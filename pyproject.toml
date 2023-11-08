@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "schemapack"
 version = "1.0.0"
-description = "A specification (plus tooling) for describing linked data models based on JSON schema."
+description = "Make your JSON Schemas sociable and create linked data model."
 readme = "README.md"
 authors = [
     { name = "German Human Genome Phenome Archive (GHGA)", email = "contact@ghga.de" },

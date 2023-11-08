@@ -4,7 +4,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/ghga-de/schemapack/badge.svg?branch=main)](https://coveralls.io/github/ghga-de/schemapack?branch=main)
 
 # schemapack
-A specification (plus tooling) for describing linked data models based on JSON schema.
+
+Make your JSON Schemas sociable and create linked data model.
 
 ## Installation
 This package is available at PyPI:
