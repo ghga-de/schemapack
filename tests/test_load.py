@@ -20,7 +20,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from schemapack.parse import load_schemapack
+from schemapack.load import load_schemapack
 from tests.fixtures.examples import INVALID_SCHEMAPACK_PATHS, VALID_SCHEMAPACK_PATHS
 
 

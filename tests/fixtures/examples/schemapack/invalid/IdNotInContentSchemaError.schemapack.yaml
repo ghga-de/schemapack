@@ -3,4 +3,4 @@ classes:
   Dataset:
     id:
       from_content: does_not_exist_in_content_schema # <-
-    content: /does/not/exist.schema.json
+    content: ../../content_schemas/Dataset.schema.json

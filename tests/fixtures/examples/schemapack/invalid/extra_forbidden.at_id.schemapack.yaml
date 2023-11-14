@@ -4,5 +4,5 @@ classes:
   Dataset:
     id:
       from_content: alias
-    content: ../content_schemas/Dataset.schema.json
-    additional_attribute: is_not_allowed # <-
+      additional_attribute: is_not_allowed # <-
+    content: ../../content_schemas/Dataset.schema.json

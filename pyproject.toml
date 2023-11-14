@@ -26,6 +26,8 @@ classifiers = [
 dependencies = [
     "pydantic >=2, <3",
     "pydantic_settings >=2, <3",
+    "PyYAML >=6.0.1, <7",
+    "jsonschema >=4.19.2, <5",
 ]
 
 [tool.setuptools.packages.find]
