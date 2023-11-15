@@ -34,6 +34,7 @@ from pydantic_core import PydanticCustomError
 
 from schemapack.utils import (
     DecodeError,
+    FrozenDict,
     JsonSchemaError,
     JsonSchemaValidator,
     get_json_schema_validator,
@@ -94,7 +95,7 @@ class ContentSchema(FrozenBaseModel):
             "Optionally, the path to the JSON schema file defining the content schema."
         ),
     )
-    json_schema: dict[str, Any] = Field(
+    json_schema: FrozenDict[str, Any] = Field(
         ...,
         description=("A JSON schema describing the content of the class instances."),
     )
@@ -151,7 +152,7 @@ class ClassDefinition(FrozenBaseModel):
 
     id: IdField
     content: ContentSchema
-    relations: dict[str, Relation] = Field(
+    relations: FrozenDict[str, Relation] = Field(
         {},
         description=(
             "A mapping of relation names to relation definitions. Relation names"
@@ -163,7 +164,7 @@ class ClassDefinition(FrozenBaseModel):
     @field_validator("content", mode="before")
     @classmethod
     def content_schema_validator(
-        cls, v: Union[ContentSchema, Path, str, dict[str, Any]]
+        cls, v: Union[ContentSchema, Path, str, dict[str, Any], FrozenDict[str, Any]]
     ) -> ContentSchema:
         """Validate and convert the type of the content schema."""
         if isinstance(v, ContentSchema):
@@ -203,14 +204,15 @@ class ClassDefinition(FrozenBaseModel):
 
             return ContentSchema.model_validate({"path": v, "json_schema": json_schema})
 
-        if isinstance(v, dict):
+        if isinstance(v, (dict, FrozenDict)):
             return ContentSchema.model_validate({"json_schema": v})
 
         raise PydanticCustomError(
             "InvalidContentSchemaError",
             (
-                "Expected an instance of class ContentSchema, a dict[str, Any], or a"
-                + " path (pathlib.Path or str) to a JSON or YAML file."
+                "Expected an instance of class ContentSchema, a dict[str, Any], a"
+                + " FrozenDict[str, Any] or a path (pathlib.Path or str) to a JSON or"
+                + " YAML file."
             ),
         )
 
@@ -224,11 +226,13 @@ class ClassDefinition(FrozenBaseModel):
         if content.path:
             return str(content.path)
 
-        return content.json_schema
+        return dict(content.json_schema)
 
     @field_validator("relations", mode="after")
     @classmethod
-    def relation_name_validator(cls, v: dict[str, Relation]) -> dict[str, Relation]:
+    def relation_name_validator(
+        cls, v: FrozenDict[str, Relation]
+    ) -> FrozenDict[str, Relation]:
         """Validate relation names."""
         invalid_relation_names = [
             relation_name for relation_name in v if not relation_name.isidentifier()
@@ -279,7 +283,7 @@ class SchemaPack(FrozenBaseModel):
             + " schemapack specification."
         ),
     )
-    classes: dict[str, ClassDefinition] = Field(
+    classes: FrozenDict[str, ClassDefinition] = Field(
         ...,
         description=(
             "A mapping of class names to class definitions. Class names should use"
@@ -337,8 +341,8 @@ class SchemaPack(FrozenBaseModel):
     @field_validator("classes", mode="after")
     @classmethod
     def class_name_validator(
-        cls, v: dict[str, ClassDefinition]
-    ) -> dict[str, ClassDefinition]:
+        cls, v: FrozenDict[str, ClassDefinition]
+    ) -> FrozenDict[str, ClassDefinition]:
         """Validates class names."""
         invalid_relation_names = [
             relation_name for relation_name in v if not relation_name.isidentifier()

@@ -21,13 +21,16 @@ import os
 from collections.abc import Mapping
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, TypeVar
 
 import jsonschema
 import jsonschema.exceptions
 import jsonschema.validators
 import yaml
+from immutabledict import immutabledict
 from jsonschema.protocols import Validator as JsonSchemaValidator
+from pydantic import GetCoreSchemaHandler
+from pydantic_core import CoreSchema, core_schema
 
 
 class DecodeError(ValueError):
@@ -108,3 +111,24 @@ def transient_directory_change(path: Path):
         yield
     finally:
         os.chdir(original_cwd)
+
+
+_K = TypeVar("_K")
+_V_co = TypeVar("_V_co", covariant=True)
+
+
+class FrozenDict(immutabledict[_K, _V_co]):
+    """A pydantic-comatible wrapper around immutabledict."""
+
+    @classmethod
+    def __get_pydantic_core_schema__(
+        cls, _source_type: Any, handler: GetCoreSchemaHandler
+    ) -> CoreSchema:
+        """Get a pydantic core schema for this class."""
+        return core_schema.no_info_after_validator_function(
+            cls,
+            handler(dict),
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                lambda instance: dict(instance)
+            ),
+        )
