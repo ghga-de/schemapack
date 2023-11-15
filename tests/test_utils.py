@@ -72,3 +72,23 @@ def test_frozen_dict_hashing():
     hash(test1)
 
     assert test1 == test2
+
+
+def test_frozen_dict_nesting():
+    """Test hashing and comparison of pydantic models using FrozenDicts."""
+
+    class Inner(BaseModel):
+        dict_: FrozenDict
+
+    class Test(BaseModel):
+        inner: FrozenDict[str, Inner]
+
+    test_dict = {1: 2}
+
+    test1 = Test.model_validate({"inner": {"test": {"dict_": test_dict}}})
+    assert isinstance(test1.inner["test"], Inner)
+
+    test2 = Test(
+        inner=FrozenDict({"test": FrozenDict({"dict_": FrozenDict(test_dict)})})
+    )
+    assert test1 == test2

@@ -14,38 +14,7 @@
 # limitations under the License.
 #
 
+from schemapack.utils import FrozenDict
 
-from re import I
-from typing import Any
-
-from immutabledict import immutabledict
-from pydantic import BaseModel, GetCoreSchemaHandler
-from pydantic_core import CoreSchema, core_schema
-
-# class immutabledict(immutabledict_):
-#     """Wrapper around immutabledict to make it pydantic compatible."""
-
-
-class FrozenDict(immutabledict):
-    @classmethod
-    def __get_pydantic_core_schema__(
-        cls, _source_type: Any, handler: GetCoreSchemaHandler
-    ) -> CoreSchema:
-        return core_schema.no_info_after_validator_function(
-            cls,
-            handler(dict),
-            serialization=core_schema.plain_serializer_function_ser_schema(
-                lambda instance: dict(instance)
-            ),
-        )
-
-
-class InnerTest(BaseModel):
-    dict_: FrozenDict
-
-
-class Test(BaseModel):
-    inner: FrozenDict[str, InnerTest]
-
-
-test = Test(inner={"test": {"dict_": {1: 2}}})
+test = FrozenDict({1: {2: 3}})
+test[1][2] = 4

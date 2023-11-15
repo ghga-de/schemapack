@@ -18,6 +18,7 @@
 
 import json
 import os
+import typing
 from collections.abc import Mapping
 from contextlib import contextmanager
 from pathlib import Path
@@ -30,7 +31,7 @@ import yaml
 from immutabledict import immutabledict
 from jsonschema.protocols import Validator as JsonSchemaValidator
 from pydantic import GetCoreSchemaHandler
-from pydantic_core import CoreSchema, core_schema
+from pydantic_core import core_schema
 
 
 class DecodeError(ValueError):
@@ -122,13 +123,22 @@ class FrozenDict(immutabledict[_K, _V_co]):
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, _source_type: Any, handler: GetCoreSchemaHandler
-    ) -> CoreSchema:
-        """Get a pydantic core schema for this class."""
-        return core_schema.no_info_after_validator_function(
-            cls,
-            handler(dict),
-            serialization=core_schema.plain_serializer_function_ser_schema(
-                lambda instance: dict(instance)
-            ),
-        )
+        cls, source: Any, handler: GetCoreSchemaHandler
+    ) -> core_schema.CoreSchema:
+        """Get the pydantic core schema for this type."""
+        # Validate the type against a dict:
+        # (this will have the side effect of converting the instance to dict even if it
+        # is already a dict a FrozenDict)
+        args = typing.get_args(source)
+        if args:
+            if len(args) != 2:
+                raise TypeError(
+                    "Expected exactly two (or no) type arguments for FrozenDict, got"
+                    + f" {len(args)}"
+                )
+            dict_schema = handler.generate_schema(dict[args[0], args[1]])  # type: ignore
+        else:
+            dict_schema = handler.generate_schema(dict)
+
+        # Uses cls as validator function to convert the dict to a FrozenDict:
+        return core_schema.no_info_after_validator_function(cls, dict_schema)

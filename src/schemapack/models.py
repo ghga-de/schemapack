@@ -107,7 +107,7 @@ class ContentSchema(FrozenBaseModel):
         Raises:
             JsonSchemaError: If the schema is invalid.
         """
-        return get_json_schema_validator(self.json_schema)
+        return get_json_schema_validator(dict(self.json_schema))
 
     @model_validator(mode="after")
     def trigger_validator_construction(self) -> "ContentSchema":
