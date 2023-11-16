@@ -290,7 +290,7 @@ class SchemaPack(FrozenBaseModel):
     root: Optional[str] = Field(
         None,
         description=(
-            "By default, schemapacks are unrooted meaning that they can be used to"
+            "By default, schemapacks are unrooted, meaning that they can be used to"
             + " describe any number of instances of the classes contained in the"
             + " schemapack."
             + " Using this field, you may optionally specify the name of a class that"
