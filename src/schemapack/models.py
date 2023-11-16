@@ -112,7 +112,7 @@ class ContentSchema(FrozenBaseModel):
     @model_validator(mode="after")
     def trigger_validator_construction(self) -> "ContentSchema":
         """Trigger the construction of a validator (for validating data against the
-        schema. This also validates the content schema itself.
+        schema). This also validates the content schema itself.
         """
         try:
             _ = self.validator
@@ -244,7 +244,7 @@ class ClassDefinition(FrozenBaseModel):
                 (
                     "Relation names may only contain alphanumeric characters and"
                     + " underscores. They must not start with a number."
-                    + " Got {number} invalid names: {relation_name}"
+                    + " Got {number} invalid names: {invalid_relation_names}"
                 ),
                 {
                     "number": len(invalid_relation_names),
@@ -294,7 +294,7 @@ class SchemaPack(FrozenBaseModel):
     root: Optional[str] = Field(
         None,
         description=(
-            "By default, schemapacks are unrooted meaning that they can be used to"
+            "By default, schemapacks are unrooted, meaning that they can be used to"
             + " describe any number of instances of the classes contained in the"
             + " schemapack."
             + " Using this field, you may optionally specify the name of a class that"
@@ -344,21 +344,21 @@ class SchemaPack(FrozenBaseModel):
         cls, v: FrozenDict[str, ClassDefinition]
     ) -> FrozenDict[str, ClassDefinition]:
         """Validates class names."""
-        invalid_relation_names = [
-            relation_name for relation_name in v if not relation_name.isidentifier()
+        invalid_class_names = [
+            class_name for class_name in v if not class_name.isidentifier()
         ]
 
-        if invalid_relation_names:
+        if invalid_class_names:
             raise PydanticCustomError(
                 "InvalidClassNameError",
                 (
                     "Class names may only contain alphanumeric characters and"
                     + " underscores. They must not start with a number."
-                    + " Got {number} invalid names: {relation_name}"
+                    + " Got {number} invalid names: {invalid_class_names}"
                 ),
                 {
-                    "number": len(invalid_relation_names),
-                    "invalid_relation_names": invalid_relation_names,
+                    "number": len(invalid_class_names),
+                    "invalid_class_names": invalid_class_names,
                 },
             )
 

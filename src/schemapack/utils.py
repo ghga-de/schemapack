@@ -54,7 +54,7 @@ def read_json_or_yaml(path: Path) -> dict:
     Raises:
         DecodeError: If the file cannot be decoded as JSON or YAML.
     """
-    with path.open("rb") as file:
+    with path.open("r", encoding="utf-8") as file:
         if path.suffix == ".json":
             try:
                 data = json.load(file)

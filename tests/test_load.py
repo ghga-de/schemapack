@@ -25,7 +25,7 @@ from tests.fixtures.examples import INVALID_SCHEMAPACK_PATHS, VALID_SCHEMAPACK_P
 
 
 @pytest.mark.parametrize(
-    "path", VALID_SCHEMAPACK_PATHS.values(), ids=VALID_SCHEMAPACK_PATHS.keys()
+    "path", VALID_SCHEMAPACK_PATHS.values(), ids=VALID_SCHEMAPACK_PATHS
 )
 def test_load_schemapack_valid(path: Path):
     """Test loading valid schemapacks."""
@@ -33,7 +33,7 @@ def test_load_schemapack_valid(path: Path):
 
 
 @pytest.mark.parametrize(
-    "name, path", INVALID_SCHEMAPACK_PATHS.items(), ids=INVALID_SCHEMAPACK_PATHS.keys()
+    "name, path", INVALID_SCHEMAPACK_PATHS.items(), ids=INVALID_SCHEMAPACK_PATHS
 )
 def test_load_schemapack_invalid(name: str, path: Path):
     """Test loading invalid schemapacks."""
