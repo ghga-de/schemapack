@@ -340,21 +340,21 @@ class SchemaPack(FrozenBaseModel):
         cls, v: dict[str, ClassDefinition]
     ) -> dict[str, ClassDefinition]:
         """Validates class names."""
-        invalid_relation_names = [
-            relation_name for relation_name in v if not relation_name.isidentifier()
+        invalid_class_names = [
+            class_name for class_name in v if not class_name.isidentifier()
         ]
 
-        if invalid_relation_names:
+        if invalid_class_names:
             raise PydanticCustomError(
                 "InvalidClassNameError",
                 (
                     "Class names may only contain alphanumeric characters and"
                     + " underscores. They must not start with a number."
-                    + " Got {number} invalid names: {relation_name}"
+                    + " Got {number} invalid names: {invalid_class_names}"
                 ),
                 {
-                    "number": len(invalid_relation_names),
-                    "invalid_relation_names": invalid_relation_names,
+                    "number": len(invalid_class_names),
+                    "invalid_class_names": invalid_class_names,
                 },
             )
 
