@@ -16,6 +16,7 @@
 
 """Models for describing and working with schemapack definitions."""
 
+import json
 import typing
 from enum import Enum
 from functools import cached_property
@@ -89,30 +90,48 @@ class IdField(FrozenBaseModel):
 class ContentSchema(FrozenBaseModel):
     """A model for describing a schemapack content schema."""
 
-    path: Optional[Path] = Field(
-        None,
+    json_schema: str = Field(
+        ...,
         description=(
-            "Optionally, the path to the JSON schema file defining the content schema."
+            "String representation of JSON schema (as a JSON-formatted string)"
+            + " describing the content of the class instances."
         ),
     )
-    json_schema: FrozenDict[str, Any] = Field(
-        ...,
-        description=("A JSON schema describing the content of the class instances."),
-    )
+
+    # cannot be cached because pydantic includes cached properties in the hash and this
+    # is unhashable:
+    @property
+    def json_schema_dict(self) -> dict[str, Any]:
+        """A dict representation of the json schema."""
+        return json.loads(self.json_schema)
 
     @cached_property
+    def properties(self) -> frozenset[str]:
+        """Returns a set of the content properties. If the content schema is not a
+        JSON Schema Object (but e.g. a list), an empty set is returned.
+        """
+        return frozenset(self.json_schema_dict.get("properties", {}))
+
+    # cannot be cached because pydantic includes cached properties in the hash and this
+    # is unhashable:
+    @property
     def validator(self) -> JsonSchemaValidator:
         """Get a JSON schema validator for validating data against the content schema.
 
         Raises:
             JsonSchemaError: If the schema is invalid.
         """
-        return get_json_schema_validator(dict(self.json_schema))
+        # this call to the following function is cached:
+        # (Caching here might be either way better as is happens independent of the
+        # ContentSchema model and there might be many instances of ContentSchema with
+        # the same json_schema.)
+        return get_json_schema_validator(self.json_schema)
 
     @model_validator(mode="after")
     def trigger_validator_construction(self) -> "ContentSchema":
         """Trigger the construction of a validator (for validating data against the
-        schema). This also validates the content schema itself.
+        schema) and thereby the generation of the json_schema_dict attribute. This also
+        validates the content schema itself.
         """
         try:
             _ = self.validator
@@ -124,6 +143,12 @@ class ContentSchema(FrozenBaseModel):
             ) from error
 
         return self
+
+    def hash_func(self) -> int:
+        """Overrides the pydantic hash function to not takes the cached properties into
+        account.
+        """
+        return hash(self.json_schema)
 
 
 class Relation(FrozenBaseModel):
@@ -153,7 +178,7 @@ class ClassDefinition(FrozenBaseModel):
     id: IdField
     content: ContentSchema
     relations: FrozenDict[str, Relation] = Field(
-        {},
+        FrozenDict(),
         description=(
             "A mapping of relation names to relation definitions. Relation names"
             + " should use snake_case and may only contain alphanumeric characters and"
@@ -164,9 +189,12 @@ class ClassDefinition(FrozenBaseModel):
     @field_validator("content", mode="before")
     @classmethod
     def content_schema_validator(
-        cls, v: Union[ContentSchema, Path, str, dict[str, Any], FrozenDict[str, Any]]
+        cls, v: Union[ContentSchema, Path, str, dict[str, Any]]
     ) -> ContentSchema:
-        """Validate and convert the type of the content schema."""
+        """Validate and convert the type of the content schema.
+        If a str is provided it must be a path to the JSON schema file and not the
+        JSON-formatted string representation of the JSON Schema itself.
+        """
         if isinstance(v, ContentSchema):
             return v
 
@@ -189,7 +217,7 @@ class ClassDefinition(FrozenBaseModel):
                 )
 
             try:
-                json_schema = read_json_or_yaml(v)
+                json_schema_dict = read_json_or_yaml(v)
             except DecodeError as error:
                 raise PydanticCustomError(
                     "InvalidContentSchemaError",
@@ -202,16 +230,16 @@ class ClassDefinition(FrozenBaseModel):
                     },
                 ) from error
 
-            return ContentSchema.model_validate({"path": v, "json_schema": json_schema})
+            return ContentSchema(json_schema=json.dumps(json_schema_dict))
 
-        if isinstance(v, (dict, FrozenDict)):
-            return ContentSchema.model_validate({"json_schema": v})
+        if isinstance(v, dict):
+            return ContentSchema(json_schema=json.dumps(v))
 
         raise PydanticCustomError(
             "InvalidContentSchemaError",
             (
-                "Expected an instance of class ContentSchema, a dict[str, Any], a"
-                + " FrozenDict[str, Any] or a path (pathlib.Path or str) to a JSON or"
+                "Expected an instance of class ContentSchema, a dict[str, Any], or a"
+                + " path (pathlib.Path or str) to a JSON or"
                 + " YAML file."
             ),
         )
@@ -219,14 +247,11 @@ class ClassDefinition(FrozenBaseModel):
     @field_serializer("content")
     def content_schema_serializer(
         self, content: ContentSchema, _info
-    ) -> Union[str, dict[str, Any]]:
+    ) -> dict[str, Any]:
         """Serialize the content schema by representing it either as the path to the
         JSON schema (if the path is known) or as the JSON schema itself.
         """
-        if content.path:
-            return str(content.path)
-
-        return dict(content.json_schema)
+        return self.content.json_schema_dict
 
     @field_validator("relations", mode="after")
     @classmethod
@@ -256,16 +281,19 @@ class ClassDefinition(FrozenBaseModel):
 
     @model_validator(mode="after")
     def id_from_content_validator(self) -> "ClassDefinition":
-        """Validate that the from_content field of id is part of the content schema."""
-        if (
-            self.content.json_schema.get("properties", {}).get(self.id.from_content)
-            is None
-        ):
+        """Validate that the from_content property of the id field is part of the
+        content schema.
+        """
+        if self.id.from_content not in self.content.properties:
             raise PydanticCustomError(
                 "IdNotInContentSchemaError",
-                ("The ID field '{id_field}' is not part of the content schema."),
+                (
+                    "The ID property '{id_property}' is not part of the content schema"
+                    + " which contains only the following properties: {content_properties}"
+                ),
                 {
-                    "id_field": self.id.from_content,
+                    "id_property": self.id.from_content,
+                    "content_properties": self.content.properties,
                 },
             )
 
@@ -301,9 +329,6 @@ class SchemaPack(FrozenBaseModel):
             + " acts as root. The schemapack will then be scoped to only"
             + " describe a single instance of the root class along with its relations."
         ),
-    )
-    self_path: Optional[Path] = Field(
-        None, description="The path to this schemapack.", exclude=True
     )
 
     @model_validator(mode="before")
@@ -363,18 +388,6 @@ class SchemaPack(FrozenBaseModel):
             )
 
         return v
-
-    @field_validator("self_path", mode="after")
-    @classmethod
-    def self_path_validator(cls, v: Optional[Path]) -> Optional[Path]:
-        """Validates that self_path is a file and make it absolute."""
-        if v is None:
-            return v
-
-        if not v.is_file():
-            raise ValueError("self_path must be a file.")
-
-        return v.absolute()
 
     @model_validator(mode="after")
     def relation_to_class_validation(self) -> "SchemaPack":

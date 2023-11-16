@@ -19,8 +19,8 @@
 import json
 import os
 import typing
-from collections.abc import Mapping
 from contextlib import contextmanager
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Literal, TypeVar
 
@@ -86,13 +86,15 @@ class JsonSchemaError(ValueError):
     """Raised when a JSON schema is invalid."""
 
 
-def get_json_schema_validator(schema: Mapping[str, Any]) -> JsonSchemaValidator:
-    """Get a JSON schema validator for the given schema.
+@lru_cache
+def get_json_schema_validator(schema_str: str) -> JsonSchemaValidator:
+    """Get a JSON schema validator for the given schema formatted as JSON string.
 
     Raises:
         JsonSchemaError: If the schema is invalid.
     """
-    cls = jsonschema.validators.validator_for(schema)
+    schema = json.loads(schema_str)
+    cls: type[JsonSchemaValidator] = jsonschema.validators.validator_for(schema)
 
     try:
         cls.check_schema(schema)
