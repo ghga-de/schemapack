@@ -240,7 +240,7 @@ class ClassDefinition(FrozenBaseModel):
                 (
                     "Relation names may only contain alphanumeric characters and"
                     + " underscores. They must not start with a number."
-                    + " Got {number} invalid names: {relation_name}"
+                    + " Got {number} invalid names: {invalid_relation_names}"
                 ),
                 {
                     "number": len(invalid_relation_names),
