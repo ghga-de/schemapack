@@ -14,17 +14,4 @@
 # limitations under the License.
 #
 
-"""Loading schemapack and datapack definitions."""
-
-from pathlib import Path
-
-from schemapack.models.schema import SchemaPack
-from schemapack.utils import read_json_or_yaml, transient_directory_change
-
-
-def load_schemapack(path: Path):
-    """Load a schemapack definition from a file."""
-    schemapack_dict = read_json_or_yaml(path)
-
-    with transient_directory_change(path.parent):
-        return SchemaPack.model_validate(schemapack_dict)
+"""Models for describing and working with datapack definitions."""
