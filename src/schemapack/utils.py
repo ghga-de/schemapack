@@ -132,15 +132,15 @@ class FrozenDict(immutabledict[_K, _V_co]):
         # (this will have the side effect of converting the instance to dict even if it
         # is already a dict a FrozenDict)
         args = typing.get_args(source)
-        if args:
-            if len(args) != 2:
-                raise TypeError(
-                    "Expected exactly two (or no) type arguments for FrozenDict, got"
-                    + f" {len(args)}"
-                )
+        if not args:
+            dict_schema = handler.generate_schema(dict)
+        elif len(args) == 2:
             dict_schema = handler.generate_schema(dict[args[0], args[1]])  # type: ignore
         else:
-            dict_schema = handler.generate_schema(dict)
+            raise TypeError(
+                "Expected exactly two (or no) type arguments for FrozenDict, got"
+                + f" {len(args)}"
+            )
 
         # Uses cls as validator function to convert the dict to a FrozenDict:
         return core_schema.no_info_after_validator_function(cls, dict_schema)
