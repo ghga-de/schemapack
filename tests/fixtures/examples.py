@@ -24,18 +24,52 @@ EXAMPLES_DIR = BASE_DIR / "examples"
 SCHEMAPACK_DIR = EXAMPLES_DIR / "schemapack"
 VALID_SCHEMAPACK_DIR = SCHEMAPACK_DIR / "valid"
 INVALID_SCHEMAPACK_DIR = SCHEMAPACK_DIR / "invalid"
+DATAPACK_DIR = EXAMPLES_DIR / "datapack"
+VALID_DATAPACK_DIR = DATAPACK_DIR / "valid"
+INVALID_DATAPACK_DIR = DATAPACK_DIR / "invalid"
 
 schemapack_suffix = ".schemapack.yaml"
+datapack_suffix = ".datapack.yaml"
 
 
-def list_schemapacks_in_dir(dir: Path):
-    """List all schemapack files in the given dir and return a dict of name: path."""
+def list_examples_in_dir(dir: Path, *, suffix: str) -> dict[str, Path]:
+    """List all example files with the given suffix in the given dir.
+
+    Returns:
+        A dict of {example_name: path}.
+    """
     return {
-        path.name.removesuffix(schemapack_suffix): path
+        path.name.removesuffix(suffix): path
         for path in dir.iterdir()
-        if path.name.endswith(schemapack_suffix)
+        if path.name.endswith(suffix)
     }
+
+
+def list_schemapacks_in_dir(dir: Path) -> dict[str, Path]:
+    """List all schemapack files in the given dir.
+
+    Returns:
+        A dict of {example_name: path}.
+    """
+    return list_examples_in_dir(dir, suffix=schemapack_suffix)
 
 
 VALID_SCHEMAPACK_PATHS = list_schemapacks_in_dir(VALID_SCHEMAPACK_DIR)
 INVALID_SCHEMAPACK_PATHS = list_schemapacks_in_dir(INVALID_SCHEMAPACK_DIR)
+
+
+def list_datapacks_in_dir(dir: Path) -> dict[str, dict[str, Path]]:
+    """List all datapack example files per schemapack in the provided dictionary.
+
+    Returns:
+        A nested dict of {schempack_name: {datapack_name: path}}.
+    """
+    return {
+        path.name: list_examples_in_dir(path, suffix=".datapack.yaml")
+        for path in dir.iterdir()
+        if not path.is_file()
+    }
+
+
+VALID_DATAPACK_PATHS = list_datapacks_in_dir(VALID_DATAPACK_DIR)
+INVALID_DATAPACK_PATHS = list_datapacks_in_dir(INVALID_DATAPACK_DIR)

@@ -1,0 +1,21 @@
+# Contains a resource that is not related to the root resource:
+datapack: 0.1.0
+resources:
+  File:
+    non_related_file: # <-
+      content:
+        alias: non_related_file
+        filename: non_related_file.fastq
+        format: FASTQ
+        checksum: 1a5ac10ab42911dc0224172c118a326d9a4c03969112a2f3eb1ad971e96e92b8
+        size: 12321
+  Dataset:
+    example_dataset:
+      content:
+        alias: example_dataset
+        dac_contact: dac@example.org
+      relations:
+        files: []
+root:
+  class: Dataset
+  id: example_dataset

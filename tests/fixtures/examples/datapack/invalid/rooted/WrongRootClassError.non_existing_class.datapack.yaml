@@ -1,0 +1,8 @@
+# The root class does not correspond to the one defined in the schemapack:
+datapack: 0.1.0
+resources:
+  File: {}
+  Dataset: {}
+root:
+  class: NonExistingClass # <-
+  id: non_existing_resource
