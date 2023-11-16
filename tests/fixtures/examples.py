@@ -29,11 +29,11 @@ schemapack_suffix = ".schemapack.yaml"
 
 
 def list_schemapacks_in_dir(dir: Path):
-    """List all schemapack file in the given dir and return a dict of name: path."""
+    """List all schemapack files in the given dir and return a dict of name: path."""
     return {
-        path.name.replace(schemapack_suffix, ""): path
+        path.name.removesuffix(schemapack_suffix): path
         for path in dir.iterdir()
-        if str(path).endswith(schemapack_suffix)
+        if path.name.endswith(schemapack_suffix)
     }
 
 
