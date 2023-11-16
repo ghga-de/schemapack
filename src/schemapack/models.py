@@ -111,7 +111,7 @@ class ContentSchema(FrozenBaseModel):
     @model_validator(mode="after")
     def trigger_validator_construction(self) -> "ContentSchema":
         """Trigger the construction of a validator (for validating data against the
-        schema. This also validates the content schema itself.
+        schema). This also validates the content schema itself.
         """
         try:
             _ = self.validator
