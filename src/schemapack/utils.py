@@ -88,7 +88,7 @@ class JsonSchemaError(ValueError):
 
 @lru_cache
 def get_json_schema_validator(schema_str: str) -> JsonSchemaValidator:
-    """Get a JSON schema validator for the given schema formatted as JSON string.
+    """Get a JSON Schema validator for the given schema formatted as JSON string.
 
     Raises:
         JsonSchemaError: If the schema is invalid.

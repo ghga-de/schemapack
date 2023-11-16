@@ -144,12 +144,6 @@ class ContentSchema(FrozenBaseModel):
 
         return self
 
-    def hash_func(self) -> int:
-        """Overrides the pydantic hash function to not takes the cached properties into
-        account.
-        """
-        return hash(self.json_schema)
-
 
 class Relation(FrozenBaseModel):
     """A model for describing a schemapack relation definition."""
