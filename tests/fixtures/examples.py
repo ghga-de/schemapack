@@ -18,9 +18,9 @@
 
 from pathlib import Path
 
-from tests.fixtures.utils import BASE_DIR
+from tests.fixtures.utils import ROOT_DIR
 
-EXAMPLES_DIR = BASE_DIR / "examples"
+EXAMPLES_DIR = ROOT_DIR / "examples"
 SCHEMAPACK_DIR = EXAMPLES_DIR / "schemapack"
 VALID_SCHEMAPACK_DIR = SCHEMAPACK_DIR / "valid"
 INVALID_SCHEMAPACK_DIR = SCHEMAPACK_DIR / "invalid"
