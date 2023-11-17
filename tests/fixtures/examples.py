@@ -58,16 +58,19 @@ VALID_SCHEMAPACK_PATHS = list_schemapacks_in_dir(VALID_SCHEMAPACK_DIR)
 INVALID_SCHEMAPACK_PATHS = list_schemapacks_in_dir(INVALID_SCHEMAPACK_DIR)
 
 
-def list_datapacks_in_dir(dir: Path) -> dict[str, dict[str, Path]]:
+def list_datapacks_in_dir(dir: Path) -> dict[str, Path]:
     """List all datapack example files per schemapack in the provided dictionary.
 
     Returns:
-        A nested dict of {schempack_name: {datapack_name: path}}.
+        A dict of {"schempack_name.example_name": path}.
     """
     return {
-        path.name: list_examples_in_dir(path, suffix=".datapack.yaml")
-        for path in dir.iterdir()
-        if not path.is_file()
+        f"{per_schemapack_dir.name}.{example_name}": example
+        for per_schemapack_dir in dir.iterdir()
+        if not per_schemapack_dir.is_file()
+        for example_name, example in list_examples_in_dir(
+            per_schemapack_dir, suffix=".datapack.yaml"
+        ).items()
     }
 
 

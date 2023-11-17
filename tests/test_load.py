@@ -20,8 +20,12 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from schemapack.load import load_schemapack
-from tests.fixtures.examples import INVALID_SCHEMAPACK_PATHS, VALID_SCHEMAPACK_PATHS
+from schemapack.load import load_datapack, load_schemapack
+from tests.fixtures.examples import (
+    INVALID_SCHEMAPACK_PATHS,
+    VALID_DATAPACK_PATHS,
+    VALID_SCHEMAPACK_PATHS,
+)
 
 
 @pytest.mark.parametrize(
@@ -46,3 +50,11 @@ def test_load_schemapack_invalid(name: str, path: Path):
     assert len(original_errors) == 1
 
     assert original_errors[0]["type"] == error_type
+
+
+@pytest.mark.parametrize(
+    "path", VALID_DATAPACK_PATHS.values(), ids=VALID_DATAPACK_PATHS
+)
+def test_load_datapack_valid(path: Path):
+    """Test loading valid datapacks."""
+    _ = load_datapack(path)

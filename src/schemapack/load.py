@@ -18,8 +18,30 @@
 
 from pathlib import Path
 
+import pydantic
+
+from schemapack.models.data import DataPack
 from schemapack.models.schema import SchemaPack
 from schemapack.utils import read_json_or_yaml, transient_directory_change
+
+
+class DataPackFormatError(Exception):
+    """An error indicating that the provided data does not follow the basic format of
+    a datapack.
+    """
+
+
+def load_datapack(path: Path):
+    """Load a datapack definition from a file."""
+    datapack_dict = read_json_or_yaml(path)
+
+    try:
+        return DataPack.model_validate(datapack_dict)
+    except pydantic.ValidationError as error:
+        raise DataPackFormatError(
+            "The provided data does not follow the basic format of a"
+            + f" datapack:\n{error}"
+        ) from error
 
 
 def load_schemapack(path: Path):
