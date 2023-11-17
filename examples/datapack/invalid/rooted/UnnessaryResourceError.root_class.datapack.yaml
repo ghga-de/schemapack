@@ -15,6 +15,4 @@ resources:
         dac_contact: dac@example.org
       relations:
         files: []
-root:
-  class: Dataset
-  id: example_dataset
+root: example_dataset

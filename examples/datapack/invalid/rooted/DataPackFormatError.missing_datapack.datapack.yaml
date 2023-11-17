@@ -9,6 +9,4 @@ resources:
         non_existing_property: "non_existing_value"
       relations:
         files: []
-root:
-  class: Dataset
-  id: example_dataset
+root: example_dataset

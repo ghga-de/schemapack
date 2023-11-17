@@ -10,6 +10,4 @@ resources:
       relations:
         files: []
         non_existing_property: [] # <-
-root:
-  class: Dataset
-  id: example_dataset
+root: example_dataset

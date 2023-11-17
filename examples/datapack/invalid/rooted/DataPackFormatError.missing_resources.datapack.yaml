@@ -1,5 +1,3 @@
 # Missing resources field:
 datapack: 0.1.0
-root:
-  class: Dataset
-  id: example_dataset
+root: example_dataset

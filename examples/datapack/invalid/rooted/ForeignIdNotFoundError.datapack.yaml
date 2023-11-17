@@ -10,6 +10,4 @@ resources:
       relations:
         files:
           - not_existing_file # <-
-root:
-  class: Dataset
-  id: example_dataset
+root: example_dataset

@@ -7,6 +7,4 @@ resources:
       # missing the content definition
       relations:
         files: []
-root:
-  class: Dataset
-  id: example_dataset
+root: example_dataset
