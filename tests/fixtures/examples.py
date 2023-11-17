@@ -16,6 +16,7 @@
 
 """Example schemapack definitions and associated data."""
 
+from collections import OrderedDict
 from pathlib import Path
 
 from tests.fixtures.utils import ROOT_DIR
@@ -38,11 +39,13 @@ def list_examples_in_dir(dir: Path, *, suffix: str) -> dict[str, Path]:
     Returns:
         A dict of {example_name: path}.
     """
-    return {
+    examples = {
         path.name.removesuffix(suffix): path
         for path in dir.iterdir()
         if path.name.endswith(suffix)
     }
+
+    return OrderedDict(sorted(examples.items()))
 
 
 def list_schemapacks_in_dir(dir: Path) -> dict[str, Path]:
@@ -64,7 +67,7 @@ def list_datapacks_in_dir(dir: Path) -> dict[str, Path]:
     Returns:
         A dict of {"schempack_name.example_name": path}.
     """
-    return {
+    examples = {
         f"{per_schemapack_dir.name}.{example_name}": example
         for per_schemapack_dir in dir.iterdir()
         if not per_schemapack_dir.is_file()
@@ -72,6 +75,8 @@ def list_datapacks_in_dir(dir: Path) -> dict[str, Path]:
             per_schemapack_dir, suffix=".datapack.yaml"
         ).items()
     }
+
+    return OrderedDict(sorted(examples.items()))
 
 
 VALID_DATAPACK_PATHS = list_datapacks_in_dir(VALID_DATAPACK_DIR)

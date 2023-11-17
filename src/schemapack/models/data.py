@@ -17,21 +17,27 @@
 """Models for describing and working with datapack definitions."""
 
 import typing
-from typing import Any, Literal, Optional, Union
+from typing import Literal, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import TypeAlias
 
 SupportedDataPackVersions = Literal["0.1.0"]
 SUPPORTED_DATA_PACK_VERSIONS = typing.get_args(SupportedDataPackVersions)
 
 ClassName: TypeAlias = str
-ResourceID: TypeAlias = str
+ResourceId: TypeAlias = str
 RelationName: TypeAlias = str
-JsonCompatible: TypeAlias = Any
+JsonCompatible: TypeAlias = object
 
 
-class Resource(BaseModel):
+class NoExtraBaseModel(BaseModel):
+    """A BaseModel that does not allow any extra fields."""
+
+    model_config = ConfigDict(use_enum_values=True, extra="forbid")
+
+
+class Resource(NoExtraBaseModel):
     """A model defining content and relations of a resource
     of a specific class.
     """
@@ -45,7 +51,7 @@ class Resource(BaseModel):
         ),
     )
 
-    relations: dict[RelationName, Union[ResourceID, list[ResourceID]]] = Field(
+    relations: dict[RelationName, Union[ResourceId, list[ResourceId]]] = Field(
         {},
         description=(
             "A dictionary containing the relations of the resource to other resources."
@@ -57,7 +63,7 @@ class Resource(BaseModel):
     )
 
 
-class DataPack(BaseModel):
+class DataPack(NoExtraBaseModel):
     """A model for describing a schemapack definition."""
 
     datapack: SupportedDataPackVersions = Field(
@@ -69,7 +75,7 @@ class DataPack(BaseModel):
         ),
     )
 
-    resources: dict[ClassName, dict[ResourceID, Resource]] = Field(
+    resources: dict[ClassName, dict[ResourceId, Resource]] = Field(
         ...,
         description=(
             "A nested dictionary containing resources per class name (keys on the first"
@@ -79,7 +85,7 @@ class DataPack(BaseModel):
         ),
     )
 
-    root: Optional[ResourceID] = Field(
+    root: Optional[ResourceId] = Field(
         None,
         description=(
             "The ID of the root resource which must be of the class defined as root"
