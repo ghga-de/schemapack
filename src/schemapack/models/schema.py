@@ -102,7 +102,7 @@ class ContentSchema(FrozenBaseModel):
     # is unhashable:
     @property
     def json_schema_dict(self) -> dict[str, Any]:
-        """A dict representation of the json schema."""
+        """A dict representation of the JSON schema."""
         return json.loads(self.json_schema)
 
     @cached_property
@@ -186,8 +186,9 @@ class ClassDefinition(FrozenBaseModel):
         cls, v: Union[ContentSchema, Path, str, dict[str, Any]]
     ) -> ContentSchema:
         """Validate and convert the type of the content schema.
-        If a str is provided it must be a path to the JSON schema file and not the
-        JSON-formatted string representation of the JSON Schema itself.
+
+        If a str is provided, it must be a path to the JSON schema file and not the
+        JSON-formatted string representation of the JSON schema itself.
         """
         if isinstance(v, ContentSchema):
             return v

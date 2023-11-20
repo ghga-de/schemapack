@@ -56,9 +56,7 @@ def test_comparison_of_equivalent_schemapacks():
 
 
 def test_comparison_of_different_schemapacks():
-    """Test that equivalent schemapack definitions are considered equal. The
-    `self_path` attribute should not be considered for equality.
-    """
+    """Test that different schemapack definitions fail equality checks."""
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["rooted"])
     schemapack_modified = schemapack.model_copy(update={"root": None})
 
