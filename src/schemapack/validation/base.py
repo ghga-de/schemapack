@@ -23,22 +23,24 @@ from schemapack.models.schema import ClassDefinition, SchemaPack
 
 
 class GlobalValidationPlugin(ABC):
-    """Protocol for a plugin that performs validation of a datapack with respect to the
-    entire schemapack.
+    """Abstract class for a plugin that performs validation of a datapack with respect
+    to the entire schemapack.
 
     Please note:
     A ValidationPlugin should always just check for one single aspect of validation
     and should not perform all checks possible with a schemapack.
-    The "global" scope of validation plugin inheriting from this class does only mean
-    that it does not focus on one specific class or resource but rather a validation
+    The "global" scope only means that objects implementing this protocol do not focus
+    on one specific datapack class or resource but rather on a validation
     aspect that applies to the entire datapack.
     """
 
     @staticmethod
     @abstractmethod
-    def does_apply(*, schemapack: SchemaPack):
+    def does_apply(*, schemapack: SchemaPack) -> bool:
         """A classmethod to check whether this validation plugin is relevant for the
         given schemapack.
+
+        Returns: True if this plugin is relevant for the given class definition.
         """
         raise NotImplementedError
 
@@ -58,15 +60,17 @@ class GlobalValidationPlugin(ABC):
 
 
 class ClassValidationPlugin(ABC):
-    """Protocol for defining class-scoped validation plugin. Instances of this class
-    perform validation with respect to one specific class defined in a schemapack.
+    """Abstract class for defining class-scoped validation plugin. Implementing objects
+    perform validation with respect to one specific schemapack class.
     """
 
     @staticmethod
     @abstractmethod
-    def does_apply(*, class_: ClassDefinition):
+    def does_apply(*, class_: ClassDefinition) -> bool:
         """A classmethod to check whether this validation plugin is relevant for the
         given class definition.
+
+        Returns: True if this plugin is relevant for the given class definition.
         """
         raise NotImplementedError
 
@@ -89,16 +93,18 @@ class ClassValidationPlugin(ABC):
 
 
 class ResourceValidationPlugin(ABC):
-    """Protocol for defining resource-scoped validation plugin. Instances of this class
-    perform validation with respect to one specific resource of a class defined in a
-    schemapack.
+    """Abstract class for defining resource-scoped validation plugin. Implementing
+    objects perform validation with respect to one specific resource of a schemapack
+    class.
     """
 
     @staticmethod
     @abstractmethod
-    def does_apply(*, class_: ClassDefinition):
+    def does_apply(*, class_: ClassDefinition) -> bool:
         """A classmethod to check whether this validation plugin is relevant for the
         given schemapack.
+
+        Returns: True if this plugin is relevant for the given class definition.
         """
         raise NotImplementedError
 
@@ -110,7 +116,7 @@ class ResourceValidationPlugin(ABC):
     @abstractmethod
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
-    ):
+    ) -> None:
         """Validates a specific resource of the defined class. The entire datapack is
         provided for resolving relations to resources of other classes.
 
