@@ -102,7 +102,7 @@ class ContentSchema(FrozenBaseModel):
     # is unhashable:
     @property
     def json_schema_dict(self) -> dict[str, Any]:
-        """A dict representation of the json schema."""
+        """A dict representation of the JSON schema."""
         return json.loads(self.json_schema)
 
     @cached_property
