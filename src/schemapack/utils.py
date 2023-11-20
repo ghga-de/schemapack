@@ -130,7 +130,7 @@ class FrozenDict(immutabledict[_K, _V_co]):
         """Get the pydantic core schema for this type."""
         # Validate the type against a dict:
         # (this will have the side effect of converting the instance to dict even if it
-        # is already a dict a FrozenDict)
+        # is already an immutabledict or a FrozenDict)
         args = typing.get_args(source)
         if not args:
             dict_schema = handler.generate_schema(dict)
