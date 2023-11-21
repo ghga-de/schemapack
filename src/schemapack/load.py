@@ -20,10 +20,23 @@ from pathlib import Path
 
 import pydantic
 
-from schemapack.exceptions import DataPackFormatError
-from schemapack.models.data import DataPack
-from schemapack.models.schema import SchemaPack
+from schemapack.exceptions import DataPackSpecError, SchemaPackSpecError
+from schemapack.spec.datapack import DataPack
+from schemapack.spec.schemapack import SchemaPack
 from schemapack.utils import read_json_or_yaml, transient_directory_change
+
+
+def load_schemapack(path: Path):
+    """Load a schemapack definition from a file."""
+    schemapack_dict = read_json_or_yaml(path)
+
+    with transient_directory_change(path.parent):
+        try:
+            return SchemaPack.model_validate(schemapack_dict)
+        except pydantic.ValidationError as error:
+            raise SchemaPackSpecError(
+                message=str(error), details=error.errors()
+            ) from error
 
 
 def load_datapack(path: Path):
@@ -33,15 +46,4 @@ def load_datapack(path: Path):
     try:
         return DataPack.model_validate(datapack_dict)
     except pydantic.ValidationError as error:
-        raise DataPackFormatError(
-            "The provided data does not follow the basic format of a"
-            + f" datapack:\n{error}"
-        ) from error
-
-
-def load_schemapack(path: Path):
-    """Load a schemapack definition from a file."""
-    schemapack_dict = read_json_or_yaml(path)
-
-    with transient_directory_change(path.parent):
-        return SchemaPack.model_validate(schemapack_dict)
+        raise DataPackSpecError(message=str(error), details=error.errors()) from error

@@ -15,3 +15,6 @@
 #
 
 """Logic for validating a datapack against a schemapack."""
+
+# shortcuts:
+from schemapack.validation.main import SchemaPackValidator  # noqa: F401

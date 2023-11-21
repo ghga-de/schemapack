@@ -23,8 +23,8 @@ import jsonschema.protocols
 import jsonschema.validators
 
 from schemapack.exceptions import ValidationPluginError
-from schemapack.models.data import DataPack, Resource, ResourceId
-from schemapack.models.schema import ClassDefinition
+from schemapack.spec.datapack import DataPack, Resource, ResourceId
+from schemapack.spec.schemapack import ClassDefinition
 from schemapack.validation.base import ResourceValidationPlugin
 
 
