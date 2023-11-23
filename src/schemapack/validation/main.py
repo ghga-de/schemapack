@@ -33,11 +33,15 @@ from schemapack.validation.base import (
     ResourceValidationPlugin,
 )
 from schemapack.validation.content_schema import ContentSchemaValidationPlugin
+from schemapack.validation.foreign_id import ForeignIdValidationPlugin
+from schemapack.validation.id_from_content import IdFromContentValidationPlugin
 
 DEFAULT_GLOBAL_PLUGIN_REGISTRY: list[type[GlobalValidationPlugin]] = []
 DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = []
 DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
-    ContentSchemaValidationPlugin
+    ContentSchemaValidationPlugin,
+    IdFromContentValidationPlugin,
+    ForeignIdValidationPlugin,
 ]
 
 

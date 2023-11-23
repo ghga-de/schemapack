@@ -123,6 +123,12 @@ class ContentSchema(FrozenBaseModel):
                 {"error_message": str(error)},
             ) from error
 
+        if self.json_schema_dict.get("type") != "object":
+            raise PydanticCustomError(
+                "InvalidContentSchemaError",
+                "The content schema must be an object.",
+            )
+
         return self
 
 
@@ -270,6 +276,19 @@ class ClassDefinition(FrozenBaseModel):
                 {
                     "id_property": self.id.from_content,
                     "content_properties": self.content.properties,
+                },
+            )
+        if self.id.from_content not in self.content.json_schema_dict.get(
+            "required", []
+        ):
+            raise PydanticCustomError(
+                "IdNotRequiredError",
+                (
+                    "The ID property '{id_property}' is not required in the content"
+                    + " schema. It must be marked as required."
+                ),
+                {
+                    "id_property": self.id.from_content,
                 },
             )
 

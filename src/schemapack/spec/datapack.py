@@ -17,7 +17,7 @@
 """Models for describing and working with datapack definitions."""
 
 import typing
-from typing import Literal, Optional, Union
+from typing import Any, Literal, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import TypeAlias
@@ -28,7 +28,6 @@ SUPPORTED_DATA_PACK_VERSIONS = typing.get_args(SupportedDataPackVersions)
 ClassName: TypeAlias = str
 ResourceId: TypeAlias = str
 RelationName: TypeAlias = str
-JsonCompatible: TypeAlias = object
 
 
 class NoExtraBaseModel(BaseModel):
@@ -42,12 +41,11 @@ class Resource(NoExtraBaseModel):
     of a specific class.
     """
 
-    content: JsonCompatible = Field(
+    content: dict[str, Any] = Field(
         ...,
         description=(
             "The content of the resource that complies with the content schema defined"
-            + " in the corresponding schemapack. This is often of type dict[str, Any]"
-            + " but can be of any type that is JSON compatible."
+            + " in the corresponding schemapack."
         ),
     )
 
