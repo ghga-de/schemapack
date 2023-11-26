@@ -17,6 +17,9 @@
 """Built-In Validation Plugins"""
 
 # shortcuts:
+from schemapack.validation.plugins.cardinality_plural import (
+    CardinalityPluralityValidationPlugin,  # noqa: F401
+)
 from schemapack.validation.plugins.content_schema import (
     ContentSchemaValidationPlugin,  # noqa: F401
 )
@@ -25,4 +28,10 @@ from schemapack.validation.plugins.foreign_id import (
 )
 from schemapack.validation.plugins.id_from_content import (
     IdFromContentValidationPlugin,  # noqa: F401
+)
+from schemapack.validation.plugins.missing_relations import (
+    MissingRelationValidationPlugin,  # noqa: F401
+)
+from schemapack.validation.plugins.unknown_relations import (
+    UnknownRelationValidationPlugin,  # noqa: F401
 )

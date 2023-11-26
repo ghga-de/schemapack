@@ -22,9 +22,12 @@ from schemapack.validation.base import (
     ResourceValidationPlugin,
 )
 from schemapack.validation.plugins import (
+    CardinalityPluralityValidationPlugin,
     ContentSchemaValidationPlugin,
     ForeignIdValidationPlugin,
     IdFromContentValidationPlugin,
+    MissingRelationValidationPlugin,
+    UnknownRelationValidationPlugin,
 )
 
 DEFAULT_GLOBAL_PLUGIN_REGISTRY: list[type[GlobalValidationPlugin]] = []
@@ -33,4 +36,7 @@ DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
     ContentSchemaValidationPlugin,
     IdFromContentValidationPlugin,
     ForeignIdValidationPlugin,
+    MissingRelationValidationPlugin,
+    UnknownRelationValidationPlugin,
+    CardinalityPluralityValidationPlugin,
 ]

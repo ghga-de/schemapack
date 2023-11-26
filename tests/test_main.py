@@ -22,7 +22,22 @@ import pytest
 
 from schemapack.exceptions import BaseError, DataPackSpecError, ValidationError
 from schemapack.main import load_and_validate
-from tests.fixtures.examples import INVALID_DATAPACK_PATHS, VALID_SCHEMAPACK_PATHS
+from tests.fixtures.examples import (
+    INVALID_DATAPACK_PATHS,
+    VALID_DATAPACK_PATHS,
+    VALID_SCHEMAPACK_PATHS,
+)
+
+
+@pytest.mark.parametrize(
+    "name, path", VALID_DATAPACK_PATHS.items(), ids=VALID_DATAPACK_PATHS
+)
+def test_load_and_validate_valid(name: str, path: Path):
+    """Test load_and_validate function with valid schemapack and valid datapacks."""
+    schemapack_name, error_type, *_ = tuple(name.split("."))
+    schemapack_path = VALID_SCHEMAPACK_PATHS[schemapack_name]
+
+    _ = load_and_validate(schemapack_path=schemapack_path, datapack_path=path)
 
 
 @pytest.mark.parametrize(
