@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-"""Content schema validation plugin."""
+"""A validation plugin."""
 
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
@@ -58,7 +58,7 @@ class MissingRelationValidationPlugin(ResourceValidationPlugin):
 
         if missing_relations:
             raise ValidationPluginError(
-                type="MissingRelationPropertyError",
+                type_="MissingRelationPropertyError",
                 message=(
                     "Missing following relation properties: "
                     + ", ".join(missing_relations)

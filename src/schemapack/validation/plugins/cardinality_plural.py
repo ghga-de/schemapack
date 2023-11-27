@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-"""Content schema validation plugin."""
+"""A validation plugin."""
 
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
@@ -67,7 +67,7 @@ class CardinalityPluralityValidationPlugin(ResourceValidationPlugin):
 
         if wrong_relations:
             raise ValidationPluginError(
-                type="CardinalityPluralityError",
+                type_="CardinalityPluralityError",
                 message=(
                     "Expected a single foreign ID but got a list, or vise versa, for"
                     " the following relation propertie(s): "

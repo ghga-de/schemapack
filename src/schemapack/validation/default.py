@@ -24,14 +24,31 @@ from schemapack.validation.base import (
 from schemapack.validation.plugins import (
     CardinalityPluralityValidationPlugin,
     ContentSchemaValidationPlugin,
+    DuplicateForeignIdValidationPlugin,
     ForeignIdValidationPlugin,
     IdFromContentValidationPlugin,
+    MissingClassSlotValidationPlugin,
     MissingRelationValidationPlugin,
+    MissingRootValidationPlugin,
+    OneToManyOverlapValidationPlugin,
+    OneToOneOverlapValidationPlugin,
+    RootResourceExistenceValidationPlugin,
+    UnexpectedRootValidationPlugin,
+    UnknownClassSlotValidationPlugin,
     UnknownRelationValidationPlugin,
 )
 
-DEFAULT_GLOBAL_PLUGIN_REGISTRY: list[type[GlobalValidationPlugin]] = []
-DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = []
+DEFAULT_GLOBAL_PLUGIN_REGISTRY: list[type[GlobalValidationPlugin]] = [
+    UnexpectedRootValidationPlugin,
+    MissingRootValidationPlugin,
+    RootResourceExistenceValidationPlugin,
+    MissingClassSlotValidationPlugin,
+    UnknownClassSlotValidationPlugin,
+]
+DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = [
+    OneToOneOverlapValidationPlugin,
+    OneToManyOverlapValidationPlugin,
+]
 DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
     ContentSchemaValidationPlugin,
     IdFromContentValidationPlugin,
@@ -39,4 +56,5 @@ DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
     MissingRelationValidationPlugin,
     UnknownRelationValidationPlugin,
     CardinalityPluralityValidationPlugin,
+    DuplicateForeignIdValidationPlugin,
 ]

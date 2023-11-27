@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-"""Content schema validation plugin."""
+"""A validation plugin."""
 
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
@@ -58,7 +58,7 @@ class UnknownRelationValidationPlugin(ResourceValidationPlugin):
 
         if unknown_relations:
             raise ValidationPluginError(
-                type="UnknownRelationPropertyError",
+                type_="UnknownRelationPropertyError",
                 message=(
                     "The following relation propertie(s) is/are unkown: "
                     + ", ".join(unknown_relations)

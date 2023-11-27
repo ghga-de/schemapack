@@ -111,7 +111,7 @@ def _plugin_error_to_record(
     return ValidationErrorRecord(
         subject_class=subject_class,
         subject_resource=subject_resource,
-        type=error.type,
+        type=error.type_,
         message=error.message,
         details=error.details,
     )

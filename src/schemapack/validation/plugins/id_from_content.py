@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-"""Content schema validation plugin."""
+"""A validation plugin."""
 
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
@@ -53,7 +53,7 @@ class IdFromContentValidationPlugin(ResourceValidationPlugin):
         """
         if resource_id != (expected_id := resource.content.get(self._id_property)):
             raise ValidationPluginError(
-                type="IdContentMissmatchError",
+                type_="IdContentMissmatchError",
                 message=(
                     "The ID did not match the corresponding content property: "
                     + f"got '{resource_id}' but expected '{expected_id}'"

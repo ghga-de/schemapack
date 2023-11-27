@@ -16,16 +16,18 @@
 
 """A validation plugin."""
 
+from collections import Counter
+
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
 from schemapack.spec.schemapack import ClassDefinition
 from schemapack.validation.base import ResourceValidationPlugin
 
 
-class ForeignIdValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating that all relations of a given
-    resource point to existing foreign resources.
-    This plugin only applies if the schemapack class defines any relations.
+class DuplicateForeignIdValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating that all foreign id for *_to_many
+    a relation of a given resource are unique.
+    This plugin only applies if the schemapack class has any *_to_many relations.
     """
 
     @staticmethod
@@ -35,11 +37,18 @@ class ForeignIdValidationPlugin(ResourceValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return bool(class_.relations)
+        for relation in class_.relations.values():
+            if relation.cardinality.endswith("to_many"):
+                return True
+        return False
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._relations = class_.relations
+        self._relations_of_interest = [
+            name
+            for name, relation in class_.relations.items()
+            if relation.cardinality.endswith("to_many")
+        ]
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -50,30 +59,30 @@ class ForeignIdValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.DataValidationError: If validation fails.
         """
-        non_found_foreign_ids: dict[str, str] = {}  # foreign_id -> relation_name
-        for relation_name, relation in self._relations.items():
+        # Contains all duplicate foreign ids (values) per relation (keys) if any
+        # overlaps are found for that relation:
+        duplicate_ids_by_relation: dict[str, list[str]] = {}
+
+        for relation_name in self._relations_of_interest:
             foreign_ids = resource.relations.get(relation_name, [])
 
             if not isinstance(foreign_ids, list):
+                # This is an error, however, it needs to be handled by a different
+                # validation plugin
                 foreign_ids = [foreign_ids]
 
-            for foreign_id in foreign_ids:
-                if foreign_id not in datapack.resources.get(relation.to, {}):
-                    non_found_foreign_ids[foreign_id] = relation_name
+            duplicate_foreign_ids = [
+                k for k, v in Counter(foreign_ids).items() if v > 1
+            ]
+            if duplicate_foreign_ids:
+                duplicate_ids_by_relation[relation_name] = duplicate_foreign_ids
 
-        if non_found_foreign_ids:
+        if duplicate_ids_by_relation:
             raise ValidationPluginError(
-                type_="ForeignIdNotFoundError",
+                type_="DuplicateForeignIdError",
                 message=(
-                    "Did not find a foreign resource for the following ID(s) (relation"
-                    + " names): "
-                    + ", ".join(
-                        f"'{foreign_id}' ('{relation_name}')"
-                        for foreign_id, relation_name in non_found_foreign_ids.items()
-                    )
+                    "Found duplicate foreign ids for the following relation(s): "
+                    + ", ".join(duplicate_ids_by_relation.keys())
                 ),
-                details={
-                    "non_found_foreign_ids": non_found_foreign_ids.keys(),
-                    "corresponding_relation_names": non_found_foreign_ids.values(),
-                },
+                details={"duplicate_ids_by_relation": duplicate_ids_by_relation},
             )

@@ -84,7 +84,7 @@ class ValidationPluginError(BaseError, ValueError):
     """Raised by a ValidationPlugin."""
 
     def __init__(
-        self, *, type: str, message: str, details: Optional[dict[str, object]] = None
+        self, *, type_: str, message: str, details: Optional[dict[str, object]] = None
     ):
         """Initiate a ValidationPluginError.
 
@@ -94,7 +94,7 @@ class ValidationPluginError(BaseError, ValueError):
             details: A dictionary for transporting additional machine-readable details.
         """
         super().__init__(message)
-        self.type = type
+        self.type_ = type_
         self.message = message
         self.details = details if details else {}
 

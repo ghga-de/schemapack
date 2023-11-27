@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-"""Content schema validation plugin."""
+"""A validation plugin."""
 
 import json
 
@@ -74,5 +74,5 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
             self._json_schema_validator.validate(resource.content)
         except jsonschema.exceptions.ValidationError as error:
             raise ValidationPluginError(
-                type="ContentValidationError", message=error.message
+                type_="ContentValidationError", message=error.message
             ) from error
