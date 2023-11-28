@@ -23,8 +23,8 @@ from schemapack.validation.base import GlobalValidationPlugin
 
 
 class UnknownClassSlotValidationPlugin(GlobalValidationPlugin):
-    """A resource-scoped validation plugin validating that a datapack only contain slots
-    for classes defined in the provided schemapack.
+    """A resource-scoped validation plugin validating that a datapack only contains
+    slots for classes defined in the provided schemapack.
     """
 
     @staticmethod
