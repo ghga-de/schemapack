@@ -55,7 +55,7 @@ class RootResourceExistenceValidationPlugin(GlobalValidationPlugin):
             return
 
         resources_of_interest = datapack.resources.get(self._root_class, {})
-        if not datapack.root in resources_of_interest:
+        if datapack.root not in resources_of_interest:
             raise ValidationPluginError(
                 type_="RootResourceNotFoundError",
                 message=(
