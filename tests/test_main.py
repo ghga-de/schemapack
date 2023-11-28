@@ -34,7 +34,7 @@ from tests.fixtures.examples import (
 )
 def test_load_and_validate_valid(name: str, path: Path):
     """Test load_and_validate function with valid schemapack and valid datapacks."""
-    schemapack_name, error_type, *_ = tuple(name.split("."))
+    schemapack_name = name.split(".", 1)[0]
     schemapack_path = VALID_SCHEMAPACK_PATHS[schemapack_name]
 
     _ = load_and_validate(schemapack_path=schemapack_path, datapack_path=path)
