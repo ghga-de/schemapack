@@ -53,7 +53,7 @@ class IdFromContentValidationPlugin(ResourceValidationPlugin):
         """
         if resource_id != (expected_id := resource.content.get(self._id_property)):
             raise ValidationPluginError(
-                type_="IdContentMissmatchError",
+                type_="IdContentMismatchError",
                 message=(
                     "The ID did not match the corresponding content property: "
                     + f"got '{resource_id}' but expected '{expected_id}'"
