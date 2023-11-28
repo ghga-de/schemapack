@@ -38,7 +38,7 @@ class UnknownClassSlotValidationPlugin(GlobalValidationPlugin):
 
     def __init__(self, *, schemapack: SchemaPack):
         """This plugin is configured with the entire schemapack."""
-        self._classes = schemapack.classes.keys()
+        self._classes = set(schemapack.classes)
 
     def validate(self, *, datapack: DataPack):
         """Validate the entire datapack.
