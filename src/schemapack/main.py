@@ -36,7 +36,7 @@ def load_and_validate(
         schemapack.exceptions.DataPackFormatError:
             If the datapack has an invalid format.
         schemapack.exceptions.ValidationError:
-            If the datapack is not invalid against the schemapack.
+            If the datapack is not valid against the schemapack.
     """
     schemapack = load_schemapack(schemapack_path)
     datapack = load_datapack(datapack_path)
