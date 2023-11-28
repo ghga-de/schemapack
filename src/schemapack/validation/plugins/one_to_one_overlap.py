@@ -45,11 +45,11 @@ class OneToOneOverlapValidationPlugin(ClassValidationPlugin):
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._relations_of_interest = {
-            name: relation
+        self._relations_of_interest = [
+            name
             for name, relation in class_.relations.items()
             if relation.cardinality == Cardinality.ONE_TO_ONE
-        }
+        ]
 
     def validate(
         self, *, class_resources: Mapping[ResourceId, Resource], datapack: DataPack
