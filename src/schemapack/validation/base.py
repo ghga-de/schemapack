@@ -40,7 +40,7 @@ class GlobalValidationPlugin(ABC):
         """A classmethod to check whether this validation plugin is relevant for the
         given schemapack.
 
-        Returns: True if this plugin is relevant for the given class definition.
+        Returns: True if this plugin is relevant for the given schemapack.
         """
         raise NotImplementedError
 
