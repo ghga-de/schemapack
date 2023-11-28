@@ -186,11 +186,11 @@ class SchemaPackValidator:
             schemapack:
                 The schemapack to validate against.
             add_global_plugins:
-                Global validation plugins to use in addition to the default onces.
+                Global validation plugins to use in addition to the default ones.
             add_class_plugins:
-                Class validation plugins to use in addition to the default onces.
+                Class validation plugins to use in addition to the default ones.
             add_resource_plugins:
-                Resource validation plugins to use in addition to the default onces.
+                Resource validation plugins to use in addition to the default ones.
         """
         self._global_plugins = _create_global_plugins(
             schemapack=schemapack,
