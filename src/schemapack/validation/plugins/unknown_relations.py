@@ -39,7 +39,7 @@ class UnknownRelationValidationPlugin(ResourceValidationPlugin):
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._expected_relations = class_.relations.keys()
+        self._expected_relations = set(class_.relations)
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
