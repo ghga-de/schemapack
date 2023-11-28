@@ -45,7 +45,7 @@ def test_load_and_validate_valid(name: str, path: Path):
 )
 def test_load_and_validate_invalid(name: str, path: Path):
     """Test load_and_validate function with valid schemapack but invalid datapacks."""
-    schemapack_name, error_type, *_ = tuple(name.split("."))
+    schemapack_name, error_type = name.split(".", 2)[:2]
     schemapack_path = VALID_SCHEMAPACK_PATHS[schemapack_name]
 
     with pytest.raises(BaseError) as exception_info:
