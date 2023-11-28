@@ -104,7 +104,7 @@ class ResourceValidationPlugin(ABC):
     @abstractmethod
     def does_apply(*, class_: ClassDefinition) -> bool:
         """A classmethod to check whether this validation plugin is relevant for the
-        given schemapack.
+        given class definition.
 
         Returns: True if this plugin is relevant for the given class definition.
         """
