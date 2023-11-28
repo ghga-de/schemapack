@@ -17,6 +17,7 @@
 """Base classes for defining validation plugins."""
 
 from abc import ABC, abstractmethod
+from collections.abc import Mapping
 
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
 from schemapack.spec.schemapack import ClassDefinition, SchemaPack
@@ -60,8 +61,9 @@ class GlobalValidationPlugin(ABC):
 
 
 class ClassValidationPlugin(ABC):
-    """Abstract class for defining class-scoped validation plugin. Implementing objects
-    perform validation with respect to one specific schemapack class.
+    """Abstract class for defining class-scoped validation plugin. Instances
+    of implemeting concrete classes perform validation with respect to one
+    specific schemapack class.
     """
 
     @staticmethod
@@ -81,7 +83,7 @@ class ClassValidationPlugin(ABC):
 
     @abstractmethod
     def validate(
-        self, *, class_resources: dict[ResourceId, Resource], datapack: DataPack
+        self, *, class_resources: Mapping[ResourceId, Resource], datapack: DataPack
     ):
         """Validate all resources of a specific class. The entire datapack is provided
         for resolving relations to other classes.

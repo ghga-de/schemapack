@@ -17,6 +17,7 @@
 """A validation plugin."""
 
 from collections import Counter
+from collections.abc import Mapping
 
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
@@ -51,7 +52,7 @@ class OneToOneOverlapValidationPlugin(ClassValidationPlugin):
         }
 
     def validate(
-        self, *, class_resources: dict[ResourceId, Resource], datapack: DataPack
+        self, *, class_resources: Mapping[ResourceId, Resource], datapack: DataPack
     ):
         """Validate all resources of a specific class. The entire datapack is provided
         for resolving relations to other classes.
