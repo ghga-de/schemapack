@@ -65,6 +65,6 @@ class UnknownRelationValidationPlugin(ResourceValidationPlugin):
                 ),
                 details={
                     "unknown_relations": unknown_relations,
-                    "existing_relations": list(resource.relations.keys()),
+                    "existing_relations": list(resource.relations),
                 },
             )
