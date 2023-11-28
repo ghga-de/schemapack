@@ -59,7 +59,7 @@ class CardinalityPluralityValidationPlugin(ResourceValidationPlugin):
                     "to_many"
                 )
             except KeyError:
-                # Unkown relations are handled in a different plugin:
+                # Unknown relations are handled in a different plugin:
                 continue
 
             if is_list != expected_list:

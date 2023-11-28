@@ -37,10 +37,10 @@ class DuplicateForeignIdValidationPlugin(ResourceValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        for relation in class_.relations.values():
-            if relation.cardinality.endswith("to_many"):
-                return True
-        return False
+        return any(
+            relation.cardinality.endswith("to_many")
+            for relation in class_.relations.values()
+        )
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
@@ -82,7 +82,7 @@ class DuplicateForeignIdValidationPlugin(ResourceValidationPlugin):
                 type_="DuplicateForeignIdError",
                 message=(
                     "Found duplicate foreign ids for the following relation(s): "
-                    + ", ".join(duplicate_ids_by_relation.keys())
+                    + ", ".join(duplicate_ids_by_relation)
                 ),
                 details={"duplicate_ids_by_relation": duplicate_ids_by_relation},
             )

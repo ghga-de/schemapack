@@ -79,7 +79,7 @@ class DataPack(NoExtraBaseModel):
             "A nested dictionary containing resources per class name (keys on the first"
             + " level) and resource ID (keys on the second level). Each class defined"
             + " in the schemapack must be present even if no resources are defined for"
-            + " for it in this datapack."
+            + " it in this datapack."
         ),
     )
 
@@ -87,7 +87,7 @@ class DataPack(NoExtraBaseModel):
         None,
         description=(
             "The ID of the root resource which must be of the class defined as root"
-            + " in the schemapack. This must and may be only specified if the schempack"
-            + " is rooted."
+            + " in the schemapack. This must and may be only specified if the"
+            + " schemapack is rooted."
         ),
     )

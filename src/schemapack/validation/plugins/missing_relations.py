@@ -65,6 +65,6 @@ class MissingRelationValidationPlugin(ResourceValidationPlugin):
                 ),
                 details={
                     "missing_relations": missing_relations,
-                    "existing_relations": list(resource.relations.keys()),
+                    "existing_relations": list(resource.relations),
                 },
             )
