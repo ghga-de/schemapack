@@ -38,10 +38,10 @@ class OneToOneOverlapValidationPlugin(ClassValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        for relation in class_.relations.values():
-            if relation.cardinality == Cardinality.ONE_TO_ONE:
-                return True
-        return False
+        return any(
+            relation.cardinality == Cardinality.ONE_TO_ONE
+            for relation in class_.relations.values()
+        )
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
