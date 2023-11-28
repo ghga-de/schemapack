@@ -16,7 +16,6 @@
 
 """Example schemapack definitions and associated data."""
 
-from collections import OrderedDict
 from pathlib import Path
 
 from tests.fixtures.utils import ROOT_DIR
@@ -45,7 +44,7 @@ def list_examples_in_dir(dir: Path, *, suffix: str) -> dict[str, Path]:
         if path.name.endswith(suffix)
     }
 
-    return OrderedDict(sorted(examples.items()))
+    return dict(sorted(examples.items()))
 
 
 def list_schemapacks_in_dir(dir: Path) -> dict[str, Path]:
@@ -76,7 +75,7 @@ def list_datapacks_in_dir(dir: Path) -> dict[str, Path]:
         ).items()
     }
 
-    return OrderedDict(sorted(examples.items()))
+    return dict(sorted(examples.items()))
 
 
 VALID_DATAPACK_PATHS = list_datapacks_in_dir(VALID_DATAPACK_DIR)
