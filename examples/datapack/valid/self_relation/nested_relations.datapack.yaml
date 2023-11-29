@@ -1,33 +1,21 @@
 # Nested relations between resources of the same type:
 datapack: 0.1.0
 resources:
-  File:
-    example_file_a:
+  SomeClass:
+    a:
       content:
-        alias: example_file_a
-        filename: example_file_a.fastq
-        format: FASTQ
-        checksum: 1a5ac10ab42911dc0224172c118a326d9a4c03969112a2f3eb1ad971e96e92b8
-        size: 12321
+        alias: a
       relations:
         files:
-          - example_file_b # <-
-    example_file_b:
+          - b
+    b:
       content:
-        alias: example_file_b
-        filename: example_file_b.fastq
-        format: FASTQ
-        checksum: 2b5ac10ab42911dc0224172c118a326d9a4c03969112a2f3eb1ad971e96e92c9
-        size: 12314
+        alias: b
       relations:
         files:
-          - example_file_c # <-
-    example_file_c:
+          - c
+    c:
       content:
-        alias: example_file_c
-        filename: example_file_c.fastq
-        format: FASTQ
-        checksum: a9c24870071da03f78515e6197048f3a2172e90e597e9250cd01a0cb8f0986ed
-        size: 12123
+        alias: c
       relations:
         files: []

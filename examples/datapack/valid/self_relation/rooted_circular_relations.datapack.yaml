@@ -15,3 +15,6 @@ resources:
       relations:
         files:
           - a # <-
+root:
+  class_name: SomeClass
+  resource_id: a

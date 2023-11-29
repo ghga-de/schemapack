@@ -1,12 +1,12 @@
 # A class referencing itself in a relation:
 schemapack: 0.1.0
 classes:
-  File:
+  SomeClass:
     id:
       from_content: alias
-    content: ../../content_schemas/File.schema.json
+    content: ../../content_schemas/AnyAliasedObject.schema.json
     relations:
       files:
-        to: File # <-
+        to: SomeClass # <-
         cardinality: many_to_many
         lookup: in_document
