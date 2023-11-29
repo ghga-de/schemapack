@@ -6,7 +6,7 @@ classes:
       from_content: alias
     content: ../../content_schemas/AnyAliasedObject.schema.json
     relations:
-      files:
+      some_relation:
         to: SomeClass # <-
         cardinality: many_to_many
         lookup: in_document

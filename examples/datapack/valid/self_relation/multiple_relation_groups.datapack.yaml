@@ -10,28 +10,28 @@ resources:
       content:
         alias: a
       relations:
-        files:
+        some_relation:
           - b
     b:
       content:
         alias: b
       relations:
-        files:
+        some_relation:
           - c
     c:
       content:
         alias: c
       relations:
-        files: []
+        some_relation: []
     # another group of resources:
     d:
       content:
         alias: d
       relations:
-        files:
+        some_relation:
           - e
     e:
       content:
         alias: e
       relations:
-        files: []
+        some_relation: []

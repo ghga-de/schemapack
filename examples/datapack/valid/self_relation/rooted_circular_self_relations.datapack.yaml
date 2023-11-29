@@ -7,7 +7,7 @@ resources:
       content:
         alias: a
       relations:
-        files:
+        some_relation:
           - a # <-
 root:
   class_name: SomeClass
