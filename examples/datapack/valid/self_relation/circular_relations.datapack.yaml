@@ -7,11 +7,11 @@ resources:
       content:
         alias: a
       relations:
-        files:
+        some_relation:
           - b # <-
     b:
       content:
         alias: b
       relations:
-        files:
+        some_relation:
           - a # <-

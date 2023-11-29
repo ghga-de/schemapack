@@ -7,19 +7,19 @@ resources:
       content:
         alias: a
       relations:
-        files:
+        some_relation:
           - b
     b:
       content:
         alias: b
       relations:
-        files:
+        some_relation:
           - c
     c:
       content:
         alias: c
       relations:
-        files: []
+        some_relation: []
 root:
   class_name: SomeClass
   resource_id: a
