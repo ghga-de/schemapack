@@ -20,6 +20,7 @@ from pathlib import Path
 
 import pytest
 
+from schemapack.exceptions import CircularRelationError
 from schemapack.integrate import integrate
 from schemapack.load import load_datapack, load_schemapack
 from schemapack.utils import read_json_or_yaml
@@ -45,3 +46,20 @@ def test_integrate(name: str, expected_integration_path: Path):
     integration = integrate(datapack=datapack, schemapack=schemapack)
 
     assert integration == expected_integration
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "self_relation.rooted_circular_relations",
+        "self_relation.rooted_circular_self_relations",
+    ],
+)
+def test_integrate_circular_relation(name: str):
+    """Test the integrate function fails on datapacks with circular relations."""
+    schemapack_name = name.split(".")[0]
+    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
+    datapack = load_datapack(VALID_DATAPACK_PATHS[name])
+
+    with pytest.raises(CircularRelationError):
+        _ = integrate(datapack=datapack, schemapack=schemapack)
