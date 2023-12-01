@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-"""Logic to isolate a resource from a non-rooted datapack to created a rooted datapack."""
+"""Logic to isolate a resource from a non-rooted datapack to create a rooted datapack."""
 
 from collections import defaultdict
 from collections.abc import Mapping
