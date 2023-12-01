@@ -40,7 +40,7 @@ def identify_dependencies(
     include_target: bool = False,
     _resource_blacklist: Optional[Mapping[ClassName, set[ResourceId]]] = None,
 ) -> Mapping[ClassName, set[ResourceId]]:
-    """Identify all dependencies (an dependencies of dependencies) for a given resource
+    """Identify all dependencies (recursively) for a given resource
     of the given class in the given datapack. Please note that it is assumed that
     datapack has already been validated against the schemapack.
 
