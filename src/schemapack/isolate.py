@@ -42,7 +42,7 @@ def identify_dependencies(
 ) -> Mapping[ClassName, set[ResourceId]]:
     """Identify all dependencies (recursively) for a given resource
     of the given class in the given datapack. Please note that it is assumed that
-    datapack has already been validated against the schemapack.
+    the datapack has already been validated against the schemapack.
 
     Args:
         datapack:
