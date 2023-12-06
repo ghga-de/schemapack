@@ -197,6 +197,6 @@ class ValidationAssumptionError(BaseError, RuntimeError):
 
 
 class CircularRelationError(BaseError, ValueError):
-    """Raised when a circular relation between resource is detected but the requested
+    """Raised when a circular relation between resources is detected, but the requested
     operation cannot be performed on datapacks with circular relations.
     """
