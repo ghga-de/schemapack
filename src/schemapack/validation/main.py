@@ -163,7 +163,11 @@ def _run_resource_plugins(
                     )
                 except ValidationPluginError as error:
                     records.append(
-                        _plugin_error_to_record(error, subject_class=class_name)
+                        _plugin_error_to_record(
+                            error,
+                            subject_class=class_name,
+                            subject_resource=resource_id,
+                        )
                     )
 
     return records
