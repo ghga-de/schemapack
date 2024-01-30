@@ -5,6 +5,8 @@ classes:
     id:
       from_content: alias
     content: ./content_schemas/File.schema.json
+    relations: {}
+
   Dataset:
     id:
       from_content: alias
@@ -13,6 +15,7 @@ classes:
       files:
         to: File
         cardinality: many_to_many
+
   Sample:
     id:
       from_content: alias
@@ -21,6 +24,7 @@ classes:
       files:
         to: File
         cardinality: one_to_many
+
   Experiment:
     id:
       from_content: alias

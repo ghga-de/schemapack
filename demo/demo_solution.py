@@ -19,6 +19,7 @@
 """Demo on how to use schemapack."""
 
 from pathlib import Path
+from timeit import timeit
 
 import yaml
 
@@ -42,8 +43,9 @@ invlaid_datapack = load_datapack(INVALID_DATAPACK_PATH)
 
 # validate:
 validator = SchemaPackValidator(schemapack=schemapack)
-validator.validate(datapack=datapack)
-validator.validate(datapack=invlaid_datapack)
+
+print(timeit(lambda: validator.validate(datapack=datapack), number=1000) / 1000)
+# validator.validate(datapack=invlaid_datapack)
 
 # isolate a single dataset:
 isolated_datapack = isolate(
