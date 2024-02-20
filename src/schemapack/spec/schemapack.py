@@ -41,7 +41,7 @@ from schemapack.utils import (
     read_json_or_yaml,
 )
 
-SupportedSchemaPackVersions = Literal["0.1.0"]
+SupportedSchemaPackVersions = Literal["0.2.0"]
 SUPPORTED_SCHEMA_PACK_VERSIONS = typing.get_args(SupportedSchemaPackVersions)
 
 
@@ -70,20 +70,6 @@ class FrozenBaseModel(BaseModel):
     """A BaseModel that cannot be changed after initialization."""
 
     model_config = ConfigDict(frozen=True, use_enum_values=True, extra="forbid")
-
-
-class IdField(FrozenBaseModel):
-    """A model for describing a schemapack ID field definition."""
-
-    # currently only IDs that are inherited from a field of the content schema are
-    # supported
-
-    from_content: str = Field(
-        ...,
-        description=(
-            "The name of the property from the content schema to be used as ID field."
-        ),
-    )
 
 
 class ContentSchema(FrozenBaseModel):
@@ -156,7 +142,14 @@ class Relation(FrozenBaseModel):
 class ClassDefinition(FrozenBaseModel):
     """A model for describing a schemapack class definition."""
 
-    id: IdField
+    id_property: str = Field(
+        description=(
+            "A name that can be used for the ID property. It may not collide"
+            + " with content or relations properties."
+            + "This name e.g. relavant for specifying the ID property in a"
+            + " denormalized representation."
+        ),
+    )
     content: ContentSchema
     relations: FrozenDict[str, Relation] = Field(
         FrozenDict(),
@@ -260,39 +253,6 @@ class ClassDefinition(FrozenBaseModel):
             )
 
         return v
-
-    @model_validator(mode="after")
-    def id_from_content_validator(self) -> "ClassDefinition":
-        """Validate that the from_content property of the id field is part of the
-        content schema.
-        """
-        if self.id.from_content not in self.content.properties:
-            raise PydanticCustomError(
-                "IdNotInContentSchemaError",
-                (
-                    "The ID property '{id_property}' is not part of the content schema"
-                    + " which contains only the following properties: {content_properties}"
-                ),
-                {
-                    "id_property": self.id.from_content,
-                    "content_properties": self.content.properties,
-                },
-            )
-        if self.id.from_content not in self.content.json_schema_dict.get(
-            "required", []
-        ):
-            raise PydanticCustomError(
-                "IdNotRequiredError",
-                (
-                    "The ID property '{id_property}' is not required in the content"
-                    + " schema. It must be marked as required."
-                ),
-                {
-                    "id_property": self.id.from_content,
-                },
-            )
-
-        return self
 
 
 class SchemaPack(FrozenBaseModel):
