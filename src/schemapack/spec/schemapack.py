@@ -254,6 +254,54 @@ class ClassDefinition(FrozenBaseModel):
 
         return v
 
+    @model_validator(mode="after")
+    def relation_content_property_collisions(self) -> "ClassDefinition":
+        """Check for collisions between relations and content properties."""
+        collisions = self.content.properties.intersection(set(self.relations))
+
+        if collisions:
+            raise PydanticCustomError(
+                "RelationsContentPropertyCollisionError",
+                (
+                    "The following properties occur both in the content and the"
+                    + " relations: {collisions}"
+                ),
+                {
+                    "number": len(collisions),
+                    "collisions": collisions,
+                },
+            )
+
+        return self
+
+    @model_validator(mode="after")
+    def id_content_property_collisions(self) -> "ClassDefinition":
+        """Check for collisions between the id property and content properties."""
+        if self.id_property in self.content.properties:
+            raise PydanticCustomError(
+                "IdContentPropertyCollisionError",
+                ("The id property '{id_property}' also occurs in the content."),
+                {
+                    "id_property": self.id_property,
+                },
+            )
+
+        return self
+
+    @model_validator(mode="after")
+    def id_relations_property_collisions(self) -> "ClassDefinition":
+        """Check for collisions between the id property and relations properties."""
+        if self.id_property in self.relations:
+            raise PydanticCustomError(
+                "IdRelationsPropertyCollisionError",
+                ("The id property '{id_property}' also occurs in the relations."),
+                {
+                    "id_property": self.id_property,
+                },
+            )
+
+        return self
+
 
 class SchemaPack(FrozenBaseModel):
     """A model for describing a schemapack definition."""
