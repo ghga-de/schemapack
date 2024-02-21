@@ -9,6 +9,4 @@ resources:
         checksum: 1a5ac10ab42911dc0224172c118a326d9a4c03969112a2f3eb1ad971e96e92b8
         size: 12321
   Dataset: {}
-root:
-  class_name: NonExistingClass # <-
-  resource_id: example_dataset
+root_resource: example_dataset

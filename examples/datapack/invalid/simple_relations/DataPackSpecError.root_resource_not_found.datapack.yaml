@@ -8,6 +8,4 @@ resources:
         dac_contact: dac@example.org
       relations:
         files: []
-root:
-  class_name: Dataset
-  resource_id: not_existing_dataset # <-
+root_resource: not_existing_dataset # <-
