@@ -13,5 +13,5 @@ Dockerfile
 config_schema.json
 example_config.yaml
 
-.description.md
-.design.md
+.readme_generation/description.md
+.readme_generation/design.md
