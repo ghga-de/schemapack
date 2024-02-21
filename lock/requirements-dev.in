@@ -1,0 +1,4 @@
+# requirements for development and testing this service
+
+# template requirements for development and testing
+-r requirements-dev-template.in
