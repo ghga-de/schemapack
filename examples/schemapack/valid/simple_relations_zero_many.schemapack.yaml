@@ -9,9 +9,9 @@ classes:
     relations:
       files:
         origin:
-          mandatory: true
-          multiplicity: false
+          zero: true
+          many: false
         foreign:
           class: File
-          mandatory: true
-          multiplicity: true
+          zero: true
+          many: true
