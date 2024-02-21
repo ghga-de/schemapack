@@ -11,7 +11,7 @@ classes:
         to: File
         mandatory:
           origin: true
-          foreign: true
+          target: true
         multiple:
           origin: false
-          foreign: true
+          target: true

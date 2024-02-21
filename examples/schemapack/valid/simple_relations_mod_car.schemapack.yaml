@@ -11,7 +11,7 @@ classes:
         to: File
         modality:
           origin: one
-          foreign: one
+          target: one
         cardinality:
           origin: one
-          foreign: many
+          target: many
