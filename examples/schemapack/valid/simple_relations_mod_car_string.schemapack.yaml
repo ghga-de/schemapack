@@ -9,9 +9,5 @@ classes:
     relations:
       files:
         to: File
-        modality:
-          origin: one
-          foreign: one
-        cardinality:
-          origin: one
-          foreign: many
+        modality: "one_to_one"
+        cardinality: "one_to_many"

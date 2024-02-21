@@ -8,10 +8,10 @@ classes:
     content: ../../content_schemas/Dataset.schema.json
     relations:
       files:
-        origin:
-          mandatory: true
-          multiplicity: false
-        foreign:
-          class: File
-          mandatory: true
-          multiplicity: true
+        to: File
+        mandatory:
+          origin: true
+          foreign: true
+        multiplicity:
+          origin: false
+          foreign: true
