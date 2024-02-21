@@ -19,8 +19,7 @@
 import typing
 from typing import Any, Literal, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
-from pydantic_core import PydanticCustomError
+from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import TypeAlias
 
 SupportedDataPackVersions = Literal["0.1.0"]
