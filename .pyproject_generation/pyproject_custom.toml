@@ -1,19 +1,16 @@
+
 [project]
-# please adapt to package name
-name = "my_microservice"
-version = "0.1.0"
-description = "My-Microservice - a short description"
+name = "schemapack"
+version = "1.0.0"
+description = "Make your JSON Schemas sociable and create linked data model."
 dependencies = [
-    "typer >= 0.9.0",
-    "ghga-service-commons[api] >= 1.2.0",
-    "ghga-event-schemas >= 1.0.0",
-    "hexkit[akafka,s3,mongodb] >= 1.1.0"
+    "pydantic >=2, <3",
+    "pydantic_settings >=2, <3",
+    "PyYAML >=6.0.1, <7",
+    "jsonschema >=4.19.2, <5",
+    "immutabledict >=3.0.0, <4",
 ]
 
 [project.urls]
 # please adapt to package name
-Repository = "https://github.com/ghga-de/my-microservice"
-
-[project.scripts]
-# please adapt to package name
-my-microservice = "my_microservice.__main__:run"
+Repository = "https://github.com/ghga-de/schemapack"
