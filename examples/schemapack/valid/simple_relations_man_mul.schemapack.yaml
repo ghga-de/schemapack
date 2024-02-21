@@ -12,6 +12,6 @@ classes:
         mandatory:
           origin: true
           foreign: true
-        multiplicity:
+        multiple:
           origin: false
           foreign: true
