@@ -1,4 +1,4 @@
-# a simple schemapack with a root class
+# a simple schemapack with no root class
 schemapack: 0.2.0
 classes:
   File:
