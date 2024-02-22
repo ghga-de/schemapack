@@ -8,5 +8,5 @@ classes:
     content: ../../content_schemas/Dataset.schema.json
     relations:
       files:
-        to: File
+        targetClass: File
         # every relation must have a cardinality, this has none

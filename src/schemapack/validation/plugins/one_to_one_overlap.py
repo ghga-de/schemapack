@@ -21,7 +21,7 @@ from collections.abc import Mapping
 
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
-from schemapack.spec.schemapack import Cardinality, ClassDefinition
+from schemapack.spec.schemapack import ClassDefinition
 from schemapack.validation.base import ClassValidationPlugin
 
 

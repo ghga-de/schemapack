@@ -89,7 +89,9 @@ def identify_dependencies(
             foreign_ids = [foreign_ids]
 
         try:
-            foreign_class_name = target_class_definition.relations[relation_name].to
+            foreign_class_name = target_class_definition.relations[
+                relation_name
+            ].targetClass
         except KeyError as error:
             raise ValidationAssumptionError(context="relation resolution") from error
 

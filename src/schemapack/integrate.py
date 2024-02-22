@@ -112,7 +112,7 @@ def integrate(  # noqa: PLR0912,C901
         except KeyError as error:
             raise ValidationAssumptionError(context="relation resolution") from error
 
-        foreign_class_name = relation_definition.to
+        foreign_class_name = relation_definition.targetClass
 
         is_plural = relation_definition.cardinality.endswith("to_many")
         if is_plural:

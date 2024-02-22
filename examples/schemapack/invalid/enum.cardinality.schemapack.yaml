@@ -8,5 +8,5 @@ classes:
     content: ../../content_schemas/Dataset.schema.json
     relations:
       files:
-        to: File
+        targetClass: File
         cardinality: not_valid # <-

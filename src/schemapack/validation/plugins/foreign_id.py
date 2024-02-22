@@ -58,7 +58,7 @@ class ForeignIdValidationPlugin(ResourceValidationPlugin):
                 foreign_ids = [foreign_ids]
 
             for foreign_id in foreign_ids:
-                if foreign_id not in datapack.resources.get(relation.to, {}):
+                if foreign_id not in datapack.resources.get(relation.targetClass, {}):
                     non_found_foreign_ids[foreign_id] = relation_name
 
         if non_found_foreign_ids:
