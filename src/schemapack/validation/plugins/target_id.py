@@ -54,7 +54,10 @@ class TargetIdValidationPlugin(ResourceValidationPlugin):
         for relation_name, relation in self._relations.items():
             target_ids = resource.relations.get(relation_name, [])
 
-            if not isinstance(target_ids, list):
+            if not target_ids:
+                continue
+
+            if isinstance(target_ids, str):
                 target_ids = [target_ids]
 
             for target_id in target_ids:

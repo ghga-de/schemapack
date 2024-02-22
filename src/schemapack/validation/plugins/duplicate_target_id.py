@@ -66,7 +66,7 @@ class DuplicateTargetIdValidationPlugin(ResourceValidationPlugin):
             if not isinstance(target_ids, list):
                 # This is an error, however, it needs to be handled by a different
                 # validation plugin
-                target_ids = [target_ids]
+                continue
 
             duplicate_target_ids = [k for k, v in Counter(target_ids).items() if v > 1]
             if duplicate_target_ids:

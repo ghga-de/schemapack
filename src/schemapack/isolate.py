@@ -84,16 +84,22 @@ def identify_dependencies(
 
     dependencies_by_class: dict[ClassName, set[ResourceId]] = defaultdict(set)
 
-    for relation_name, target_ids in target_resource.relations.items():
-        if isinstance(target_ids, str):
-            target_ids = [target_ids]
-
+    for relation_name in target_resource.relations:
         try:
             target_class_name = target_class_definition.relations[
                 relation_name
             ].targetClass
         except KeyError as error:
-            raise ValidationAssumptionError(context="relation resolution") from error
+            raise ValidationAssumptionError(
+                context="relation resolution in schemapack"
+            ) from error
+
+        try:
+            target_ids = target_resource.get_target_id_list(relation_name)
+        except KeyError as error:
+            raise ValidationAssumptionError(
+                context="relation resolution in datapack"
+            ) from error
 
         for target_id in target_ids:
             if (

@@ -68,16 +68,20 @@ class OneToOneOverlapValidationPlugin(ClassValidationPlugin):
             target_ids: list[str] = []
 
             for resource in class_resources.values():
-                target_id = resource.relations.get(relation_name)
-
-                if not target_id:
+                try:
+                    target_id = resource.relations[relation_name]
+                except KeyError:
                     # This is an error, however, it needs to be handled by a different
                     # validation plugin
                     continue
 
-                if not isinstance(target_id, str):
+                if isinstance(target_id, list):
                     # This is an error, however, it needs to be handled by a different
                     # validation plugin
+                    continue
+
+                if not target_id:
+                    # This is OK (at least assuming mandatory.target is False)
                     continue
 
                 target_ids.append(target_id)
