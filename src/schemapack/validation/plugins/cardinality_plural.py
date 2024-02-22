@@ -69,7 +69,7 @@ class CardinalityPluralityValidationPlugin(ResourceValidationPlugin):
             raise ValidationPluginError(
                 type_="CardinalityPluralityError",
                 message=(
-                    "Expected a single foreign ID but got a list, or vise versa, for"
+                    "Expected a single target ID but got a list, or vise versa, for"
                     " the following relation propertie(s): "
                     + ", ".join(wrong_relations)
                 ),

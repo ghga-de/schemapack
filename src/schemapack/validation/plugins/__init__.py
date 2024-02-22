@@ -23,14 +23,11 @@ from schemapack.validation.plugins.cardinality_plural import (
 from schemapack.validation.plugins.content_schema import (
     ContentSchemaValidationPlugin,  # noqa: F401
 )
-from schemapack.validation.plugins.duplicate_foreign_id import (
-    DuplicateForeignIdValidationPlugin,  # noqa: F401
+from schemapack.validation.plugins.duplicate_target_id import (
+    DuplicateTargetIdValidationPlugin,  # noqa: F401
 )
 from schemapack.validation.plugins.expected_root import (
     ExpectedRootValidationPlugin,  # noqa: F401
-)
-from schemapack.validation.plugins.foreign_id import (
-    ForeignIdValidationPlugin,  # noqa: F401
 )
 from schemapack.validation.plugins.missing_class import (
     MissingClassSlotValidationPlugin,  # noqa: F401
@@ -43,6 +40,9 @@ from schemapack.validation.plugins.one_to_many_overlap import (
 )
 from schemapack.validation.plugins.one_to_one_overlap import (
     OneToOneOverlapValidationPlugin,  # noqa: F401
+)
+from schemapack.validation.plugins.target_id import (
+    TargetIdValidationPlugin,  # noqa: F401
 )
 from schemapack.validation.plugins.unexpected_root import (
     UnexpectedRootValidationPlugin,  # noqa: F401

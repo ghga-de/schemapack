@@ -24,13 +24,13 @@ from schemapack.validation.base import (
 from schemapack.validation.plugins import (
     CardinalityPluralityValidationPlugin,
     ContentSchemaValidationPlugin,
-    DuplicateForeignIdValidationPlugin,
+    DuplicateTargetIdValidationPlugin,
     ExpectedRootValidationPlugin,
-    ForeignIdValidationPlugin,
     MissingClassSlotValidationPlugin,
     MissingRelationValidationPlugin,
     OneToManyOverlapValidationPlugin,
     OneToOneOverlapValidationPlugin,
+    TargetIdValidationPlugin,
     UnexpectedRootValidationPlugin,
     UnknownClassSlotValidationPlugin,
     UnknownRelationValidationPlugin,
@@ -50,9 +50,9 @@ DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = [
 ]
 DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
     ContentSchemaValidationPlugin,
-    ForeignIdValidationPlugin,
+    TargetIdValidationPlugin,
     MissingRelationValidationPlugin,
     UnknownRelationValidationPlugin,
     CardinalityPluralityValidationPlugin,
-    DuplicateForeignIdValidationPlugin,
+    DuplicateTargetIdValidationPlugin,
 ]

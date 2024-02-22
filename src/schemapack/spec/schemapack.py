@@ -46,7 +46,7 @@ SUPPORTED_SCHEMA_PACK_VERSIONS = typing.get_args(SupportedSchemaPackVersions)
 
 
 class RelationLookupMethod(str, Enum):
-    """The method used to lookup the foreign class instance(s) referenced in a
+    """The method used to lookup the target class instance(s) referenced in a
     relation.
     """
 
@@ -169,7 +169,7 @@ class Relation(FrozenBaseModel):
 
     targetClass: str = Field(  # noqa: N815 - align with the schemapack naming scheme
         ...,
-        description="The name of the foreign class.",
+        description="The name of the target class.",
     )
     mandatory: MandatoryRelationSpec = Field(
         ...,
@@ -191,7 +191,7 @@ class Relation(FrozenBaseModel):
     )
     lookup: RelationLookupMethod = Field(
         RelationLookupMethod.IN_DOCUMENT,
-        description="The method used to lookup the foreign class instance(s).",
+        description="The method used to lookup the target class instance(s).",
     )
 
 
