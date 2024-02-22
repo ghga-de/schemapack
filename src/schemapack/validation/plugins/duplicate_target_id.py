@@ -37,17 +37,14 @@ class DuplicateTargetIdValidationPlugin(ResourceValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return any(
-            relation.cardinality.endswith("to_many")
-            for relation in class_.relations.values()
-        )
+        return any(relation.multiple.target for relation in class_.relations.values())
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
         self._relations_of_interest = [
             name
             for name, relation in class_.relations.items()
-            if relation.cardinality.endswith("to_many")
+            if relation.multiple.target
         ]
 
     def validate(

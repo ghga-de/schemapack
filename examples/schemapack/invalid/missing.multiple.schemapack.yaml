@@ -9,4 +9,7 @@ classes:
     relations:
       files:
         targetClass: File
-        # every relation must have a cardinality, this has none
+        mandatory:
+          origin: true
+          target: true
+        # every relation multiple defined

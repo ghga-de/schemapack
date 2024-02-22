@@ -39,7 +39,7 @@ class OneToOneOverlapValidationPlugin(ClassValidationPlugin):
         Returns: True if this plugin is relevant for the given class definition.
         """
         return any(
-            relation.cardinality == Cardinality.ONE_TO_ONE
+            not relation.multiple.origin and not relation.multiple.target
             for relation in class_.relations.values()
         )
 
@@ -48,7 +48,7 @@ class OneToOneOverlapValidationPlugin(ClassValidationPlugin):
         self._relations_of_interest = [
             name
             for name, relation in class_.relations.items()
-            if relation.cardinality == Cardinality.ONE_TO_ONE
+            if not relation.multiple.origin and not relation.multiple.target
         ]
 
     def validate(

@@ -114,7 +114,7 @@ def integrate(  # noqa: PLR0912,C901
 
         target_class_name = relation_definition.targetClass
 
-        is_plural = relation_definition.cardinality.endswith("to_many")
+        is_plural = relation_definition.multiple.target
         if is_plural:
             integrated_object[relation_name] = []
 

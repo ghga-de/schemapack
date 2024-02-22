@@ -1,21 +1,15 @@
 schemapack: 0.2.0
-description: ...
 classes:
   File:
-    id:
-      property: alias
-      description: ...
+    id_property: alias
     content: ../../content_schemas/File.schema.json
   Dataset:
-    idProperty: alias
+    id_property: alias
     content: ../../content_schemas/Dataset.schema.json
     relations:
       files:
-        description: ...
         targetClass: File
-        mandatory:
-          origin: true
-          target: true
+        # every relation mandatory defined
         multiple:
-          origin: false
+          origin: true
           target: true

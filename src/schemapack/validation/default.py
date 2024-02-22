@@ -22,12 +22,12 @@ from schemapack.validation.base import (
     ResourceValidationPlugin,
 )
 from schemapack.validation.plugins import (
-    CardinalityPluralityValidationPlugin,
     ContentSchemaValidationPlugin,
     DuplicateTargetIdValidationPlugin,
     ExpectedRootValidationPlugin,
     MissingClassSlotValidationPlugin,
     MissingRelationValidationPlugin,
+    MultipleTargetValidationPlugin,
     OneToManyOverlapValidationPlugin,
     OneToOneOverlapValidationPlugin,
     TargetIdValidationPlugin,
@@ -53,6 +53,6 @@ DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
     TargetIdValidationPlugin,
     MissingRelationValidationPlugin,
     UnknownRelationValidationPlugin,
-    CardinalityPluralityValidationPlugin,
+    MultipleTargetValidationPlugin,
     DuplicateTargetIdValidationPlugin,
 ]
