@@ -26,6 +26,7 @@ from schemapack.validation.plugins import (
     DuplicateTargetIdValidationPlugin,
     ExpectedRootValidationPlugin,
     MissingClassSlotValidationPlugin,
+    MissingMandatoryOriginValidationPlugin,
     MissingMandatoryTargetValidationPlugin,
     MissingRelationValidationPlugin,
     MultipleTargetValidationPlugin,
@@ -48,6 +49,7 @@ DEFAULT_GLOBAL_PLUGIN_REGISTRY: list[type[GlobalValidationPlugin]] = [
 DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = [
     OneToOneOverlapValidationPlugin,
     OneToManyOverlapValidationPlugin,
+    MissingMandatoryOriginValidationPlugin,
 ]
 DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
     ContentSchemaValidationPlugin,

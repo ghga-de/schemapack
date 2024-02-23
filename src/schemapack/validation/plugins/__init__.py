@@ -29,6 +29,9 @@ from schemapack.validation.plugins.expected_root import (
 from schemapack.validation.plugins.missing_class import (
     MissingClassSlotValidationPlugin,
 )
+from schemapack.validation.plugins.missing_origin import (
+    MissingMandatoryOriginValidationPlugin,
+)
 from schemapack.validation.plugins.missing_relations import (
     MissingRelationValidationPlugin,
 )
@@ -75,4 +78,5 @@ __all__ = [
     "UnknownClassSlotValidationPlugin",
     "UnknownRelationValidationPlugin",
     "UnkownRootResourceValidationPlugin",
+    "MissingMandatoryOriginValidationPlugin",
 ]

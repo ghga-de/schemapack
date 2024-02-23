@@ -8,7 +8,7 @@ classes:
       some_relation:
         targetClass: SomeClass # <-
         mandatory:
-          origin: true
+          origin: false
           target: false
         multiple:
           origin: true

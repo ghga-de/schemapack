@@ -66,17 +66,27 @@ class Resource(NoExtraBaseModel):
         ),
     )
 
-    def get_target_id_list(self, relation_name: RelationName) -> list[ResourceId]:
+    def get_target_id_list(
+        self, relation_name: RelationName, do_not_raise: bool = False
+    ) -> list[ResourceId]:
         """Get the target ids for the given relation always represented as a list.
         This is even the case if the actual value in the relations dict is a single
         string (translated into a list of length one) or None (translated into an
-        empty list).
+        empty list). If do_not_raise is True, the method will return an empty list
+        even if the relation name does not exist in the relations dict.
 
         Raises:
-            KeyError: If the given relation name does not exist in the relations dict.
-
+            KeyError:
+                If the given relation name does not exist in the relations dict and
+                do_not_raise is False.
         """
-        targets = self.relations[relation_name]
+        try:
+            targets = self.relations[relation_name]
+        except KeyError:
+            if do_not_raise:
+                return []
+            raise
+
         if targets is None:
             return []
         if isinstance(targets, list):
