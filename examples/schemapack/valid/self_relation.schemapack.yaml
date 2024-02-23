@@ -9,7 +9,7 @@ classes:
         targetClass: SomeClass # <-
         mandatory:
           origin: true
-          target: true
+          target: false
         multiple:
           origin: true
           target: true

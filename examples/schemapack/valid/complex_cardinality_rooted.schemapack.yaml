@@ -1,4 +1,4 @@
-# a simple schemapack without a root class
+# a rooted schemapack illustrating all possible cardinalities:
 schemapack: 0.2.0
 classes:
   A:
@@ -8,32 +8,32 @@ classes:
       many_to_many:
         targetClass: B
         mandatory:
-          origin: true
-          target: true
+          origin: false
+          target: false
         multiple:
           origin: true
           target: true
       one_to_many:
         targetClass: B
         mandatory:
-          origin: true
-          target: true
+          origin: false
+          target: false
         multiple:
           origin: false
           target: true
       many_to_one:
         targetClass: B
         mandatory:
-          origin: true
-          target: true
+          origin: false
+          target: false
         multiple:
           origin: true
           target: false
       one_to_one:
         targetClass: B
         mandatory:
-          origin: true
-          target: true
+          origin: false
+          target: false
         multiple:
           origin: false
           target: false
