@@ -1,4 +1,4 @@
-# A collision between the ID property and the content properties:
+description: A collision between the ID property and the content properties
 schemapack: 0.2.0
 classes:
   File:
