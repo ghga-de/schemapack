@@ -1,5 +1,5 @@
-description: a schemapack illustrating all possible cardinalities
 schemapack: 0.2.0
+description: a schemapack illustrating all possible cardinalities
 classes:
   A:
     id:

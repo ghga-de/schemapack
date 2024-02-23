@@ -1,5 +1,5 @@
-description: a schemapack with a many-to-many relation that is mandatory at both ends
 schemapack: 0.2.0
+description: a schemapack with a many-to-many relation that is mandatory at both ends
 classes:
   A:
     id:

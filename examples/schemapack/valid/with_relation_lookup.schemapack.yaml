@@ -1,5 +1,5 @@
-description: a simple schema with an embedded relation
 schemapack: 0.2.0
+description: a simple schema with an embedded relation
 classes:
   File:
     id:

@@ -1,5 +1,5 @@
-description: A class referencing itself in a relation
 schemapack: 0.2.0
+description: A class referencing itself in a relation
 classes:
   SomeClass:
     id:

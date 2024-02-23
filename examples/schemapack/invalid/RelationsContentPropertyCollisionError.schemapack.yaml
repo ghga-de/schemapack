@@ -1,5 +1,5 @@
-description: A collision between relations and content properties
 schemapack: 0.2.0
+description: A collision between relations and content properties
 classes:
   File:
     id:

@@ -1,5 +1,5 @@
-description: there is little value in a schemapack without relations but it is syntactically valid
 schemapack: 0.2.0
+description: there is little value in a schemapack without relations but it is syntactically valid
 classes:
   File:
     id:

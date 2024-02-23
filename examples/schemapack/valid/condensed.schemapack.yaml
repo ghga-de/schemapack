@@ -1,5 +1,5 @@
-description: a simple schemapack with a root class with the content schemas being embedded
 schemapack: 0.2.0
+description: A simple schemapack
 classes:
   File:
     id:

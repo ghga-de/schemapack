@@ -1,5 +1,5 @@
-description: Refering to a non-existing class as root
 schemapack: 0.2.0
+description: Refering to a non-existing class as root
 classes:
   SomeClass:
     id:
