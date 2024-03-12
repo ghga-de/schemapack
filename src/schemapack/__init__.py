@@ -19,8 +19,10 @@ from importlib.metadata import version
 
 from ._isolate import isolate, isolate_class, isolate_resource
 from ._load import load_datapack, load_schemapack
+from ._main import load_and_validate
 
 __all__ = [
+    "load_and_validate",
     "load_datapack",
     "load_schemapack",
     "isolate",
