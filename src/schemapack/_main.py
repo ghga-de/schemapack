@@ -14,7 +14,10 @@
 # limitations under the License.
 #
 
-"""High-level convenience functions."""
+"""High-level convenience functions.
+
+Warning: This is an internal part of the library and might change without notice.
+"""
 
 from pathlib import Path
 
