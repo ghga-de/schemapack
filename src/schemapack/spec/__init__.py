@@ -14,4 +14,4 @@
 # limitations under the License.
 #
 
-"""Models for SchemaPack and DataPack definitions."""
+"""Models representing the schemapack and datapack specs."""

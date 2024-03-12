@@ -14,28 +14,24 @@
 # limitations under the License.
 #
 
-"""Models representing the schemapack spec (part of the public API of this package)."""
+"""Custom types annotations used for type hinting."""
 
-from ._schemapack import (
-    SUPPORTED_SCHEMA_PACK_VERSIONS,
-    ClassDefinition,
-    ContentSchema,
-    IDSpec,
-    MandatoryRelationSpec,
-    MultipleRelationSpec,
-    Relation,
-    SchemaPack,
-    SupportedSchemaPackVersions,
-)
+from typing import Annotated as _Annotated
+
+from pydantic import Field as _Field
+from typing_extensions import TypeAlias as _TypeAlias
 
 __all__ = [
-    "SUPPORTED_SCHEMA_PACK_VERSIONS",
-    "SchemaPack",
-    "ClassDefinition",
-    "ContentSchema",
-    "IDSpec",
-    "MandatoryRelationSpec",
-    "MultipleRelationSpec",
-    "Relation",
-    "SupportedSchemaPackVersions",
+    "ClassName",
+    "ResourceId",
+    "RelationPropertyName",
+    "ContentPropertyName",
+    "IdPropertyName",
 ]
+
+_NonEmptyStr: _TypeAlias = _Annotated[str, _Field(..., min_length=1)]
+ClassName: _TypeAlias = _NonEmptyStr
+ResourceId: _TypeAlias = _NonEmptyStr
+RelationPropertyName: _TypeAlias = _NonEmptyStr
+ContentPropertyName: _TypeAlias = _NonEmptyStr
+IdPropertyName: _TypeAlias = _NonEmptyStr
