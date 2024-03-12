@@ -18,7 +18,7 @@
 
 from pathlib import Path
 
-from schemapack.load import load_datapack, load_schemapack
+from schemapack._load import load_datapack, load_schemapack
 from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
 from schemapack.validation import SchemaPackValidator
