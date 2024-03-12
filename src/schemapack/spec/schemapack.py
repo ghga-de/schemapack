@@ -32,13 +32,9 @@ from pydantic import (
 )
 from pydantic_core import PydanticCustomError
 
-from schemapack.utils import (
-    FrozenDict,
-    JsonSchemaError,
-    ParsingError,
-    assert_valid_json_schema,
-    read_json_or_yaml_mapping,
-)
+from schemapack._utils import JsonSchemaError, assert_valid_json_schema
+from schemapack.exceptions import ParsingError
+from schemapack.utils import FrozenDict, read_json_or_yaml_mapping
 
 SupportedSchemaPackVersions = Literal["0.2.0"]
 SUPPORTED_SCHEMA_PACK_VERSIONS = typing.get_args(SupportedSchemaPackVersions)
