@@ -18,7 +18,7 @@
 
 import pytest
 
-from schemapack.isolate import isolate
+from schemapack import isolate
 from schemapack.load import load_datapack, load_schemapack
 from schemapack.spec.datapack import ClassName, ResourceId
 from tests.fixtures.examples import VALID_DATAPACK_PATHS, VALID_SCHEMAPACK_PATHS
