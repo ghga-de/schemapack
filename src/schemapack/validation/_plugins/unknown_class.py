@@ -19,7 +19,7 @@
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
-from schemapack.validation.base import GlobalValidationPlugin
+from schemapack.validation._base import GlobalValidationPlugin
 
 
 class UnknownClassSlotValidationPlugin(GlobalValidationPlugin):

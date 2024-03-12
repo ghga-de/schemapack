@@ -16,33 +16,16 @@
 
 """A validation plugin."""
 
-import json
-
-import jsonschema.exceptions
-import jsonschema.protocols
-import jsonschema.validators
-
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation.base import ResourceValidationPlugin
+from schemapack.validation._base import ResourceValidationPlugin
 
 
-def _get_json_schema_validator(schema_str: str) -> jsonschema.protocols.Validator:
-    """Get a JSON Schema validator for the given schema formatted as JSON string.
-    It is assumed that the schema has already been checked for validity against the
-    JSON Schema specs.
-    """
-    schema = json.loads(schema_str)
-    cls: type[jsonschema.protocols.Validator] = jsonschema.validators.validator_for(
-        schema
-    )
-    return cls(schema)
-
-
-class ContentSchemaValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating the content of one resource
-    against the content JSON Schema defined in the corresponding schemapack.
+class TargetIdValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating that all relations of a given
+    resource point to existing target resources.
+    This plugin only applies if the schemapack class defines any relations.
     """
 
     @staticmethod
@@ -52,14 +35,11 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        # Is always relevant since all resources must have a content schema:
-        return True
+        return bool(class_.relations)
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._json_schema_validator = _get_json_schema_validator(
-            class_.content.json_schema
-        )
+        self._relations = class_.relations
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -70,9 +50,27 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        try:
-            self._json_schema_validator.validate(resource.content)
-        except jsonschema.exceptions.ValidationError as error:
+        non_found_target_ids: dict[str, str] = {}  # target_id -> relation_name
+        for relation_name, relation in self._relations.items():
+            target_ids = resource.get_target_id_set(relation_name, do_not_raise=True)
+
+            for target_id in target_ids:
+                if target_id not in datapack.resources.get(relation.targetClass, set()):
+                    non_found_target_ids[target_id] = relation_name
+
+        if non_found_target_ids:
             raise ValidationPluginError(
-                type_="ContentValidationError", message=error.message
-            ) from error
+                type_="TargetIdNotFoundError",
+                message=(
+                    "Did not find a target resource for the following ID(s) (relation"
+                    + " names): "
+                    + ", ".join(
+                        f"'{target_id}' ('{relation_name}')"
+                        for target_id, relation_name in non_found_target_ids.items()
+                    )
+                ),
+                details={
+                    "non_found_target_ids": non_found_target_ids.keys(),
+                    "corresponding_relation_names": non_found_target_ids.values(),
+                },
+            )

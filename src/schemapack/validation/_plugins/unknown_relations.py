@@ -19,13 +19,12 @@
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation.base import ResourceValidationPlugin
+from schemapack.validation._base import ResourceValidationPlugin
 
 
-class MultipleTargetValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating the plurality of relations,
-    i.e. *_to_many (multiple.target is True) relations must be sets and *_to_one
-    (multiple.target is False) relations must be single values.
+class UnknownRelationValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating that no relation properties
+    are present in a resource that don not exist in the schemapack class.
     This only applies to schemapack classes with relations.
     """
 
@@ -40,7 +39,7 @@ class MultipleTargetValidationPlugin(ResourceValidationPlugin):
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._relations = class_.relations
+        self._expected_relations = set(class_.relations)
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -51,28 +50,21 @@ class MultipleTargetValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        wrong_relations: set[str] = set()
-        for relation_name, relation in resource.relations.items():
-            is_set = isinstance(relation, set)
+        unknown_relations = {
+            relation
+            for relation in resource.relations
+            if relation not in self._expected_relations
+        }
 
-            try:
-                expected_set = self._relations[relation_name].multiple.target
-            except KeyError:
-                # Unknown relations are handled in a different plugin:
-                continue
-
-            if is_set != expected_set:
-                wrong_relations.add(relation_name)
-
-        if wrong_relations:
+        if unknown_relations:
             raise ValidationPluginError(
-                type_="CardinalityPluralityError",
+                type_="UnknownRelationPropertyError",
                 message=(
-                    "Expected a single target ID but got a set, or vise versa, for"
-                    " the following relation propertie(s): "
-                    + ", ".join(wrong_relations)
+                    "The following relation propertie(s) is/are unkown: "
+                    + ", ".join(unknown_relations)
                 ),
                 details={
-                    "wrong_relations": wrong_relations,
+                    "unknown_relations": unknown_relations,
+                    "existing_relations": set(resource.relations),
                 },
             )

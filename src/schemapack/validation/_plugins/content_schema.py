@@ -16,16 +16,33 @@
 
 """A validation plugin."""
 
+import json
+
+import jsonschema.exceptions
+import jsonschema.protocols
+import jsonschema.validators
+
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation.base import ResourceValidationPlugin
+from schemapack.validation._base import ResourceValidationPlugin
 
 
-class UnknownRelationValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating that no relation properties
-    are present in a resource that don not exist in the schemapack class.
-    This only applies to schemapack classes with relations.
+def _get_json_schema_validator(schema_str: str) -> jsonschema.protocols.Validator:
+    """Get a JSON Schema validator for the given schema formatted as JSON string.
+    It is assumed that the schema has already been checked for validity against the
+    JSON Schema specs.
+    """
+    schema = json.loads(schema_str)
+    cls: type[jsonschema.protocols.Validator] = jsonschema.validators.validator_for(
+        schema
+    )
+    return cls(schema)
+
+
+class ContentSchemaValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating the content of one resource
+    against the content JSON Schema defined in the corresponding schemapack.
     """
 
     @staticmethod
@@ -35,11 +52,14 @@ class UnknownRelationValidationPlugin(ResourceValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return bool(class_.relations)
+        # Is always relevant since all resources must have a content schema:
+        return True
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._expected_relations = set(class_.relations)
+        self._json_schema_validator = _get_json_schema_validator(
+            class_.content.json_schema
+        )
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -50,21 +70,9 @@ class UnknownRelationValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        unknown_relations = {
-            relation
-            for relation in resource.relations
-            if relation not in self._expected_relations
-        }
-
-        if unknown_relations:
+        try:
+            self._json_schema_validator.validate(resource.content)
+        except jsonschema.exceptions.ValidationError as error:
             raise ValidationPluginError(
-                type_="UnknownRelationPropertyError",
-                message=(
-                    "The following relation propertie(s) is/are unkown: "
-                    + ", ".join(unknown_relations)
-                ),
-                details={
-                    "unknown_relations": unknown_relations,
-                    "existing_relations": set(resource.relations),
-                },
-            )
+                type_="ContentValidationError", message=error.message
+            ) from error

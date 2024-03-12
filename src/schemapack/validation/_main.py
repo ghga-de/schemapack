@@ -27,12 +27,12 @@ from schemapack.exceptions import (
 )
 from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
-from schemapack.validation.base import (
+from schemapack.validation._base import (
     ClassValidationPlugin,
     GlobalValidationPlugin,
     ResourceValidationPlugin,
 )
-from schemapack.validation.default import (
+from schemapack.validation._default import (
     DEFAULT_CLASS_PLUGIN_REGISTRY,
     DEFAULT_GLOBAL_PLUGIN_REGISTRY,
     DEFAULT_RESOURCE_PLUGIN_REGISTRY,

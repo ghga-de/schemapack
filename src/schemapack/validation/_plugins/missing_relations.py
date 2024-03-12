@@ -19,15 +19,13 @@
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack, Resource, ResourceId
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation.base import ResourceValidationPlugin
+from schemapack.validation._base import ResourceValidationPlugin
 
 
-class MissingMandatoryTargetValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating that every origin defines at least
-    one target resource for relations that are mandatory at the target end.
-
-    This only applies to schemapack classes with relations that are mandatory at the
-    target end.
+class MissingRelationValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating that all relation properties
+    described in the schemapack exist.
+    This only applies to schemapack classes with relations.
     """
 
     @staticmethod
@@ -37,15 +35,11 @@ class MissingMandatoryTargetValidationPlugin(ResourceValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return any(relation.mandatory.target for relation in class_.relations.values())
+        return bool(class_.relations)
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._relations_of_interest = {
-            relation_name
-            for relation_name, relation in class_.relations.items()
-            if relation.mandatory.target
-        }
+        self._expected_relations = class_.relations.keys()
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -56,26 +50,21 @@ class MissingMandatoryTargetValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        relations_with_missing_targets: set[str] = set()
+        missing_relations = {
+            relation
+            for relation in self._expected_relations
+            if relation not in resource.relations
+        }
 
-        for relation_name in self._relations_of_interest:
-            try:
-                target_resource_ids = resource.relations[relation_name]
-            except KeyError:
-                # This is an error but needs to be handled by another validation plugin:
-                continue
-
-            if not target_resource_ids:
-                relations_with_missing_targets.add(relation_name)
-
-        if relations_with_missing_targets:
+        if missing_relations:
             raise ValidationPluginError(
-                type_="MissingMandatoryTargetError",
+                type_="MissingRelationPropertyError",
                 message=(
-                    "No targets were defined for the following mandatory relations: "
-                    + ", ".join(relations_with_missing_targets)
+                    "Missing following relation properties: "
+                    + ", ".join(missing_relations)
                 ),
                 details={
-                    "relations_with_missing_targets": relations_with_missing_targets,
+                    "missing_relations": missing_relations,
+                    "existing_relations": set(resource.relations),
                 },
             )
