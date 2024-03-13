@@ -17,36 +17,61 @@
 """Test dumping a schemapack."""
 
 import json
+from pathlib import Path
 
+import pytest
 import ruamel.yaml
 
-from schemapack import dumps_schemapack, load_schemapack
+from schemapack import dump_schemapack, load_schemapack
 from tests.fixtures.examples import VALID_SCHEMAPACK_PATHS
 
 yaml = ruamel.yaml.YAML(typ="safe")
 
 
-def test_dumps_yaml():
-    """Tests that using the dumps_schemapack function to dump a schemapack as a yaml
-    string yields the expected result.
+@pytest.mark.parametrize(
+    "yaml_format", [True, False], ids=["yaml_format", "json_format"]
+)
+def test_dumps_condensed(yaml_format: bool, tmp_path: Path):
+    """Tests using the dump_schemapack function to dump a schemapack as a
+    condensed representation to file.
     """
     input_schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations"])
     expected_dict = yaml.load(VALID_SCHEMAPACK_PATHS["simple_relations_condensed"])
+    output_path = tmp_path / "output.schemapack.yaml"
 
-    observed_str = dumps_schemapack(input_schemapack)
-    observed_dict = yaml.load(observed_str)
+    dump_schemapack(input_schemapack, path=output_path, yaml_format=yaml_format)
+    if yaml_format:
+        observed_dict = yaml.load(output_path)
+    else:
+        with open(output_path, encoding="utf-8") as file:
+            observed_dict = json.load(file)
 
     assert observed_dict == expected_dict
 
 
-def test_dumps_json():
-    """Tests that using the dumps_schemapack function to dump a schemapack as a json
-    string yields the expected result.
+def test_dumps_not_condensed(tmp_path: Path):
+    """Tests using the dump_schemapack function to dump a schemapack as a representation
+    to file with content schemas being written to dedicated files.
     """
-    input_schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations"])
-    expected_dict = yaml.load(VALID_SCHEMAPACK_PATHS["simple_relations_condensed"])
+    input_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
+    input_schemapack = load_schemapack(input_path)
+    expected_dict = yaml.load(input_path)
+    output_path = tmp_path / "output.schemapack.yaml"
 
-    observed_str = dumps_schemapack(input_schemapack, yaml_format=False)
-    observed_dict = json.loads(observed_str)
+    dump_schemapack(
+        input_schemapack,
+        path=output_path,
+        condensed=False,
+        content_schema_dir=Path("."),
+    )
 
+    # check schemapack file itself:
+    observed_dict = yaml.load(output_path)
     assert observed_dict == expected_dict
+
+    # check content schema files:
+    for class_name, class_ in input_schemapack.classes.items():
+        content_schema_path = tmp_path / f"{class_name}.json"
+        with open(content_schema_path, encoding="utf-8") as file:
+            observed_content_schema = json.load(file)
+        assert observed_content_schema == class_.content.json_schema_dict

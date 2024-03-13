@@ -19,7 +19,7 @@ schema.
 
 from importlib.metadata import version
 
-from ._internals.dump import dump_schemapack, dumps_schemapack
+from ._internals.dump import dump_schemapack
 from ._internals.isolate import isolate, isolate_class, isolate_resource
 from ._internals.load import load_datapack, load_schemapack
 from ._internals.main import load_and_validate
@@ -36,7 +36,6 @@ __all__ = [
     "denormalize",
     "SchemaPackValidator",
     "dump_schemapack",
-    "dumps_schemapack",
 ]
 
 __version__ = version(__package__)
