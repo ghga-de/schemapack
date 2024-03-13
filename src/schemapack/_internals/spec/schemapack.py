@@ -24,6 +24,7 @@ from functools import cached_property
 from pathlib import Path
 from typing import Any, Literal, Optional, Union
 
+from immutabledict import immutabledict
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -34,6 +35,7 @@ from pydantic import (
 )
 from pydantic_core import PydanticCustomError
 
+from schemapack._internals.spec.custom_types import FrozenDict
 from schemapack._internals.utils import JsonSchemaError, assert_valid_json_schema
 from schemapack.exceptions import ParsingError
 from schemapack.spec.custom_types import (
@@ -42,7 +44,7 @@ from schemapack.spec.custom_types import (
     IdPropertyName,
     RelationPropertyName,
 )
-from schemapack.utils import FrozenDict, read_json_or_yaml_mapping
+from schemapack.utils import read_json_or_yaml_mapping
 
 SupportedSchemaPackVersions = Literal["0.2.0"]
 SUPPORTED_SCHEMA_PACK_VERSIONS = typing.get_args(SupportedSchemaPackVersions)
@@ -220,7 +222,7 @@ class ClassDefinition(_FrozenBaseModel):
     )
     content: ContentSchema
     relations: FrozenDict[RelationPropertyName, Relation] = Field(
-        FrozenDict(),
+        immutabledict(),
         description=(
             "A mapping of relation names to relation definitions. Relation names"
             + " should use snake_case and may only contain alphanumeric characters and"
@@ -288,8 +290,8 @@ class ClassDefinition(_FrozenBaseModel):
     def content_schema_serializer(
         self, content: ContentSchema, _info
     ) -> dict[str, Any]:
-        """Serialize the content schema by representing it either as the path to the
-        JSON schema (if the path is known) or as the JSON schema itself.
+        """Serialize the content schema by representing it as dictionary containing the
+        JSON schema itself.
         """
         return self.content.json_schema_dict
 
