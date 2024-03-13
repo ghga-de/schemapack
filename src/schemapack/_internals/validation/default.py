@@ -16,12 +16,12 @@
 
 """Default Validation Plugin Registry"""
 
-from schemapack.validation._base import (
+from schemapack._internals.validation.base import (
     ClassValidationPlugin,
     GlobalValidationPlugin,
     ResourceValidationPlugin,
 )
-from schemapack.validation._plugins import (
+from schemapack._internals.validation.plugins import (
     ContentSchemaValidationPlugin,
     ExpectedRootValidationPlugin,
     MissingClassSlotValidationPlugin,

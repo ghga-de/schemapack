@@ -16,16 +16,17 @@
 
 """A validation plugin."""
 
+from schemapack._internals.validation.base import ResourceValidationPlugin
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.custom_types import ResourceId
 from schemapack.spec.datapack import DataPack, Resource
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation._base import ResourceValidationPlugin
 
 
-class MissingRelationValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating that all relation properties
-    described in the schemapack exist.
+class MultipleTargetValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating the plurality of relations,
+    i.e. *_to_many (multiple.target is True) relations must be sets and *_to_one
+    (multiple.target is False) relations must be single values.
     This only applies to schemapack classes with relations.
     """
 
@@ -40,7 +41,7 @@ class MissingRelationValidationPlugin(ResourceValidationPlugin):
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._expected_relations = class_.relations.keys()
+        self._relations = class_.relations
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -51,21 +52,28 @@ class MissingRelationValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        missing_relations = {
-            relation
-            for relation in self._expected_relations
-            if relation not in resource.relations
-        }
+        wrong_relations: set[str] = set()
+        for relation_name, relation in resource.relations.items():
+            is_set = isinstance(relation, set)
 
-        if missing_relations:
+            try:
+                expected_set = self._relations[relation_name].multiple.target
+            except KeyError:
+                # Unknown relations are handled in a different plugin:
+                continue
+
+            if is_set != expected_set:
+                wrong_relations.add(relation_name)
+
+        if wrong_relations:
             raise ValidationPluginError(
-                type_="MissingRelationPropertyError",
+                type_="CardinalityPluralityError",
                 message=(
-                    "Missing following relation properties: "
-                    + ", ".join(missing_relations)
+                    "Expected a single target ID but got a set, or vise versa, for"
+                    " the following relation propertie(s): "
+                    + ", ".join(wrong_relations)
                 ),
                 details={
-                    "missing_relations": missing_relations,
-                    "existing_relations": set(resource.relations),
+                    "wrong_relations": wrong_relations,
                 },
             )

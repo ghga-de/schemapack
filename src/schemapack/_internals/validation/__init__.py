@@ -16,12 +16,12 @@
 
 """Logic for validating a datapack against a schemapack."""
 
-from ._base import (
+from ._main import SchemaPackValidator
+from .base import (
     ClassValidationPlugin,
     GlobalValidationPlugin,
     ResourceValidationPlugin,
 )
-from ._main import SchemaPackValidator
 
 __all__ = [
     "SchemaPackValidator",

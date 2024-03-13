@@ -16,17 +16,17 @@
 
 """A validation plugin."""
 
+from schemapack._internals.validation.base import ResourceValidationPlugin
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.custom_types import ResourceId
 from schemapack.spec.datapack import DataPack, Resource
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation._base import ResourceValidationPlugin
 
 
-class TargetIdValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating that all relations of a given
-    resource point to existing target resources.
-    This plugin only applies if the schemapack class defines any relations.
+class UnknownRelationValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating that no relation properties
+    are present in a resource that don not exist in the schemapack class.
+    This only applies to schemapack classes with relations.
     """
 
     @staticmethod
@@ -40,7 +40,7 @@ class TargetIdValidationPlugin(ResourceValidationPlugin):
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._relations = class_.relations
+        self._expected_relations = set(class_.relations)
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -51,27 +51,21 @@ class TargetIdValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        non_found_target_ids: dict[str, str] = {}  # target_id -> relation_name
-        for relation_name, relation in self._relations.items():
-            target_ids = resource.get_target_id_set(relation_name, do_not_raise=True)
+        unknown_relations = {
+            relation
+            for relation in resource.relations
+            if relation not in self._expected_relations
+        }
 
-            for target_id in target_ids:
-                if target_id not in datapack.resources.get(relation.targetClass, set()):
-                    non_found_target_ids[target_id] = relation_name
-
-        if non_found_target_ids:
+        if unknown_relations:
             raise ValidationPluginError(
-                type_="TargetIdNotFoundError",
+                type_="UnknownRelationPropertyError",
                 message=(
-                    "Did not find a target resource for the following ID(s) (relation"
-                    + " names): "
-                    + ", ".join(
-                        f"'{target_id}' ('{relation_name}')"
-                        for target_id, relation_name in non_found_target_ids.items()
-                    )
+                    "The following relation propertie(s) is/are unkown: "
+                    + ", ".join(unknown_relations)
                 ),
                 details={
-                    "non_found_target_ids": non_found_target_ids.keys(),
-                    "corresponding_relation_names": non_found_target_ids.values(),
+                    "unknown_relations": unknown_relations,
+                    "existing_relations": set(resource.relations),
                 },
             )

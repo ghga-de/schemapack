@@ -16,16 +16,15 @@
 
 """A validation plugin."""
 
+from schemapack._internals.validation.base import GlobalValidationPlugin
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
-from schemapack.validation._base import GlobalValidationPlugin
 
 
-class UnexpectedRootValidationPlugin(GlobalValidationPlugin):
-    """A global-scoped validation plugin validating that a datapack has no root resource
-    defined.
-    This plugin is only relevant if the schemapack has no root class defined.
+class MissingClassSlotValidationPlugin(GlobalValidationPlugin):
+    """A global-scoped validation plugin validating that a datapack has a slot for
+    each class defined in the provided schemapack.
     """
 
     @staticmethod
@@ -35,11 +34,11 @@ class UnexpectedRootValidationPlugin(GlobalValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return not bool(schemapack.root_class)
+        return True
 
     def __init__(self, *, schemapack: SchemaPack):
         """This plugin is configured with the entire schemapack."""
-        # there is nothing to do
+        self._classes = schemapack.classes.keys()
 
     def validate(self, *, datapack: DataPack):
         """Validate the entire datapack.
@@ -47,11 +46,15 @@ class UnexpectedRootValidationPlugin(GlobalValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        if datapack.root_resource:
+        missing_classes = [
+            class_ for class_ in self._classes if class_ not in datapack.resources
+        ]
+
+        if missing_classes:
             raise ValidationPluginError(
-                type_="UnexpectedRootResourceError",
-                message=(
-                    "The schemapack has no root class defined but the datapack "
-                    "specifies a root resource."
-                ),
+                type_="MissingClassSlotError",
+                message=("Missing slot(s) for class(es):" + ", ".join(missing_classes)),
+                details={
+                    "missing_classes": missing_classes,
+                },
             )

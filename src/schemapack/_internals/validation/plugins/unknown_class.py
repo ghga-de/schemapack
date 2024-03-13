@@ -16,17 +16,15 @@
 
 """A validation plugin."""
 
-from typing import cast
-
+from schemapack._internals.validation.base import GlobalValidationPlugin
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
-from schemapack.validation._base import GlobalValidationPlugin
 
 
-class UnkownRootResourceValidationPlugin(GlobalValidationPlugin):
-    """A global-scoped validation plugin validating that a datapack has a root resource.
-    This plugin is only relevant for the schemapack has a root class defined.
+class UnknownClassSlotValidationPlugin(GlobalValidationPlugin):
+    """A global-scoped validation plugin validating that a datapack only contains
+    slots for classes defined in the provided schemapack.
     """
 
     @staticmethod
@@ -36,11 +34,11 @@ class UnkownRootResourceValidationPlugin(GlobalValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return bool(schemapack.root_class)
+        return True
 
     def __init__(self, *, schemapack: SchemaPack):
         """This plugin is configured with the entire schemapack."""
-        self._root_class = cast(str, schemapack.root_class)
+        self._classes = set(schemapack.classes)
 
     def validate(self, *, datapack: DataPack):
         """Validate the entire datapack.
@@ -48,25 +46,18 @@ class UnkownRootResourceValidationPlugin(GlobalValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        root_class_resources = datapack.resources.get(self._root_class)
+        unknown_classes = [
+            class_ for class_ in datapack.resources if class_ not in self._classes
+        ]
 
-        if not root_class_resources:
-            # This is a validation error but needs to be handled elsewhere:
-            return
-
-        if not datapack.root_resource:
-            # this is a validation error but needs to be handled elsewhere:
-            return
-
-        if datapack.root_resource not in root_class_resources:
+        if unknown_classes:
             raise ValidationPluginError(
-                type_="UnkownRootResourceError",
+                type_="UnknownClassSlotError",
                 message=(
-                    "The specified root resource with ID '{root_resource}' of class "
-                    + " '{root_class}' does not exist."
+                    "Found slot(s) for class(es) not defined in the schemapack:"
+                    + ", ".join(unknown_classes)
                 ),
                 details={
-                    "root_resource": datapack.root_resource,
-                    "root_class": self._root_class,
+                    "unknown_classes": unknown_classes,
                 },
             )

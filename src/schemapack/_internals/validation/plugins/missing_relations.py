@@ -16,34 +16,17 @@
 
 """A validation plugin."""
 
-import json
-
-import jsonschema.exceptions
-import jsonschema.protocols
-import jsonschema.validators
-
+from schemapack._internals.validation.base import ResourceValidationPlugin
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.custom_types import ResourceId
 from schemapack.spec.datapack import DataPack, Resource
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation._base import ResourceValidationPlugin
 
 
-def _get_json_schema_validator(schema_str: str) -> jsonschema.protocols.Validator:
-    """Get a JSON Schema validator for the given schema formatted as JSON string.
-    It is assumed that the schema has already been checked for validity against the
-    JSON Schema specs.
-    """
-    schema = json.loads(schema_str)
-    cls: type[jsonschema.protocols.Validator] = jsonschema.validators.validator_for(
-        schema
-    )
-    return cls(schema)
-
-
-class ContentSchemaValidationPlugin(ResourceValidationPlugin):
-    """A resource-scoped validation plugin validating the content of one resource
-    against the content JSON Schema defined in the corresponding schemapack.
+class MissingRelationValidationPlugin(ResourceValidationPlugin):
+    """A resource-scoped validation plugin validating that all relation properties
+    described in the schemapack exist.
+    This only applies to schemapack classes with relations.
     """
 
     @staticmethod
@@ -53,14 +36,11 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        # Is always relevant since all resources must have a content schema:
-        return True
+        return bool(class_.relations)
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._json_schema_validator = _get_json_schema_validator(
-            class_.content.json_schema
-        )
+        self._expected_relations = class_.relations.keys()
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -71,9 +51,21 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        try:
-            self._json_schema_validator.validate(resource.content)
-        except jsonschema.exceptions.ValidationError as error:
+        missing_relations = {
+            relation
+            for relation in self._expected_relations
+            if relation not in resource.relations
+        }
+
+        if missing_relations:
             raise ValidationPluginError(
-                type_="ContentValidationError", message=error.message
-            ) from error
+                type_="MissingRelationPropertyError",
+                message=(
+                    "Missing following relation properties: "
+                    + ", ".join(missing_relations)
+                ),
+                details={
+                    "missing_relations": missing_relations,
+                    "existing_relations": set(resource.relations),
+                },
+            )

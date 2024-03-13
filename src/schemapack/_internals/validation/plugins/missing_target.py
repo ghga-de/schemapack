@@ -16,11 +16,11 @@
 
 """A validation plugin."""
 
+from schemapack._internals.validation.base import ResourceValidationPlugin
 from schemapack.exceptions import ValidationPluginError
 from schemapack.spec.custom_types import ResourceId
 from schemapack.spec.datapack import DataPack, Resource
 from schemapack.spec.schemapack import ClassDefinition
-from schemapack.validation._base import ResourceValidationPlugin
 
 
 class MissingMandatoryTargetValidationPlugin(ResourceValidationPlugin):
