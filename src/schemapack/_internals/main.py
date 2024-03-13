@@ -21,7 +21,7 @@ Warning: This is an internal part of the library and might change without notice
 
 from pathlib import Path
 
-from schemapack.__internals.load import load_datapack, load_schemapack
+from schemapack._internals.load import load_datapack, load_schemapack
 from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
 from schemapack.validation import SchemaPackValidator

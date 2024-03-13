@@ -16,7 +16,7 @@
 
 """Models representing the schemapack spec (part of the public API of this package)."""
 
-from schemapack.__internals.spec.schemapack import (
+from schemapack._internals.spec.schemapack import (
     SUPPORTED_SCHEMA_PACK_VERSIONS,
     ClassDefinition,
     ContentSchema,

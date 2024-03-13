@@ -34,7 +34,7 @@ from pydantic import (
 )
 from pydantic_core import PydanticCustomError
 
-from schemapack.__internals.utils import JsonSchemaError, assert_valid_json_schema
+from schemapack._internals.utils import JsonSchemaError, assert_valid_json_schema
 from schemapack.exceptions import ParsingError
 from schemapack.spec.custom_types import (
     ClassName,

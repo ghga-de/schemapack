@@ -16,7 +16,7 @@
 
 """Collection of package-specific exceptions"""
 
-from schemapack.__internals.exceptions import (
+from schemapack._internals.exceptions import (
     BaseError,
     CircularRelationError,
     DataPackSpecError,

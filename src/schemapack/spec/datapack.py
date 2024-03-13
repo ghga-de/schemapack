@@ -16,7 +16,7 @@
 
 """Models representing the datapack spec (part of the public API of this package)."""
 
-from schemapack.__internals.spec.datapack import (
+from schemapack._internals.spec.datapack import (
     SUPPORTED_DATA_PACK_VERSIONS,
     DataPack,
     Resource,

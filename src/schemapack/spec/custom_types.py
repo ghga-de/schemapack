@@ -16,7 +16,7 @@
 
 """Custom types annotations used for type hinting."""
 
-from schemapack.__internals.spec.custom_types import (
+from schemapack._internals.spec.custom_types import (
     ClassName,
     ContentPropertyName,
     IdPropertyName,

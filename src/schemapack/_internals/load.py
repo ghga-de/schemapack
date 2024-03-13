@@ -23,7 +23,7 @@ from pathlib import Path
 
 import pydantic
 
-from schemapack.__internals.utils import transient_directory_change
+from schemapack._internals.utils import transient_directory_change
 from schemapack.exceptions import DataPackSpecError, SchemaPackSpecError
 from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack

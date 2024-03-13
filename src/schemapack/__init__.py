@@ -19,10 +19,10 @@ schema.
 
 from importlib.metadata import version
 
-from .__internals.isolate import isolate, isolate_class, isolate_resource
-from .__internals.load import load_datapack, load_schemapack
-from .__internals.main import load_and_validate
-from .__internals.normalize import denormalize
+from ._internals.isolate import isolate, isolate_class, isolate_resource
+from ._internals.load import load_datapack, load_schemapack
+from ._internals.main import load_and_validate
+from ._internals.normalize import denormalize
 from .validation import SchemaPackValidator
 
 __all__ = [
