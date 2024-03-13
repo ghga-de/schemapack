@@ -38,7 +38,9 @@ def test_comparison_and_hashing():
     hash and are equal.
     """
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations"])
-    schemapack_condensed = load_schemapack(VALID_SCHEMAPACK_PATHS["condensed"])
+    schemapack_condensed = load_schemapack(
+        VALID_SCHEMAPACK_PATHS["simple_relations_condensed"]
+    )
 
     assert hash(schemapack) == hash(schemapack_condensed)
     assert schemapack == schemapack_condensed
