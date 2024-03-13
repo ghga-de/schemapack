@@ -16,13 +16,10 @@
 
 """Custom types annotations used for type hinting."""
 
-from schemapack.__internals.spec.custom_types import (
-    ClassName,
-    ContentPropertyName,
-    IdPropertyName,
-    RelationPropertyName,
-    ResourceId,
-)
+from typing import Annotated as _Annotated
+
+from pydantic import Field as _Field
+from typing_extensions import TypeAlias as _TypeAlias
 
 __all__ = [
     "ClassName",
@@ -31,3 +28,10 @@ __all__ = [
     "ContentPropertyName",
     "IdPropertyName",
 ]
+
+_NonEmptyStr: _TypeAlias = _Annotated[str, _Field(..., min_length=1)]
+ClassName: _TypeAlias = _NonEmptyStr
+ResourceId: _TypeAlias = _NonEmptyStr
+RelationPropertyName: _TypeAlias = _NonEmptyStr
+ContentPropertyName: _TypeAlias = _NonEmptyStr
+IdPropertyName: _TypeAlias = _NonEmptyStr

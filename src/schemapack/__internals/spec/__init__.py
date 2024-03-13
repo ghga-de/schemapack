@@ -14,20 +14,4 @@
 # limitations under the License.
 #
 
-"""Custom types annotations used for type hinting."""
-
-from schemapack.__internals.spec.custom_types import (
-    ClassName,
-    ContentPropertyName,
-    IdPropertyName,
-    RelationPropertyName,
-    ResourceId,
-)
-
-__all__ = [
-    "ClassName",
-    "ResourceId",
-    "RelationPropertyName",
-    "ContentPropertyName",
-    "IdPropertyName",
-]
+"""Models representing the schemapack and datapack specs."""

@@ -28,7 +28,7 @@ from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, WrapSerializ
 from pydantic_core import PydanticCustomError
 from typing_extensions import TypeAlias
 
-from .custom_types import ClassName, RelationPropertyName, ResourceId
+from ...spec.custom_types import ClassName, RelationPropertyName, ResourceId
 
 SupportedDataPackVersions = Literal["0.2.0"]
 SUPPORTED_DATA_PACK_VERSIONS = typing.get_args(SupportedDataPackVersions)
