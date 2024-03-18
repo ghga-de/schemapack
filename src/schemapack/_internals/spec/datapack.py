@@ -30,7 +30,7 @@ from typing_extensions import TypeAlias
 
 from ...spec.custom_types import ClassName, RelationPropertyName, ResourceId
 
-SupportedDataPackVersions = Literal["0.2.0"]
+SupportedDataPackVersions = Literal["0.3.0"]
 SUPPORTED_DATA_PACK_VERSIONS = typing.get_args(SupportedDataPackVersions)
 
 
