@@ -159,7 +159,7 @@ class DataPack(_NoExtraBaseModel):
         ),
     )
 
-    root_resource: Optional[str] = Field(
+    rootResource: Optional[str] = Field(  # noqa: N815 - following JSON conventions
         None,
         description=(
             "Defines the id of the resource that should act as root. This means"

@@ -8,4 +8,4 @@ resources:
       relations:
         some_relation:
           - a # <-
-root_resource: a
+rootResource: a

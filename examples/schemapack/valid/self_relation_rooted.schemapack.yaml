@@ -14,4 +14,4 @@ classes:
         multiple:
           origin: true
           target: true
-root_class: SomeClass
+rootClass: SomeClass

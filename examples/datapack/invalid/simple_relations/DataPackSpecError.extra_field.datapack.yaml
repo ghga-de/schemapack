@@ -8,5 +8,5 @@ resources:
         dac_contact: dac@example.org
       relations:
         files: []
-root_resource: example_dataset
+rootResource: example_dataset
 extra_field: {} # <-

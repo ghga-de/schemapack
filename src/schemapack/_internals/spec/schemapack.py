@@ -394,7 +394,7 @@ class SchemaPack(_FrozenBaseModel):
         min_length=1,
     )
 
-    root_class: Optional[ClassName] = Field(
+    rootClass: Optional[ClassName] = Field(  # noqa: N815 - following JSON conventions
         None,
         description=(
             "Optionally, define the name of a class that should acting as the root of"
@@ -492,12 +492,12 @@ class SchemaPack(_FrozenBaseModel):
     @model_validator(mode="after")
     def root_in_classes(self) -> "SchemaPack":
         """Check that the specified root exists in the defined classes."""
-        if self.root_class and self.root_class not in self.classes:
+        if self.rootClass and self.rootClass not in self.classes:
             raise PydanticCustomError(
                 "RootClassNotFoundError",
-                ("The specified root class '{self.root_class}' does not exist."),
+                ("The specified root class '{self.rootClass}' does not exist."),
                 {
-                    "root_class": self.root_class,
+                    "rootClass": self.rootClass,
                 },
             )
 

@@ -19,4 +19,4 @@ resources:
       content: {}
     b2:
       content: {}
-root_resource: a1
+rootResource: a1

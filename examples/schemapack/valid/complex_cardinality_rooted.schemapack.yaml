@@ -42,4 +42,4 @@ classes:
     id:
       propertyName: alias
     content: ../../content_schemas/AnyObject.schema.json
-root_class: A
+rootClass: A

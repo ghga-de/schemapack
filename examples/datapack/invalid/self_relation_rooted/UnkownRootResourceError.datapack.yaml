@@ -12,4 +12,4 @@ resources:
       relations:
         some_relation:
           - a
-root_resource: non_existing_resource
+rootResource: non_existing_resource
