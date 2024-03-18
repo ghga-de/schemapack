@@ -38,6 +38,10 @@ text = "Apache 2.0"
 [project.urls]
 Repository = "https://github.com/ghga-de/schemapack"
 
+
+[project.scripts]
+schemapack = "schemapack.__main__:cli"
+
 [tool.setuptools.packages.find]
 where = [
     "src",

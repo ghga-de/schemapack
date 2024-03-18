@@ -13,9 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Entrypoint of the package"""
+"""Public details about the command line interface."""
 
-from schemapack._internals.cli import cli
+from schemapack._internals.cli import (
+    DATAPACK_SPEC_ERROR_CODE as DATAPACK_SPEC_ERROR,
+)
+from schemapack._internals.cli import (
+    SCHEMAPACK_SPEC_ERROR_CODE as SCHEMAPACK_SPEC_ERROR,
+)
+from schemapack._internals.cli import (
+    SUCCESS_CODE as SUCCESS,
+)
+from schemapack._internals.cli import (
+    VALIDATION_ERROR_CODE as VALIDATION_ERROR,
+)
 
-if __name__ == "__main__":
-    cli()
+__all__ = [
+    "SCHEMAPACK_SPEC_ERROR",
+    "DATAPACK_SPEC_ERROR",
+    "SUCCESS",
+    "VALIDATION_ERROR",
+]
