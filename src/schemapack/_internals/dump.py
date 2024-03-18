@@ -25,6 +25,7 @@ import ruamel.yaml
 from schemapack._internals.spec.schemapack import SchemaPack
 
 yaml = ruamel.yaml.YAML(typ="safe")
+yaml.indent(mapping=2, sequence=4, offset=2)
 
 
 def get_content_schema_path(*, class_name: str, content_schema_dir: Path) -> Path:
@@ -76,7 +77,15 @@ def write_content_schemas(
     schemapack as separate files to the provided directory `content_schema_dir`
     which is relative to `relative_to`.
     """
-    raise NotImplementedError
+    abs_content_schema_dir = relative_to / content_schema_dir
+    abs_content_schema_dir.mkdir(parents=True, exist_ok=True)
+
+    for class_name, class_ in schemapack.classes.items():
+        content_schema_path = get_content_schema_path(
+            class_name=class_name, content_schema_dir=abs_content_schema_dir
+        )
+        with open(content_schema_path, "w", encoding="utf-8") as file:
+            file.write(class_.content.json_schema)
 
 
 def dump_schemapack(
@@ -116,7 +125,7 @@ def dump_schemapack(
     if not parent_dir.exists():
         raise FileNotFoundError(f"The parent directory of '{path}' does not exist.")
 
-    schemapack_dict = json.loads(schemapack.model_dump_json())
+    schemapack_dict = json.loads(schemapack.model_dump_json(exclude_defaults=True))
 
     if not condensed:
         schemapack_dict = set_content_schema_paths(

@@ -31,7 +31,7 @@ yaml = ruamel.yaml.YAML(typ="safe")
 @pytest.mark.parametrize(
     "yaml_format", [True, False], ids=["yaml_format", "json_format"]
 )
-def test_dumps_condensed(yaml_format: bool, tmp_path: Path):
+def test_dump_condensed(yaml_format: bool, tmp_path: Path):
     """Tests using the dump_schemapack function to dump a schemapack as a
     condensed representation to file.
     """
@@ -49,20 +49,24 @@ def test_dumps_condensed(yaml_format: bool, tmp_path: Path):
     assert observed_dict == expected_dict
 
 
-def test_dumps_not_condensed(tmp_path: Path):
+def test_dump_not_condensed(tmp_path: Path):
     """Tests using the dump_schemapack function to dump a schemapack as a representation
     to file with content schemas being written to dedicated files.
     """
     input_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
     input_schemapack = load_schemapack(input_path)
     expected_dict = yaml.load(input_path)
-    output_path = tmp_path / "output.schemapack.yaml"
+    schemapack_dir = tmp_path / "schemapack" / "valid"
+    output_path = schemapack_dir / "output.schemapack.yaml"
+    rel_content_schema_path = Path("../../content_schemas/")
+
+    schemapack_dir.mkdir(parents=True)
 
     dump_schemapack(
         input_schemapack,
         path=output_path,
         condensed=False,
-        content_schema_dir=Path("."),
+        content_schema_dir=rel_content_schema_path,
     )
 
     # check schemapack file itself:
@@ -71,7 +75,9 @@ def test_dumps_not_condensed(tmp_path: Path):
 
     # check content schema files:
     for class_name, class_ in input_schemapack.classes.items():
-        content_schema_path = tmp_path / f"{class_name}.json"
+        content_schema_path = (
+            schemapack_dir / rel_content_schema_path / f"{class_name}.schema.json"
+        )
         with open(content_schema_path, encoding="utf-8") as file:
             observed_content_schema = json.load(file)
         assert observed_content_schema == class_.content.json_schema_dict
