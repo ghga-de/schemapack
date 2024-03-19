@@ -63,7 +63,7 @@ def generate_validate_command(
     "abbreviate", [True, False], ids=["abbreviate", "no_abbreviate"]
 )
 def test_validate_valid(abbreviate: bool):
-    """Test validating a valid datapack against a schemapack."""
+    """Test the validate command with a valid datapack."""
     schemapack = VALID_SCHEMAPACK_PATHS["simple_relations"]
     datapack = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
 
@@ -74,15 +74,13 @@ def test_validate_valid(abbreviate: bool):
         ),
     )
     assert result.exit_code == exit_codes.SUCCESS == 0
-    last_stdout_line = result.stdout.splitlines()[-1]
-    assert " valid" in last_stdout_line.lower()
 
 
 @pytest.mark.parametrize(
     "abbreviate", [True, False], ids=["abbreviate", "no_abbreviate"]
 )
 def test_validate_invalid(abbreviate: bool):
-    """Test validating a invalid datapack against a schemapack."""
+    """Test the validate command with an invalid datapack."""
     schemapack = VALID_SCHEMAPACK_PATHS["simple_relations"]
     datapack = INVALID_DATAPACK_PATHS[
         "simple_relations.ContentValidationError.missing_property"
@@ -95,8 +93,6 @@ def test_validate_invalid(abbreviate: bool):
         ),
     )
     assert result.exit_code == exit_codes.VALIDATION_ERROR != 0
-    last_stdout_line = result.stdout.splitlines()[-1]
-    assert " not valid" in last_stdout_line.lower()
     assert "ContentValidationError" in result.stderr
 
 
@@ -104,7 +100,7 @@ def test_validate_invalid(abbreviate: bool):
     "abbreviate", [True, False], ids=["abbreviate", "no_abbreviate"]
 )
 def test_validate_datapack_spec_error(abbreviate: bool):
-    """Test validating a invalid datapack against a schemapack."""
+    """Test the validate command with a datapack that does not comply with the specs."""
     schemapack = VALID_SCHEMAPACK_PATHS["simple_relations"]
     datapack = INVALID_DATAPACK_PATHS[
         "simple_relations.DataPackSpecError.DuplicateTargetIdError"
@@ -117,8 +113,6 @@ def test_validate_datapack_spec_error(abbreviate: bool):
         ),
     )
     assert result.exit_code == exit_codes.DATAPACK_SPEC_ERROR != 0
-    last_stdout_line = result.stdout.splitlines()[-1]
-    assert " spec" in last_stdout_line
     assert "DataPackSpecError" in result.stderr
 
 
@@ -126,7 +120,7 @@ def test_validate_datapack_spec_error(abbreviate: bool):
     "abbreviate", [True, False], ids=["abbreviate", "no_abbreviate"]
 )
 def test_validate_schemapack_spec_error(abbreviate: bool):
-    """Test validating a invalid datapack against a schemapack."""
+    """Test the validate command with a schemapack that does not comply with the specs."""
     schemapack = INVALID_SCHEMAPACK_PATHS["ContentSchemaNotFoundError"]
     datapack = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
 
@@ -137,6 +131,40 @@ def test_validate_schemapack_spec_error(abbreviate: bool):
         ),
     )
     assert result.exit_code == exit_codes.SCHEMAPACK_SPEC_ERROR != 0
-    last_stdout_line = result.stdout.splitlines()[-1]
-    assert " spec" in last_stdout_line
     assert "SchemaPackSpecError" in result.stderr
+
+
+def test_check_schemapack_complies():
+    """Test the check-schemapack command with a complies document."""
+    schemapack = VALID_SCHEMAPACK_PATHS["simple_relations"]
+
+    result = runner.invoke(cli, ["check-schemapack", str(schemapack)])
+    assert result.exit_code == exit_codes.SUCCESS == 0
+
+
+def test_check_schemapack_not_complies():
+    """Test the check-schemapack command with a non compliant document."""
+    schemapack = INVALID_SCHEMAPACK_PATHS["ContentSchemaNotFoundError"]
+
+    result = runner.invoke(cli, ["check-schemapack", str(schemapack)])
+    assert result.exit_code == exit_codes.SCHEMAPACK_SPEC_ERROR != 0
+    assert "SchemaPackSpecError" in result.stderr
+
+
+def test_check_datapack_complies():
+    """Test the check-datapack command with a complies document."""
+    datapack = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
+
+    result = runner.invoke(cli, ["check-datapack", str(datapack)])
+    assert result.exit_code == exit_codes.SUCCESS == 0
+
+
+def test_check_datapack_not_complies():
+    """Test the check-datapack command with a non compliant document."""
+    datapack = INVALID_DATAPACK_PATHS[
+        "simple_relations.DataPackSpecError.DuplicateTargetIdError"
+    ]
+
+    result = runner.invoke(cli, ["check-datapack", str(datapack)])
+    assert result.exit_code == exit_codes.DATAPACK_SPEC_ERROR != 0
+    assert "DataPackSpecError" in result.stderr

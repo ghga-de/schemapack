@@ -64,7 +64,7 @@ def expect_schemapack_errors():
 
 
 @contextmanager
-def handle_user_errors():
+def expect_user_errors():
     """Handle all user-derived errors."""
     with (
         expect_validation_errors(),
