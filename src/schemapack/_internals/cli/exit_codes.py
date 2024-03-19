@@ -13,24 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Public details about the command line interface."""
+"""Exit codes returned for different outcomes."""
 
-from schemapack._internals.cli import (
-    DATAPACK_SPEC_ERROR_CODE as DATAPACK_SPEC_ERROR,
-)
-from schemapack._internals.cli import (
-    SCHEMAPACK_SPEC_ERROR_CODE as SCHEMAPACK_SPEC_ERROR,
-)
-from schemapack._internals.cli import (
-    SUCCESS_CODE as SUCCESS,
-)
-from schemapack._internals.cli import (
-    VALIDATION_ERROR_CODE as VALIDATION_ERROR,
-)
+from typing import Final
 
-__all__ = [
-    "SCHEMAPACK_SPEC_ERROR",
-    "DATAPACK_SPEC_ERROR",
-    "SUCCESS",
-    "VALIDATION_ERROR",
-]
+SUCCESS: Final = 0
+VALIDATION_ERROR: Final = 10
+DATAPACK_SPEC_ERROR: Final = 20
+SCHEMAPACK_SPEC_ERROR: Final = 30

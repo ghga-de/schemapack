@@ -14,3 +14,7 @@
 # limitations under the License.
 
 """Details on the command line interface."""
+
+from schemapack._internals.cli import exit_codes
+
+__all__ = ["exit_codes"]

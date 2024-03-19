@@ -36,7 +36,7 @@ from tests.fixtures.examples import (
     VALID_SCHEMAPACK_PATHS,
 )
 
-runner = CliRunner()
+runner = CliRunner(mix_stderr=False)
 
 
 def test_version():

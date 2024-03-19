@@ -15,44 +15,20 @@
 
 """Describes a command line interface"""
 
-from enum import Enum
 from pathlib import Path
-from typing import Annotated, Final
+from typing import Annotated
 
 import typer
 
 from schemapack import __version__, exceptions
+from schemapack._internals.cli import exit_codes
+from schemapack._internals.cli.utils import (
+    print_exception,
+    print_failure,
+    print_info,
+    print_success,
+)
 from schemapack._internals.main import load_and_validate
-
-# exit codes:
-SUCCESS_CODE: Final = 0
-VALIDATION_ERROR_CODE: Final = 10
-DATAPACK_SPEC_ERROR_CODE: Final = 20
-SCHEMAPACK_SPEC_ERROR_CODE: Final = 30
-
-
-class MessageLevel(str, Enum):
-    """The level of the message."""
-
-    INFO = "info"
-    ERROR = "error"
-    SUCCESS = "success"
-
-
-LEVEL_COLOR_MAP = {
-    MessageLevel.INFO: typer.colors.BLUE,
-    MessageLevel.ERROR: typer.colors.RED,
-    MessageLevel.SUCCESS: typer.colors.GREEN,
-}
-
-
-def echo(message: str, *, level: MessageLevel, stderr: bool = False):
-    """Print a message colored depending on the level.
-    Optionally, write to stderr, if `stderr` is True.
-    """
-    styled_message = typer.style(text=message, fg=LEVEL_COLOR_MAP[level])
-    typer.echo(styled_message, err=stderr)
-
 
 cli = typer.Typer()
 
@@ -61,8 +37,8 @@ def version_callback(
     version: bool = False,
 ):
     if version:
-        echo(str(__version__), level=MessageLevel.INFO)
-        raise typer.Exit(SUCCESS_CODE)
+        print_info(__version__)
+        raise typer.Exit(exit_codes.SUCCESS)
 
 
 @cli.callback()
@@ -104,26 +80,24 @@ def validate(
         load_and_validate(schemapack_path=schemapack, datapack_path=datapack)
 
     except exceptions.ValidationError as error:
-        echo(str(error), level=MessageLevel.ERROR, stderr=True)
-        echo("The datapack is invalid.", level=MessageLevel.ERROR, stderr=False)
-        raise typer.Exit(VALIDATION_ERROR_CODE) from None
+        print_exception(error, exception_name="ValidationError")
+        print_failure(
+            "The datapack is invalid.",
+        )
+        raise typer.Exit(exit_codes.VALIDATION_ERROR) from None
 
     except exceptions.DataPackSpecError as error:
-        echo(str(error), level=MessageLevel.ERROR, stderr=True)
-        echo(
-            "The provided datapack did not comply with the specs of a datapack.",
-            level=MessageLevel.ERROR,
-            stderr=False,
+        print_exception(error, exception_name="DataPackSpecError")
+        print_failure(
+            "The provided datapack did not comply with the specs of a datapack."
         )
-        raise typer.Exit(DATAPACK_SPEC_ERROR_CODE) from None
+        raise typer.Exit(exit_codes.DATAPACK_SPEC_ERROR) from None
 
     except exceptions.SchemaPackSpecError as error:
-        echo(str(error), level=MessageLevel.ERROR, stderr=True)
-        echo(
-            "The provided schemapack did not comply with the specs of a schemapack.",
-            level=MessageLevel.ERROR,
-            stderr=False,
+        print_exception(error, exception_name="SchemaPackSpecError")
+        print_failure(
+            "The provided schemapack did not comply with the specs of a schemapack."
         )
-        raise typer.Exit(SCHEMAPACK_SPEC_ERROR_CODE) from None
+        raise typer.Exit(exit_codes.SCHEMAPACK_SPEC_ERROR) from None
 
-    echo("The datapack is valid.", level=MessageLevel.SUCCESS)
+    print_success("The datapack is valid.")
