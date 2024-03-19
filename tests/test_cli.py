@@ -75,7 +75,7 @@ def test_validate_valid(abbreviate: bool):
     )
     assert result.exit_code == exit_codes.SUCCESS == 0
     last_stdout_line = result.stdout.splitlines()[-1]
-    assert " valid" in last_stdout_line
+    assert " valid" in last_stdout_line.lower()
 
 
 @pytest.mark.parametrize(
@@ -96,7 +96,7 @@ def test_validate_invalid(abbreviate: bool):
     )
     assert result.exit_code == exit_codes.VALIDATION_ERROR != 0
     last_stdout_line = result.stdout.splitlines()[-1]
-    assert " invalid" in last_stdout_line
+    assert " not valid" in last_stdout_line.lower()
     assert "ContentValidationError" in result.stderr
 
 
