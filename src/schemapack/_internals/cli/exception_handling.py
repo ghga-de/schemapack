@@ -21,7 +21,7 @@ import typer
 
 from schemapack import exceptions
 from schemapack._internals.cli import exit_codes
-from schemapack._internals.cli.printing import print_exception, print_failure
+from schemapack._internals.cli.printing import print_exception, print_final_failure
 
 
 @contextmanager
@@ -31,7 +31,7 @@ def expect_validation_errors():
         yield
     except exceptions.ValidationError as error:
         print_exception(error, exception_name="ValidationError")
-        print_failure(
+        print_final_failure(
             "The provided datapack is not valid wrt the provided schemapack.",
         )
         raise typer.Exit(exit_codes.VALIDATION_ERROR) from None
@@ -44,7 +44,7 @@ def expect_datapackspec_errors():
         yield
     except exceptions.DataPackSpecError as error:
         print_exception(error, exception_name="DataPackSpecError")
-        print_failure(
+        print_final_failure(
             "The provided document did not comply with the specs of a datapack."
         )
         raise typer.Exit(exit_codes.DATAPACK_SPEC_ERROR) from None
@@ -57,7 +57,7 @@ def expect_schemapack_errors():
         yield
     except exceptions.SchemaPackSpecError as error:
         print_exception(error, exception_name="SchemaPackSpecError")
-        print_failure(
+        print_final_failure(
             "The provided document did not comply with the specs of a schemapack."
         )
         raise typer.Exit(exit_codes.SCHEMAPACK_SPEC_ERROR) from None

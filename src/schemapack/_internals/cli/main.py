@@ -27,7 +27,7 @@ from schemapack._internals.cli.exception_handling import (
     expect_schemapack_errors,
     expect_user_errors,
 )
-from schemapack._internals.cli.printing import print_info, print_success
+from schemapack._internals.cli.printing import print_final_success, print_info
 from schemapack._internals.load import load_datapack, load_schemapack
 from schemapack._internals.main import load_and_validate
 
@@ -80,7 +80,7 @@ def validate(
     with expect_user_errors():
         load_and_validate(schemapack_path=schemapack, datapack_path=datapack)
 
-    print_success("The provided datapack is valid wrt the provided schemapack.")
+    print_final_success("The provided datapack is valid wrt the provided schemapack.")
 
 
 @cli.command()
@@ -97,7 +97,9 @@ def check_schemapack(
     with expect_schemapack_errors():
         load_schemapack(schemapack)
 
-    print_success("The provided document complies with the specs of a schemapack.")
+    print_final_success(
+        "The provided document complies with the specs of a schemapack."
+    )
 
 
 @cli.command()
@@ -114,4 +116,4 @@ def check_datapack(
     with expect_datapackspec_errors():
         load_datapack(datapack)
 
-    print_success("The provided document complies with the specs of a datapack.")
+    print_final_success("The provided document complies with the specs of a datapack.")

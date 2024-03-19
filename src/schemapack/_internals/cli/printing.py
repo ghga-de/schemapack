@@ -19,8 +19,8 @@ import rich.console
 import rich.panel
 
 EXCEPTION_CONSOLE = rich.console.Console(stderr=True, style="red")
-SUCCESS_CONSOLE = rich.console.Console(style="green bold")
-FAILURE_CONSOLE = rich.console.Console(style="red bold")
+FINAL_SUCCESS_CONSOLE = rich.console.Console(style="green bold")
+FINAL_FAILURE_CONSOLE = rich.console.Console(style="red bold")
 INFO_CONSOLE = rich.console.Console()
 
 
@@ -29,22 +29,22 @@ def print_exception(exception: Exception, exception_name: str = "Exception"):
     EXCEPTION_CONSOLE.print(rich.panel.Panel(str(exception), title=exception_name))
 
 
-def print_success(
+def print_final_success(
     message: str,
 ):
     """Print a final message indicating success."""
-    SUCCESS_CONSOLE.print(message)
+    FINAL_SUCCESS_CONSOLE.print(message)
 
 
-def print_failure(
+def print_final_failure(
     message: str,
 ):
     """Print a final message indicating failure."""
-    FAILURE_CONSOLE.print(message)
+    FINAL_FAILURE_CONSOLE.print(message)
 
 
 def print_info(
     message: str,
 ):
     """Print non-rated message."""
-    FAILURE_CONSOLE.print(message)
+    FINAL_FAILURE_CONSOLE.print(message)
