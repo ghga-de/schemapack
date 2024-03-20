@@ -26,6 +26,7 @@ from schemapack._internals.spec.schemapack import SchemaPack
 
 yaml = ruamel.yaml.YAML(typ="safe")
 yaml.indent(mapping=2, sequence=4, offset=2)
+yaml.default_flow_style = False
 
 
 def get_content_schema_path(*, class_name: str, content_schema_dir: Path) -> Path:
