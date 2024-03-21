@@ -30,6 +30,7 @@ import schemapack
 from schemapack._internals.cli import cli
 from schemapack.cli import exit_codes
 from tests.fixtures.examples import (
+    EXAMPLES_DIR,
     INVALID_DATAPACK_PATHS,
     INVALID_SCHEMAPACK_PATHS,
     VALID_DATAPACK_PATHS,
@@ -168,3 +169,46 @@ def test_check_datapack_not_complies():
     result = runner.invoke(cli, ["check-datapack", str(datapack)])
     assert result.exit_code == exit_codes.DATAPACK_SPEC_ERROR != 0
     assert "DataPackSpecError" in result.stderr
+
+
+@pytest.mark.parametrize(
+    "props,example_suffix", [([], "_wo_props.mm.txt"), (["-p"], "_w_props.mm.txt")]
+)
+def test_export_mermaid(tmp_path, props: list[str], example_suffix: str):
+    """Test the export-mermaid command."""
+    example = "comprehensive_cardinalities_and_types"
+    schemapack = VALID_SCHEMAPACK_PATHS[example]
+    output_path = tmp_path / "output.mermaid"
+    expected_output_path = EXAMPLES_DIR / "mermaid" / f"{example}{example_suffix}"
+
+    args = [
+        "export-mermaid",
+        str(schemapack),
+        str(output_path),
+        *props,
+    ]
+    result = runner.invoke(cli, args)
+    assert result.exit_code == exit_codes.SUCCESS == 0
+    assert output_path.read_text() == expected_output_path.read_text()
+
+
+def test_export_mermaid_force(tmp_path):
+    """Test the export-mermaid command force overwrite guard."""
+    example = "comprehensive_cardinalities_and_types"
+    schemapack = VALID_SCHEMAPACK_PATHS[example]
+    output_path = tmp_path / "output.mermaid"
+    dummy_content = "dummy content"
+
+    args = [
+        "export-mermaid",
+        str(schemapack),
+        str(output_path),
+    ]
+    output_path.write_text(dummy_content)
+    result = runner.invoke(cli, args)
+    assert result.exit_code == exit_codes.OUTPUT_EXISTS != 0
+    assert output_path.read_text() == dummy_content
+
+    result = runner.invoke(cli, [*args, "--force"])
+    assert result.exit_code == exit_codes.SUCCESS == 0
+    assert output_path.read_text() != dummy_content
