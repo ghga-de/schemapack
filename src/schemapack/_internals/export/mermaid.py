@@ -35,7 +35,10 @@ def _get_property_type(json_schema_props: Mapping[str, Any], prop_name: str) -> 
     """
     prop = json_schema_props[prop_name]
     if isinstance(prop, dict):
-        return prop.get("type", "object") if not prop.get("enum") else "enum"
+        type = prop.get("type", "object") if not prop.get("enum") else "enum"
+        if type == "array":
+            return f"array[{prop.get('items', {}).get('type', 'object')}]"
+        return type
     raise ValueError(
         f"Invalid JSON schema. Expected property {prop_name} to be a dict."
     )

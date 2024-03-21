@@ -21,7 +21,7 @@ Order ||--o| ShippingEvent : "Order.shipping_event"
 Product {
 string name "req"
 number price "req"
-string comment "opt"
+array[string] comments "opt"
 }
 Product }|--|{ ProductCategory : "Product.categories"
 ProductCategory {

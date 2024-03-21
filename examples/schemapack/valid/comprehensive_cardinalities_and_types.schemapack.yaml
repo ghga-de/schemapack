@@ -106,8 +106,10 @@ classes:
           type: string
         price:
           type: number
-        comment:
-          type: string
+        comments:
+          type: array
+          items:
+            type: string
       additionalProperties: false
     relations:
       categories:
