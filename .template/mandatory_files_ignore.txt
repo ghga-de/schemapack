@@ -2,6 +2,7 @@
 # but are allowed to be removed in the current repository
 
 .devcontainer/dev_launcher
+.devcontainer/docker-compose.yml
 
 .github/workflows/cd.yaml
 .github/workflows/dev_cd.yaml
