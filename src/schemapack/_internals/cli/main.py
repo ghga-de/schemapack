@@ -15,6 +15,7 @@
 
 """Describes a command line interface"""
 
+import os
 from pathlib import Path
 from typing import Annotated
 
@@ -55,7 +56,8 @@ def common(
     ] = False,
 ):
     """Common arguments and options."""
-    pass
+    if "PYDANTIC_ERRORS_INCLUDE_URL" not in os.environ:
+        os.environ["PYDANTIC_ERRORS_INCLUDE_URL"] = "0"
 
 
 @cli.command()
