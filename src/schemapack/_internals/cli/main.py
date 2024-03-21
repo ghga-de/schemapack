@@ -27,7 +27,9 @@ from schemapack._internals.cli.exception_handling import (
     expect_schemapack_errors,
     expect_user_errors,
 )
+from schemapack._internals.cli.io import check_force
 from schemapack._internals.cli.printing import print_final_success, print_info
+from schemapack._internals.export import mermaid
 from schemapack._internals.load import load_datapack, load_schemapack
 from schemapack._internals.main import load_and_validate
 
@@ -117,3 +119,53 @@ def check_datapack(
         load_datapack(datapack)
 
     print_final_success("The provided document complies with the specs of a datapack.")
+
+
+@cli.command()
+def export_mermaid(
+    *,
+    schemapack: Annotated[
+        Path,
+        typer.Argument(
+            help="Provide the path to a schemapack file to export.",
+        ),
+    ],
+    output: Annotated[
+        Path,
+        typer.Argument(
+            help="Provide the path to the mermaid output file to produce.",
+            file_okay=True,
+            dir_okay=False,
+            writable=True,
+        ),
+    ],
+    with_properties: Annotated[
+        bool,
+        typer.Option(
+            "--with-properties",
+            "-p",
+            help="Include properties in the output.",
+        ),
+    ] = False,
+    force: Annotated[
+        bool,
+        typer.Option(
+            "--force",
+            "-f",
+            help="Overwrite the output file if it exists.",
+        ),
+    ] = False,
+):
+    """Export a schemapack to a markdown file diagram."""
+    with expect_schemapack_errors():
+        schemapack_ = load_schemapack(schemapack)
+
+    with check_force(output, force):
+        output.write_text(
+            mermaid.export_mermaid(
+                schemapack=schemapack_, with_properties=with_properties
+            ),
+            encoding="utf-8",
+        )
+
+    print_final_success("Schemapack exported successfully.")

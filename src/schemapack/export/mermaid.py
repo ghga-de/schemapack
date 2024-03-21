@@ -13,12 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Exit codes returned for different outcomes."""
+"""Logic for exporting schemapacks in mermaid format."""
 
-from typing import Final
+from schemapack._internals.export.mermaid import export_mermaid
 
-SUCCESS: Final = 0
-VALIDATION_ERROR: Final = 10
-DATAPACK_SPEC_ERROR: Final = 20
-SCHEMAPACK_SPEC_ERROR: Final = 30
-OUTPUT_EXISTS: Final = 40
+__all__ = ["export_mermaid"]

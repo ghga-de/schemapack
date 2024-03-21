@@ -13,12 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Exit codes returned for different outcomes."""
+from contextlib import contextmanager
+from pathlib import Path
 
-from typing import Final
+import typer
 
-SUCCESS: Final = 0
-VALIDATION_ERROR: Final = 10
-DATAPACK_SPEC_ERROR: Final = 20
-SCHEMAPACK_SPEC_ERROR: Final = 30
-OUTPUT_EXISTS: Final = 40
+from schemapack._internals.cli import exit_codes
+from schemapack._internals.cli.printing import print_final_failure
+
+
+@contextmanager
+def check_force(output: Path, force: bool):
+    """Check if the output file exists and if so, whether to overwrite it."""
+    if output.exists() and not force:
+        print_final_failure(
+            "The specified output file exists. Use --force to overwrite."
+        )
+        raise typer.Exit(exit_codes.OUTPUT_EXISTS) from None
+    yield
