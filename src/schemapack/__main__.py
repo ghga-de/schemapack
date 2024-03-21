@@ -14,3 +14,8 @@
 # limitations under the License.
 
 """Entrypoint of the package"""
+
+from schemapack._internals.cli import cli
+
+if __name__ == "__main__":
+    cli()
