@@ -16,8 +16,6 @@
 
 """Tests for exporting schemapacks in mermaid format."""
 
-from pathlib import Path
-
 import pytest
 
 from schemapack import load_schemapack
@@ -33,10 +31,9 @@ def test_export_mermaid(with_properties: bool, file_suffix: str):
     """Test dumping a schemapack in mermaid format."""
     example = "comprehensive_cardinalities_and_types"
     input_schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[example])
-    with Path(EXAMPLES_DIR / "mermaid" / f"{example}{file_suffix}").open("r") as file:
-        expected_output = file.read()
+    expected_output_path = EXAMPLES_DIR / "mermaid" / f"{example}{file_suffix}"
 
     observed_output = export_mermaid(
         schemapack=input_schemapack, with_properties=with_properties
     )
-    assert observed_output == expected_output
+    assert observed_output == expected_output_path.read_text()
