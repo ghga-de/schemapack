@@ -21,16 +21,22 @@ only a single senario is tester for each command. More deeper testing is done on
 python API (to avoid redundancy of tests).
 """
 
+import json
 from pathlib import Path
 
 import pytest
 import ruamel.yaml
 from typer.testing import CliRunner
 
-import schemapack
+from schemapack import __version__ as schemapack_version
+from schemapack import (
+    dumps_schemapack,
+    isolate_resource,
+    load_datapack,
+    load_schemapack,
+)
 from schemapack._internals.cli import cli
-from schemapack._internals.dump import dumps_schemapack
-from schemapack._internals.load import load_schemapack
+from schemapack._internals.utils import dumps_model
 from schemapack.cli import exit_codes
 from tests.fixtures.examples import (
     INVALID_DATAPACK_PATHS,
@@ -49,7 +55,7 @@ def test_version():
     """Test the version command."""
     result = runner.invoke(cli, ["--version"])
     assert result.exit_code == exit_codes.SUCCESS == 0
-    assert result.stdout.strip() == str(schemapack.__version__)
+    assert result.stdout.strip() == str(schemapack_version)
 
 
 def generate_validate_command(
@@ -176,6 +182,12 @@ def test_check_datapack_not_complies():
     assert "DataPackSpecError" in result.stderr
 
 
+def assert_is_yaml(yaml_str: str):
+    """Assert that the provided string is valid YAML."""
+    try:
+        
+
+
 @pytest.mark.parametrize(
     "json, abbreviate",
     [(False, False), (True, False), (True, True)],
@@ -183,7 +195,8 @@ def test_check_datapack_not_complies():
 )
 def test_condense_schemapack(json: bool, abbreviate: bool):
     """Test the condense-schemapack command. This is checked against the output of
-    the dumps_schemapack function. Further behavior is checked for that function.
+    the dumps_schemapack function. Further behavior is checked for that function in
+    separate tests.
     """
     schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
     schemapack = load_schemapack(schemapack_path)
@@ -196,3 +209,36 @@ def test_condense_schemapack(json: bool, abbreviate: bool):
     assert result.exit_code == exit_codes.SUCCESS == 0
 
     assert result.output.strip() == expected_str
+
+
+@pytest.mark.parametrize(
+    "abbreviate", [True, False], ids=["abbreviate", "no_abbreviate"]
+)
+def test_isolate_resource(abbreviate: bool):
+    """Test the isolate_resource command. This is checked against the isolate_resource
+    function in separate tests.
+    """
+    schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
+    datapack_path = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
+    expected_datapack_path = VALID_DATAPACK_PATHS[
+        "simple_relations_rooted.rooted_simple_resources"
+    ]
+    class_name = "Dataset"
+    resource_id = "example_dataset_1"
+
+
+    command = [
+        "isolate-resource",
+        "-s" if abbreviate else "--schemapack",
+        str(schemapack),
+        "-d" if abbreviate else "--datapack",
+        "-j" if abbreviate else "--json",
+        str(datapack),
+        class_name,
+        resource_id,
+    ]
+    result = runner.invoke(cli, command)
+    assert result.exit_code == exit_codes.DATAPACK_SPEC_ERROR != 0
+
+    observed_datapack_dict = json.loads(result.stdout)
+    assert expected_datapack_dict == observed_datapack_dict
