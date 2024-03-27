@@ -21,7 +21,6 @@ only a single senario is tester for each command. More deeper testing is done on
 python API (to avoid redundancy of tests).
 """
 
-import json
 from pathlib import Path
 
 import pytest
@@ -29,20 +28,18 @@ import ruamel.yaml
 from typer.testing import CliRunner
 
 from schemapack import __version__ as schemapack_version
-from schemapack import (
-    dumps_schemapack,
-    isolate_resource,
-    load_datapack,
-    load_schemapack,
-)
 from schemapack._internals.cli import cli
-from schemapack._internals.utils import dumps_model
+from schemapack._internals.utils import read_json_or_yaml_mapping
 from schemapack.cli import exit_codes
 from tests.fixtures.examples import (
     INVALID_DATAPACK_PATHS,
     INVALID_SCHEMAPACK_PATHS,
     VALID_DATAPACK_PATHS,
     VALID_SCHEMAPACK_PATHS,
+)
+from tests.fixtures.utils import (
+    assert_formatted_string,
+    loads_json_or_yaml_mapping,
 )
 
 yaml = ruamel.yaml.YAML(typ="rt")
@@ -182,63 +179,159 @@ def test_check_datapack_not_complies():
     assert "DataPackSpecError" in result.stderr
 
 
-def assert_is_yaml(yaml_str: str):
-    """Assert that the provided string is valid YAML."""
-    try:
-        
-
-
 @pytest.mark.parametrize(
-    "json, abbreviate",
+    "json_format, abbreviate",
     [(False, False), (True, False), (True, True)],
-    ids=["yaml_format", "json_format_no_abbrev", "json_format_abbrev"],
+    ids=["yaml", "json", "json_abbrev"],
 )
-def test_condense_schemapack(json: bool, abbreviate: bool):
-    """Test the condense-schemapack command. This is checked against the output of
-    the dumps_schemapack function. Further behavior is checked for that function in
-    separate tests.
-    """
+def test_condense_schemapack(json_format: bool, abbreviate: bool):
+    """Test the condense-schemapack command."""
     schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
-    schemapack = load_schemapack(schemapack_path)
-    expected_str = dumps_schemapack(schemapack, yaml_format=not json)
+    expected_dict = read_json_or_yaml_mapping(
+        VALID_SCHEMAPACK_PATHS["simple_relations_condensed"]
+    )
 
     command = ["condense-schemapack", str(schemapack_path)]
-    if json:
+    if json_format:
         command.append("-j" if abbreviate else "--json")
     result = runner.invoke(cli, command)
     assert result.exit_code == exit_codes.SUCCESS == 0
 
-    assert result.output.strip() == expected_str
+    observed_str = result.stdout
+    assert_formatted_string(observed_str, json_format=json_format)
+
+    observed_dict = loads_json_or_yaml_mapping(observed_str)
+    assert observed_dict == expected_dict
 
 
 @pytest.mark.parametrize(
-    "abbreviate", [True, False], ids=["abbreviate", "no_abbreviate"]
+    "json_format, abbreviate",
+    [(False, False), (True, False), (True, True)],
+    ids=["yaml", "json", "json_abbrev"],
 )
-def test_isolate_resource(abbreviate: bool):
-    """Test the isolate_resource command. This is checked against the isolate_resource
-    function in separate tests.
-    """
+def test_isolate_resource(json_format: bool, abbreviate: bool):
+    """Test the isolate_resource command."""
     schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
     datapack_path = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
-    expected_datapack_path = VALID_DATAPACK_PATHS[
-        "simple_relations_rooted.rooted_simple_resources"
-    ]
+    expected_dict = read_json_or_yaml_mapping(
+        VALID_DATAPACK_PATHS["simple_relations_rooted.rooted_simple_resources"]
+    )
     class_name = "Dataset"
     resource_id = "example_dataset_1"
-
 
     command = [
         "isolate-resource",
         "-s" if abbreviate else "--schemapack",
-        str(schemapack),
+        str(schemapack_path),
         "-d" if abbreviate else "--datapack",
-        "-j" if abbreviate else "--json",
-        str(datapack),
+        str(datapack_path),
+        "-c" if abbreviate else "--class-name",
         class_name,
+        "-r" if abbreviate else "--resource-id",
+        resource_id,
+    ]
+    if json_format:
+        command.append("-j" if abbreviate else "--json")
+    result = runner.invoke(cli, command)
+    assert result.exit_code == exit_codes.SUCCESS == 0
+
+    observed_str = result.output
+    assert_formatted_string(observed_str, json_format=json_format)
+
+    observed_dict = loads_json_or_yaml_mapping(observed_str)
+    assert observed_dict == expected_dict
+
+
+def test_isolate_resource_non_existing_class():
+    """Test the isolate_resource command with a non-existing class."""
+    schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
+    datapack_path = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
+    class_name = "NonExistingClass"
+    resource_id = "example_dataset_1"
+
+    command = [
+        "isolate-resource",
+        "--schemapack",
+        str(schemapack_path),
+        "--datapack",
+        str(datapack_path),
+        "--class-name",
+        class_name,
+        "--resource-id",
         resource_id,
     ]
     result = runner.invoke(cli, command)
-    assert result.exit_code == exit_codes.DATAPACK_SPEC_ERROR != 0
+    assert result.exit_code == exit_codes.CLASS_NOT_FOUND_ERROR != 0
+    assert "ClassNotFoundError" in result.stderr
 
-    observed_datapack_dict = json.loads(result.stdout)
-    assert expected_datapack_dict == observed_datapack_dict
+
+def test_isolate_resource_non_existing_resource():
+    """Test the isolate_resource command with a non-existing resource."""
+    schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
+    datapack_path = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
+    class_name = "Dataset"
+    resource_id = "non_existing_resource"
+
+    command = [
+        "isolate-resource",
+        "--schemapack",
+        str(schemapack_path),
+        "--datapack",
+        str(datapack_path),
+        "--class-name",
+        class_name,
+        "--resource-id",
+        resource_id,
+    ]
+    result = runner.invoke(cli, command)
+    assert result.exit_code == exit_codes.RESOURCE_NOT_FOUND_ERROR != 0
+    assert "ResourceNotFoundError" in result.stderr
+
+
+@pytest.mark.parametrize(
+    "json_format, abbreviate",
+    [(False, False), (True, False), (True, True)],
+    ids=["yaml", "json", "json_abbrev"],
+)
+def test_isolate_class(json_format: bool, abbreviate: bool):
+    """Test the isolate_class command."""
+    schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
+    expected_dict = read_json_or_yaml_mapping(
+        VALID_SCHEMAPACK_PATHS["simple_relations_rooted_condensed"]
+    )
+    class_name = "Dataset"
+
+    command = [
+        "isolate-class",
+        "-s" if abbreviate else "--schemapack",
+        str(schemapack_path),
+        "-c" if abbreviate else "--class-name",
+        class_name,
+    ]
+    if json_format:
+        command.append("-j" if abbreviate else "--json")
+    result = runner.invoke(cli, command)
+    assert result.exit_code == exit_codes.SUCCESS == 0
+
+    observed_str = result.output
+    assert_formatted_string(observed_str, json_format=json_format)
+
+    observed_dict = loads_json_or_yaml_mapping(observed_str)
+    assert observed_dict == expected_dict
+
+
+def test_isolate_class_non_existing():
+    """Test the isolate_class command with a non-existing class."""
+    schemapack_path = VALID_SCHEMAPACK_PATHS["simple_relations"]
+    class_name = "NonExistingClass"
+
+    command = [
+        "isolate-class",
+        "--schemapack",
+        str(schemapack_path),
+        "--class-name",
+        class_name,
+    ]
+    result = runner.invoke(cli, command)
+    assert result.exit_code == exit_codes.CLASS_NOT_FOUND_ERROR != 0
+    assert "ClassNotFoundError" in result.stderr

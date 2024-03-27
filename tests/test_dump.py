@@ -29,7 +29,12 @@ from schemapack import (
     load_datapack,
     load_schemapack,
 )
+from schemapack._internals.utils import read_json_or_yaml_mapping
 from tests.fixtures.examples import VALID_DATAPACK_PATHS, VALID_SCHEMAPACK_PATHS
+from tests.fixtures.utils import (
+    assert_formatted_string,
+    loads_json_or_yaml_mapping,
+)
 
 yaml = ruamel.yaml.YAML(typ="rt")
 
@@ -41,18 +46,12 @@ def test_dumps_datapack(yaml_format: bool):
     """Tests using the dumps_datapack function."""
     datapack_path = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
     datapack = load_datapack(datapack_path)
-    expected_dict = yaml.load(datapack_path)
+    expected_dict = read_json_or_yaml_mapping(datapack_path)
 
     observed_str = dumps_datapack(datapack, yaml_format=yaml_format)
+    assert_formatted_string(observed_str, json_format=not yaml_format)
 
-    # make sure that it has the datapack property at the top:
-    if yaml_format:
-        assert observed_str.startswith("datapack:")
-        observed_dict = yaml.load(observed_str)
-    else:
-        assert observed_str.startswith('{\n  "datapack":')
-        observed_dict = json.loads(observed_str)
-
+    observed_dict = loads_json_or_yaml_mapping(observed_str)
     assert observed_dict == expected_dict
 
 
@@ -63,19 +62,15 @@ def test_dumps_schemapack(yaml_format: bool):
     """Tests using the dumps_schemapack function to dump a schemapack as a
     condensed representation to string.
     """
-    input_schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations"])
-    expected_dict = yaml.load(VALID_SCHEMAPACK_PATHS["simple_relations_condensed"])
+    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations"])
+    expected_dict = read_json_or_yaml_mapping(
+        VALID_SCHEMAPACK_PATHS["simple_relations_condensed"]
+    )
 
-    observed_str = dumps_schemapack(input_schemapack, yaml_format=yaml_format)
+    observed_str = dumps_schemapack(schemapack, yaml_format=yaml_format)
+    assert_formatted_string(observed_str, json_format=not yaml_format)
 
-    # make sure that it has the schemapack property at the top:
-    if yaml_format:
-        assert observed_str.startswith("schemapack:")
-        observed_dict = yaml.load(observed_str)
-    else:
-        assert observed_str.startswith('{\n  "schemapack":')
-        observed_dict = json.loads(observed_str)
-
+    observed_dict = loads_json_or_yaml_mapping(observed_str)
     assert observed_dict == expected_dict
 
 
