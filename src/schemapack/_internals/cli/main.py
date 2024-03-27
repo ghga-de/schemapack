@@ -32,6 +32,7 @@ from schemapack._internals.cli.printing import (
     print_output,
 )
 from schemapack._internals.dump import dumps_schemapack
+from schemapack._internals.isolate import isolate_resource as isolate_resource_impl
 from schemapack._internals.load import load_datapack, load_schemapack
 from schemapack._internals.main import load_and_validate
 
@@ -137,7 +138,7 @@ def condense_schemapack(
         typer.Option(
             "--json",
             "-j",
-            help="Output the condensed schemapack as JSON instead of YAML (the default).",
+            help="Output the condensed schemapack as JSON instead of YAML.",
         ),
     ] = False,
 ):
@@ -148,3 +149,70 @@ def condense_schemapack(
         schemapack_dict = load_schemapack(schemapack)
         condensed_schemapack = dumps_schemapack(schemapack_dict, yaml_format=not json)
         print_output(condensed_schemapack)
+
+
+@cli.command()
+def isolate_resource(
+    *,
+    schemapack: Annotated[
+        Path,
+        typer.Option(
+            "--schemapack",
+            "-s",
+            help=(
+                "Provide the path to a schemapack that describes the structure of"
+                " provided input datapack (not the rooted datapack output by this"
+                " command)."
+            ),
+        ),
+    ],
+    datapack: Annotated[
+        Path,
+        typer.Option(
+            "--datapack",
+            "-d",
+            help=(
+                "Provide the path to a datapack from which the resource shall be"
+                + " isolated."
+            ),
+        ),
+    ],
+    class_name: Annotated[
+        str,
+        typer.Option(
+            "--class-name",
+            "-c",
+            help="The name of the class of the resource to isolate.",
+        ),
+    ],
+    resource_id: Annotated[
+        str,
+        typer.Option(
+            "--resource-id",
+            "-r",
+            help="The ID of the resource to isolate.",
+        ),
+    ],
+    json: Annotated[
+        bool,
+        typer.Option(
+            "--json",
+            "-j",
+            help="Output the rooted datapack as JSON instead of YAML.",
+        ),
+    ] = False,
+):
+    """Isolate a resource from the given datapack and write a datapack rooted to this
+    resource to stdout.
+    """
+    with expect_user_errors():
+        schemapack_obj, datapack_obj = load_and_validate(
+            schemapack_path=schemapack, datapack_path=datapack
+        )
+
+    datapack = isolate_resource_impl(
+        datapack=datapack_obj,
+        class_name=class_name,
+        resource_id=resource_id,
+        schemapack=schemapack_obj,
+    )

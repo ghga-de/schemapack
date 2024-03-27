@@ -22,9 +22,14 @@ from pathlib import Path
 import pytest
 import ruamel.yaml
 
-from schemapack import dump_schemapack, load_schemapack
-from schemapack._internals.dump import dumps_schemapack
-from tests.fixtures.examples import VALID_SCHEMAPACK_PATHS
+from schemapack import (
+    dump_schemapack,
+    dumps_datapack,
+    dumps_schemapack,
+    load_datapack,
+    load_schemapack,
+)
+from tests.fixtures.examples import VALID_DATAPACK_PATHS, VALID_SCHEMAPACK_PATHS
 
 yaml = ruamel.yaml.YAML(typ="rt")
 
@@ -32,7 +37,29 @@ yaml = ruamel.yaml.YAML(typ="rt")
 @pytest.mark.parametrize(
     "yaml_format", [True, False], ids=["yaml_format", "json_format"]
 )
-def test_dumps(yaml_format: bool, tmp_path: Path):
+def test_dumps_datapack(yaml_format: bool):
+    """Tests using the dumps_datapack function."""
+    datapack_path = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
+    datapack = load_datapack(datapack_path)
+    expected_dict = yaml.load(datapack_path)
+
+    observed_str = dumps_datapack(datapack, yaml_format=yaml_format)
+
+    # make sure that it has the datapack property at the top:
+    if yaml_format:
+        assert observed_str.startswith("datapack:")
+        observed_dict = yaml.load(observed_str)
+    else:
+        assert observed_str.startswith('{\n  "datapack":')
+        observed_dict = json.loads(observed_str)
+
+    assert observed_dict == expected_dict
+
+
+@pytest.mark.parametrize(
+    "yaml_format", [True, False], ids=["yaml_format", "json_format"]
+)
+def test_dumps_schemapack(yaml_format: bool):
     """Tests using the dumps_schemapack function to dump a schemapack as a
     condensed representation to string.
     """
@@ -55,7 +82,7 @@ def test_dumps(yaml_format: bool, tmp_path: Path):
 @pytest.mark.parametrize(
     "yaml_format", [True, False], ids=["yaml_format", "json_format"]
 )
-def test_dump_condensed(yaml_format: bool, tmp_path: Path):
+def test_dump_condensed_schemapack(yaml_format: bool, tmp_path: Path):
     """Tests using the dump_schemapack function to dump a schemapack as a
     condensed representation to file.
     """
@@ -73,7 +100,7 @@ def test_dump_condensed(yaml_format: bool, tmp_path: Path):
     assert observed_dict == expected_dict
 
 
-def test_dump_not_condensed(tmp_path: Path):
+def test_dump_not_condensed_schemapack(tmp_path: Path):
     """Tests using the dump_schemapack function to dump a schemapack as a representation
     to file with content schemas being written to dedicated files.
     """
