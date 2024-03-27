@@ -204,3 +204,44 @@ class CircularRelationError(BaseError, ValueError):
     """Raised when a circular relation between resources is detected, but the requested
     operation cannot be performed on datapacks with circular relations.
     """
+
+
+class ClassNotFoundError(BaseError, KeyError):
+    """Raised when a class was not found in a schemapack or datapack."""
+
+    def __init__(self, *, class_name: str, in_schemapack: bool):
+        """Initiate a ClassNotFoundError.
+
+        Args:
+            class_name:
+                The name of the class that was not found.
+            in_schemapack:
+                Whether the class was not found in a schemapack (True) or
+                datapack (False).
+        """
+        message = f"Class '{class_name}' not found in the provided" + (
+            " schemapack." if in_schemapack else " datapack."
+        )
+        super().__init__(message)
+        self.class_name = class_name
+
+
+class ResourceNotFoundError(BaseError, KeyError):
+    """Raised when a resource was not found in a datapack."""
+
+    def __init__(self, *, class_name: str, resource_id: str):
+        """Initiate a ResourceNotFoundError.
+
+        Args:
+            class_name:
+                The name of the class of the resource that was not found.
+            resource_id:
+                The ID of the resource that was not found.
+        """
+        message = (
+            f"A resource of class '{class_name}' with id '{resource_id}' not found in"
+            + " the provided datapack."
+        )
+        super().__init__(message)
+        self.class_name = class_name
+        self.resource_id = resource_id

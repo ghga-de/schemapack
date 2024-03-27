@@ -31,7 +31,7 @@ from schemapack._internals.cli.printing import (
     print_final_success,
     print_output,
 )
-from schemapack._internals.dump import dumps_schemapack
+from schemapack._internals.dump import dumps_datapack, dumps_schemapack
 from schemapack._internals.isolate import isolate_resource as isolate_resource_impl
 from schemapack._internals.load import load_datapack, load_schemapack
 from schemapack._internals.main import load_and_validate
@@ -210,9 +210,12 @@ def isolate_resource(
             schemapack_path=schemapack, datapack_path=datapack
         )
 
-    datapack = isolate_resource_impl(
+    rooted_datapack = isolate_resource_impl(
         datapack=datapack_obj,
         class_name=class_name,
         resource_id=resource_id,
         schemapack=schemapack_obj,
     )
+
+    rooted_datapack_str = dumps_datapack(rooted_datapack, yaml_format=not json)
+    print_output(rooted_datapack_str)
