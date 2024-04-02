@@ -86,7 +86,7 @@ def write_content_schemas(
             class_name=class_name, content_schema_dir=abs_content_schema_dir
         )
         with open(content_schema_path, "w", encoding="utf-8") as file:
-            file.write(class_.content.json_schema)
+            file.write(class_.content)
 
 
 def dump_schemapack(

@@ -74,10 +74,7 @@ def test_content_schema_serialization():
     serialized_schemapack = json.loads(schemapack.model_dump_json())
 
     for class_name, class_ in schemapack.classes.items():
-        assert (
-            serialized_schemapack["classes"][class_name]["content"]
-            == class_.content.json_schema_dict
-        )
+        assert serialized_schemapack["classes"][class_name]["content"] == class_.content
 
 
 def test_datapack_target_id_ordering_upon_dump():

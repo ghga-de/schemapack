@@ -80,4 +80,4 @@ def test_dump_not_condensed(tmp_path: Path):
         )
         with open(content_schema_path, encoding="utf-8") as file:
             observed_content_schema = json.load(file)
-        assert observed_content_schema == class_.content.json_schema_dict
+        assert observed_content_schema == class_.content_dict

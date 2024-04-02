@@ -22,7 +22,6 @@ Warning: This is an internal part of the library and might change without notice
 import os
 from collections.abc import Mapping
 from contextlib import contextmanager
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -66,7 +65,6 @@ class JsonSchemaError(ValueError):
     """Raised when a JSON schema is invalid."""
 
 
-@lru_cache
 def assert_valid_json_schema(schema: Mapping[str, Any]) -> None:
     """Asserts that the given mapping is a valid JSON Schema.
 
