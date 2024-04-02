@@ -20,6 +20,7 @@ Warning: This is an internal part of the library and might change without notice
 
 import json
 import typing
+from collections.abc import Mapping
 from functools import cached_property
 from pathlib import Path
 from typing import Any, Literal, Optional, Union
@@ -267,7 +268,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
 
             return ContentSchema(json_schema=json.dumps(json_schema_dict))
 
-        if isinstance(v, dict):
+        if isinstance(v, Mapping):
             return ContentSchema(json_schema=json.dumps(v))
 
         raise PydanticCustomError(
@@ -403,9 +404,9 @@ class SchemaPack(_FrozenNoExtraBaseModel):
     def check_schemapack_field_exists(cls, data: Any) -> Any:
         """Checks that the schemapack field exists and points to a supported version
         before doing anything else. Please note, this validation only takes place if the
-        data is passed as dict. However, the data can be pretty much anything.
+        data is passed as Mapping. However, the data can be pretty much anything.
         """
-        if isinstance(data, dict):
+        if isinstance(data, Mapping):
             if "schemapack" not in data:
                 raise PydanticCustomError(
                     "MissingSchemaPackVersionError",

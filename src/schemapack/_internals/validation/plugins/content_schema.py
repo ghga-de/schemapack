@@ -71,8 +71,9 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
+        json_compatible_content = json.loads(resource.model_dump_json())["content"]
         try:
-            self._json_schema_validator.validate(resource.content)
+            self._json_schema_validator.validate(json_compatible_content)
         except jsonschema.exceptions.ValidationError as error:
             raise ValidationPluginError(
                 type_="ContentValidationError", message=error.message

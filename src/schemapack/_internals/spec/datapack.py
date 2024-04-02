@@ -46,7 +46,7 @@ def validate_duplicate_target_ids(iterable: Iterable) -> Any:
     does, a PydanticCustomError with name "DuplicateTargetIdError" is raised. Otherwise,
     the given iterable is returned.
     """
-    if isinstance(iterable, set):
+    if isinstance(iterable, frozenset):
         return iterable
 
     try:
@@ -141,7 +141,7 @@ class Resource(_FrozenNoExtraBaseModel):
             return frozenset()
         if isinstance(targets, frozenset):
             return targets
-        return frozenset(targets)
+        return frozenset({targets})
 
 
 class DataPack(_FrozenNoExtraBaseModel):
