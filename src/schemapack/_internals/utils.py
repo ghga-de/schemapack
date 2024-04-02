@@ -19,11 +19,12 @@
 Warning: This is an internal part of the library and might change without notice.
 """
 
-import json
 import os
+from collections.abc import Mapping
 from contextlib import contextmanager
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 import jsonschema
 import jsonschema.exceptions
@@ -66,13 +67,12 @@ class JsonSchemaError(ValueError):
 
 
 @lru_cache
-def assert_valid_json_schema(schema_str: str) -> None:
-    """Asserts that the given string is a valid JSON Schema.
+def assert_valid_json_schema(schema: Mapping[str, Any]) -> None:
+    """Asserts that the given mapping is a valid JSON Schema.
 
     Raises:
         JsonSchemaError: If the schema is invalid.
     """
-    schema = json.loads(schema_str)
     cls: type[jsonschema.protocols.Validator] = jsonschema.validators.validator_for(
         schema
     )

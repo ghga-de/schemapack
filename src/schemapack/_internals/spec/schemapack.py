@@ -18,18 +18,15 @@
 Warning: This is an internal part of the library and might change without notice.
 """
 
-import json
 import typing
 from collections.abc import Mapping
-from functools import cached_property
 from pathlib import Path
-from typing import Any, Literal, Optional, Union
+from typing import Any, Literal, Optional, Union, cast
 
-from arcticfreeze import FrozenDict
+from arcticfreeze import FrozenDict, freeze
 from immutabledict import immutabledict
 from pydantic import (
     Field,
-    field_serializer,
     field_validator,
     model_validator,
 )
@@ -50,50 +47,29 @@ SupportedSchemaPackVersions = Literal["0.3.0"]
 SUPPORTED_SCHEMA_PACK_VERSIONS = typing.get_args(SupportedSchemaPackVersions)
 
 
-class ContentSchema(_FrozenNoExtraBaseModel):
-    """A model for describing a schemapack content schema."""
+def validate_object_json_schema(value: Mapping[str, Any]):
+    """Check if the given dict represents a valid JSON Schema for object types.
 
-    json_schema: str = Field(
-        ...,
-        description=(
-            "String representation of JSON schema (as a JSON-formatted string)"
-            + " describing the content of the class instances."
-        ),
-    )
+    Raises:
+        PydanticCustomError:
+            If the value is not a valid JSON Schema for object types.
+    """
+    try:
+        assert_valid_json_schema(value)
+    except JsonSchemaError as error:
+        raise PydanticCustomError(
+            "InvalidContentSchemaError",
+            "The content schema is not a valid JSON schema: {error_message}",
+            {"error_message": str(error)},
+        ) from error
 
-    # cannot be cached because pydantic includes cached properties in the hash and this
-    # is unhashable:
-    @property
-    def json_schema_dict(self) -> dict[str, Any]:
-        """A dict representation of the JSON schema."""
-        return json.loads(self.json_schema)
+    if value.get("type") != "object":
+        raise PydanticCustomError(
+            "InvalidContentSchemaError",
+            "The content schema must be an object.",
+        )
 
-    @cached_property
-    def properties(self) -> frozenset[ContentPropertyName]:
-        """Returns a set of the content properties. If the content schema is not a
-        JSON Schema Object (but e.g. a list), an empty set is returned.
-        """
-        return frozenset(self.json_schema_dict.get("properties", {}))
-
-    @model_validator(mode="after")
-    def validate_schema(self) -> "ContentSchema":
-        """Make sure that the schema is a  valid JSON Schema."""
-        try:
-            assert_valid_json_schema(self.json_schema)
-        except JsonSchemaError as error:
-            raise PydanticCustomError(
-                "InvalidContentSchemaError",
-                "The content schema is not a valid JSON schema: {error_message}",
-                {"error_message": str(error)},
-            ) from error
-
-        if self.json_schema_dict.get("type") != "object":
-            raise PydanticCustomError(
-                "InvalidContentSchemaError",
-                "The content schema must be an object.",
-            )
-
-        return self
+    return value
 
 
 class MandatoryRelationSpec(_FrozenNoExtraBaseModel):
@@ -214,7 +190,15 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         ...,
         description="The ID property of the class definition.",
     )
-    content: ContentSchema
+    content: FrozenDict[str, Any] = Field(
+        ...,
+        description=(
+            "The content schema of the class definition. It must be a valid JSON schema"
+            + " object for object types. You may also provide the path to a JSON or YAML"
+            + " file containing the schema. It will be automatically loaded."
+        ),
+        validators=[validate_object_json_schema],
+    )
     relations: FrozenDict[RelationPropertyName, Relation] = Field(
         immutabledict(),
         description=(
@@ -224,26 +208,27 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         ),
     )
 
+    def get_content_properties(self) -> frozenset[ContentPropertyName]:
+        """Returns a set of the content properties."""
+        return frozenset(self.content.get("properties", {}))
+
     @field_validator("content", mode="before")
     @classmethod
-    def content_schema_validator(
-        cls, v: Union[ContentSchema, Path, str, dict[str, Any]]
-    ) -> ContentSchema:
-        """Validate and convert the type of the content schema.
-
-        If a str is provided, it must be a path to the JSON schema file and not the
-        JSON-formatted string representation of the JSON schema itself.
+    def before_validate_content_schema(
+        cls, value: Union[str, Path, Mapping]
+    ) -> FrozenDict:
+        """A validator function for content schemas that:
+        - loads a JSON or YAML file if a path is provided
+        - checks if the value is a valid JSON schema object
+        - freezes the dict representation of the schema
         """
-        if isinstance(v, ContentSchema):
-            return v
-
-        if isinstance(v, str):
+        if isinstance(value, str):
             # assume that the string is a path to a JSON or YAML file
-            v = Path(v)
+            value = Path(value)
 
-        if isinstance(v, Path):
-            if not v.is_file():
-                absolute_path = v.absolute().resolve()
+        if isinstance(value, Path):
+            if not value.is_file():
+                absolute_path = value.absolute().resolve()
                 raise PydanticCustomError(
                     "ContentSchemaNotFoundError",
                     (
@@ -256,7 +241,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
                 )
 
             try:
-                json_schema_dict = read_json_or_yaml_mapping(v)
+                value = read_json_or_yaml_mapping(value)
             except ParsingError as error:
                 raise PydanticCustomError(
                     "InvalidContentSchemaError",
@@ -266,28 +251,32 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
                     ),
                 ) from error
 
-            return ContentSchema(json_schema=json.dumps(json_schema_dict))
+        if not isinstance(value, Mapping):
+            raise PydanticCustomError(
+                "InvalidContentSchemaError",
+                (
+                    "Expected a Mapping or a"
+                    + " path (pathlib.Path or str) to a JSON or"
+                    + " YAML file."
+                ),
+            )
 
-        if isinstance(v, Mapping):
-            return ContentSchema(json_schema=json.dumps(v))
+        try:
+            assert_valid_json_schema(value)
+        except JsonSchemaError as error:
+            raise PydanticCustomError(
+                "InvalidContentSchemaError",
+                "The content schema is not a valid JSON schema: {error_message}",
+                {"error_message": str(error)},
+            ) from error
 
-        raise PydanticCustomError(
-            "InvalidContentSchemaError",
-            (
-                "Expected an instance of class ContentSchema, a dict[str, Any], or a"
-                + " path (pathlib.Path or str) to a JSON or"
-                + " YAML file."
-            ),
-        )
+        if value.get("type") != "object":
+            raise PydanticCustomError(
+                "InvalidContentSchemaError",
+                "The content schema must be an object.",
+            )
 
-    @field_serializer("content")
-    def content_schema_serializer(
-        self, content: ContentSchema, _info
-    ) -> dict[str, Any]:
-        """Serialize the content schema by representing it as dictionary containing the
-        JSON schema itself.
-        """
-        return self.content.json_schema_dict
+        return cast(FrozenDict, freeze(value, by_superclass=True))
 
     @field_validator("relations", mode="after")
     @classmethod
@@ -318,7 +307,8 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
     @model_validator(mode="after")
     def relation_content_property_collisions(self) -> "ClassDefinition":
         """Check for collisions between relations and content properties."""
-        collisions = self.content.properties.intersection(set(self.relations))
+        content_properties = self.get_content_properties()
+        collisions = content_properties.intersection(set(self.relations))
 
         if collisions:
             raise PydanticCustomError(
@@ -338,7 +328,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
     @model_validator(mode="after")
     def id_content_property_collisions(self) -> "ClassDefinition":
         """Check for collisions between the id property and content properties."""
-        if self.id.propertyName in self.content.properties:
+        if self.id.propertyName in self.get_content_properties():
             raise PydanticCustomError(
                 "IdContentPropertyCollisionError",
                 ("The id property '{id_property}' also occurs in the content."),
