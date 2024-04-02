@@ -24,10 +24,9 @@ from functools import cached_property
 from pathlib import Path
 from typing import Any, Literal, Optional, Union
 
+from arcticfreeze import FrozenDict
 from immutabledict import immutabledict
 from pydantic import (
-    BaseModel,
-    ConfigDict,
     Field,
     field_serializer,
     field_validator,
@@ -35,7 +34,7 @@ from pydantic import (
 )
 from pydantic_core import PydanticCustomError
 
-from schemapack._internals.spec.custom_types import FrozenDict
+from schemapack._internals.spec.base import _FrozenNoExtraBaseModel
 from schemapack._internals.utils import JsonSchemaError, assert_valid_json_schema
 from schemapack.exceptions import ParsingError
 from schemapack.spec.custom_types import (
@@ -50,13 +49,7 @@ SupportedSchemaPackVersions = Literal["0.3.0"]
 SUPPORTED_SCHEMA_PACK_VERSIONS = typing.get_args(SupportedSchemaPackVersions)
 
 
-class _FrozenBaseModel(BaseModel):
-    """A BaseModel that cannot be changed after initialization."""
-
-    model_config = ConfigDict(frozen=True, use_enum_values=True, extra="forbid")
-
-
-class ContentSchema(_FrozenBaseModel):
+class ContentSchema(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack content schema."""
 
     json_schema: str = Field(
@@ -102,7 +95,7 @@ class ContentSchema(_FrozenBaseModel):
         return self
 
 
-class MandatoryRelationSpec(_FrozenBaseModel):
+class MandatoryRelationSpec(_FrozenNoExtraBaseModel):
     """A model for describing the modality of a relation. It describes the minimum
     number of instances the origin and the target end must contribute to the relation.
     """
@@ -131,7 +124,7 @@ class MandatoryRelationSpec(_FrozenBaseModel):
     )
 
 
-class MultipleRelationSpec(_FrozenBaseModel):
+class MultipleRelationSpec(_FrozenNoExtraBaseModel):
     """A model for describing the cardinality of a relation. It describes the maximum
     number of instances the origin and the target end may contribute to the relation.
 
@@ -160,7 +153,7 @@ class MultipleRelationSpec(_FrozenBaseModel):
     )
 
 
-class Relation(_FrozenBaseModel):
+class Relation(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack relation definition."""
 
     description: Optional[str] = Field(
@@ -191,7 +184,7 @@ class Relation(_FrozenBaseModel):
     )
 
 
-class IDSpec(_FrozenBaseModel):
+class IDSpec(_FrozenNoExtraBaseModel):
     """A model for describing the ID property of a class definition."""
 
     propertyName: IdPropertyName = Field(  # noqa: N815 - align with the schemapack naming scheme
@@ -209,7 +202,7 @@ class IDSpec(_FrozenBaseModel):
     )
 
 
-class ClassDefinition(_FrozenBaseModel):
+class ClassDefinition(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack class definition."""
 
     description: Optional[str] = Field(
@@ -370,7 +363,7 @@ class ClassDefinition(_FrozenBaseModel):
         return self
 
 
-class SchemaPack(_FrozenBaseModel):
+class SchemaPack(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack definition."""
 
     schemapack: SupportedSchemaPackVersions = Field(
