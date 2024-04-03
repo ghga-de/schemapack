@@ -102,7 +102,7 @@ class Resource(_FrozenNoExtraBaseModel):
     relations: FrozenDict[
         RelationPropertyName, Union[Optional[ResourceId], ResourceIdSet]
     ] = Field(
-        {},
+        FrozenDict(),
         description=(
             "A dictionary containing the relations of the resource to other resources."
             + " Each key correspond to the name of a relation property as per the"

@@ -213,7 +213,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
 
     @field_validator("content", mode="before")
     @classmethod
-    def before_validate_content_schema(
+    def load_and_validate_content_schema(
         cls, value: Union[str, Path, Mapping]
     ) -> FrozenDict:
         """A validator function for content schemas that:

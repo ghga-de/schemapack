@@ -21,12 +21,13 @@ import json
 from immutabledict import immutabledict
 
 from schemapack import load_schemapack
+from schemapack._internals.load import load_datapack
 from schemapack._internals.utils import read_json_or_yaml_mapping
 from schemapack.spec.datapack import (
     SUPPORTED_DATA_PACK_VERSIONS,
     DataPack,
 )
-from tests.fixtures.examples import VALID_SCHEMAPACK_PATHS
+from tests.fixtures.examples import VALID_DATAPACK_PATHS, VALID_SCHEMAPACK_PATHS
 
 
 def test_schemapack_is_hashable():
@@ -82,6 +83,12 @@ def test_content_schema_serialization():
             serialized_schemapack["classes"][class_name]["content"]
             == expected_schemapack_dict["classes"][class_name]["content"]
         )
+
+
+def test_datapack_is_hashable():
+    """Test that instances of DataPack are hashable."""
+    datapack = load_datapack(VALID_DATAPACK_PATHS["simple_relations.simple_resources"])
+    _ = hash(datapack)
 
 
 def test_datapack_target_id_ordering_upon_dump():
