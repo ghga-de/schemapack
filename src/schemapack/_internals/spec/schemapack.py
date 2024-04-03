@@ -197,7 +197,6 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
             + " object for object types. You may also provide the path to a JSON or YAML"
             + " file containing the schema. It will be automatically loaded."
         ),
-        validators=[validate_object_json_schema],
     )
     relations: FrozenDict[RelationPropertyName, Relation] = Field(
         immutabledict(),
