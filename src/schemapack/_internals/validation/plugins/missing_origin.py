@@ -86,8 +86,9 @@ class MissingMandatoryOriginValidationPlugin(ClassValidationPlugin):
         if any(not_referenced_target_id_by_relation.values()):
             raise ValidationPluginError(
                 type_="MissingMandatoryOriginError",
-                message=(
-                    f"For the following relations that are mandatory on the origin end the specified targets are not referenced by any origin: '{not_referenced_target_id_by_relation}'"
+                message=("For the following relations that are mandatory on the origin end"
+                    + " the specified targets are not referenced by any origin:"
+                    + f"{not_referenced_target_id_by_relation}"
                 ),
                 details={
                     "not_referenced_target_by_relation": not_referenced_target_id_by_relation
