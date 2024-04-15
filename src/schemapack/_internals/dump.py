@@ -19,8 +19,7 @@
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
-
+from schemapack._internals.spec.datapack import DataPack
 from schemapack._internals.spec.schemapack import SchemaPack
 from schemapack._internals.utils import (
     dumps_model,
