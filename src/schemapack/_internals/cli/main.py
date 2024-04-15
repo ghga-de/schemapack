@@ -174,7 +174,7 @@ def isolate_resource(
             "--datapack",
             "-d",
             help=(
-                "Provide the path to a datapack from which the resource shall be"
+                "The path to a datapack from which the resource shall be"
                 + " isolated."
             ),
         ),
