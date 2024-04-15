@@ -109,13 +109,14 @@ def test_isolate_with_non_existing_class():
     schemapack = load_schemapack(schemapack_path)
     datapack = load_datapack(datapack_path)
 
-    with pytest.raises(exceptions.ClassNotFoundError):
+    with pytest.raises(exceptions.ClassNotFoundError) as error:
         isolate(
             class_name="NonExistingClass",
             resource_id="example_dataset_1",
             schemapack=schemapack,
             datapack=datapack,
         )
+    assert "schemapack" in str(error)
 
 
 def test_isolate_with_non_existing_resource():
