@@ -173,10 +173,7 @@ def isolate_resource(
         typer.Option(
             "--datapack",
             "-d",
-            help=(
-                "The path to a datapack from which the resource shall be"
-                + " isolated."
-            ),
+            help="The path to a datapack from which the resource shall be isolated.",
         ),
     ],
     class_name: Annotated[
