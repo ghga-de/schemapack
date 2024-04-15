@@ -233,7 +233,7 @@ def isolate_class(
             "--schemapack",
             "-s",
             help=(
-                "Provide the path to a schemapack that describes the structure of"
+                "The path to a schemapack that describes the structure of the"
                 " provided input datapack (not the rooted datapack output by this"
                 " command)."
             ),
