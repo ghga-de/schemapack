@@ -95,7 +95,7 @@ def dumps_schemapack(
 
 
 def dumps_datapack(
-    datapack: BaseModel,
+    datapack: DataPack,
     *,
     yaml_format: bool = True,
 ) -> str:
