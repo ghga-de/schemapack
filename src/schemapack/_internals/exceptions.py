@@ -239,7 +239,7 @@ class ResourceNotFoundError(BaseError, KeyError):
                 The ID of the resource that was not found.
         """
         message = (
-            f"A resource of class '{class_name}' with id '{resource_id}' not found in"
+            f"Resource of class '{class_name}' with id '{resource_id}' not found in"
             + " the provided datapack."
         )
         super().__init__(message)
