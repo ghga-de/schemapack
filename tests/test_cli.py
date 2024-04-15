@@ -24,7 +24,6 @@ python API (to avoid redundancy of tests).
 from pathlib import Path
 
 import pytest
-import ruamel.yaml
 from typer.testing import CliRunner
 
 import schemapack
@@ -39,7 +38,6 @@ from tests.fixtures.examples import (
     VALID_SCHEMAPACK_PATHS,
 )
 
-yaml = ruamel.yaml.YAML(typ="rt")
 runner = CliRunner(
     mix_stderr=False,
 )
