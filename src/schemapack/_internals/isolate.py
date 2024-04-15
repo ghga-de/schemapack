@@ -23,7 +23,11 @@ from collections import defaultdict
 from collections.abc import Mapping
 from typing import Optional
 
-from schemapack._internals.exceptions import ClassNotFoundError, ResourceNotFoundError
+from schemapack._internals.exceptions import (
+    ClassNotFoundError,
+    ResourceNotFoundError,
+    SpecType,
+)
 from schemapack.exceptions import ValidationAssumptionError
 from schemapack.spec.custom_types import ClassName, ResourceId
 from schemapack.spec.datapack import DataPack, Resource
@@ -74,7 +78,7 @@ def identify_dependencies(  # noqa: C901, PLR0912
     """
     target_class_resources = datapack.resources.get(class_name)
     if target_class_resources is None:
-        raise ClassNotFoundError(class_name=class_name, in_schemapack=False)
+        raise ClassNotFoundError(class_name=class_name, spec_type=SpecType.DATAPACK)
 
     target_resource = target_class_resources.get(resource_id)
     if target_resource is None:
@@ -82,7 +86,7 @@ def identify_dependencies(  # noqa: C901, PLR0912
 
     target_class_definition = schemapack.classes.get(class_name)
     if target_class_definition is None:
-        raise ClassNotFoundError(class_name=class_name, in_schemapack=True)
+        raise ClassNotFoundError(class_name=class_name, spec_type=SpecType.SCHEMAPACK)
 
     # Define a blacklist of resources to avoid getting lost in infinity loop for
     # circular dependencies:
@@ -223,7 +227,7 @@ def isolate_class(*, class_name: ClassName, schemapack: SchemaPack) -> SchemaPac
             If the class_name does not exist in the schemapack or datapack.
     """
     if class_name not in schemapack.classes:
-        raise ClassNotFoundError(class_name=class_name, in_schemapack=True)
+        raise ClassNotFoundError(class_name=class_name, spec_type=SpecType.SCHEMAPACK)
 
     return schemapack.model_copy(update={"rootClass": class_name})
 

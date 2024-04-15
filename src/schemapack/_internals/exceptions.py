@@ -18,9 +18,17 @@
 
 from abc import ABC
 from dataclasses import dataclass
+from enum import Enum
 from typing import Optional
 
 import pydantic_core
+
+
+class SpecType(str, Enum):
+    """An enumeration of the types of specs."""
+
+    SCHEMAPACK = "schemapack"
+    DATAPACK = "datapack"
 
 
 class BaseError(ABC, Exception):
@@ -209,19 +217,16 @@ class CircularRelationError(BaseError, ValueError):
 class ClassNotFoundError(BaseError, KeyError):
     """Raised when a class was not found in a schemapack or datapack."""
 
-    def __init__(self, *, class_name: str, in_schemapack: bool):
+    def __init__(self, *, class_name: str, spec_type: SpecType):
         """Initiate a ClassNotFoundError.
 
         Args:
             class_name:
                 The name of the class that was not found.
-            in_schemapack:
-                Whether the class was not found in a schemapack (True) or
-                datapack (False).
+            spec_type:
+                The type of spec that the class was not found in.
         """
-        message = f"Class '{class_name}' not found in the provided" + (
-            " schemapack." if in_schemapack else " datapack."
-        )
+        message = f"Class '{class_name}' not found in the provided {spec_type.value}."
         super().__init__(message)
         self.class_name = class_name
 
