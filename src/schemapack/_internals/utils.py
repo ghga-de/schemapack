@@ -134,11 +134,11 @@ def dumps_model(
     return json.dumps(model_dict, indent=2)
 
 
-def write_dict(schemapack_dict: dict, *, path: Path, yaml_format: bool) -> None:
+def write_dict(dict_: dict, *, path: Path, yaml_format: bool) -> None:
     """Writes the provided dictionary to a file at the provided path."""
     if yaml_format:
         with open(path, "w", encoding="utf-8") as file:
-            yaml.dump(schemapack_dict, file)
+            yaml.dump(dict_, file)
     else:
         with open(path, "w", encoding="utf-8") as file:
-            json.dump(schemapack_dict, file, indent=2)
+            json.dump(dict_, file, indent=2)
