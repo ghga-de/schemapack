@@ -339,7 +339,13 @@ def test_isolate_class_non_existing():
 
 
 @pytest.mark.parametrize(
-    "props,example_suffix", [([], "_wo_props.mm.txt"), (["-c"], "_w_props.mm.txt")]
+    "props,example_suffix",
+    [
+        ([], "_wo_props.mm.txt"),
+        (["-c"], "_w_props.mm.txt"),
+        (["--content-properties"], "_w_props.mm.txt"),
+    ],
+    ids=("no_content_props", "content_props_abbrev", "content_props"),
 )
 def test_export_mermaid(tmp_path, props: list[str], example_suffix: str):
     """Test the export-mermaid command."""
