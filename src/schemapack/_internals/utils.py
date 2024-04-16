@@ -21,19 +21,24 @@ Warning: This is an internal part of the library and might change without notice
 
 import json
 import os
+from collections.abc import Mapping
 from contextlib import contextmanager
-from functools import lru_cache
+from io import StringIO
 from pathlib import Path
+from typing import Any
 
 import jsonschema
 import jsonschema.exceptions
 import jsonschema.protocols
 import jsonschema.validators
 import ruamel.yaml
+from pydantic import BaseModel
 
 from schemapack.exceptions import ParsingError
 
-yaml = ruamel.yaml.YAML(typ="safe")
+yaml = ruamel.yaml.YAML(typ="rt")
+yaml.indent(mapping=2, sequence=4, offset=2)
+yaml.default_flow_style = False
 
 
 def read_json_or_yaml_mapping(path: Path) -> dict:
@@ -65,14 +70,12 @@ class JsonSchemaError(ValueError):
     """Raised when a JSON schema is invalid."""
 
 
-@lru_cache
-def assert_valid_json_schema(schema_str: str) -> None:
-    """Asserts that the given string is a valid JSON Schema.
+def assert_valid_json_schema(schema: Mapping[str, Any]) -> None:
+    """Asserts that the given mapping is a valid JSON Schema.
 
     Raises:
         JsonSchemaError: If the schema is invalid.
     """
-    schema = json.loads(schema_str)
     cls: type[jsonschema.protocols.Validator] = jsonschema.validators.validator_for(
         schema
     )
@@ -93,3 +96,47 @@ def transient_directory_change(path: Path):
         yield
     finally:
         os.chdir(original_cwd)
+
+
+def model_to_serializable_dict(
+    model: BaseModel,
+) -> dict[str, Any]:
+    """Converts the provided pydantic model to a JSON-serializable dictionary.
+
+    Returns:
+        A dictionary representation of the provided model.
+    """
+    return json.loads(model.model_dump_json(exclude_defaults=True))
+
+
+def dumps_model(
+    model: BaseModel,
+    *,
+    yaml_format: bool = True,
+) -> str:
+    """Dumps the provided pydantic model as a JSON or YAML-formatted string.
+
+    Args:
+        model:
+            The model to dump.
+        yaml_format:
+            Whether to dump as YAML (`True`) or JSON (`False`).
+    """
+    model_dict = model_to_serializable_dict(model)
+
+    if yaml_format:
+        with StringIO() as buffer:
+            yaml.dump(model_dict, buffer)
+            return buffer.getvalue().strip()
+
+    return json.dumps(model_dict, indent=2)
+
+
+def write_dict(dict_: dict, *, path: Path, yaml_format: bool) -> None:
+    """Writes the provided dictionary to a file at the provided path."""
+    if yaml_format:
+        with open(path, "w", encoding="utf-8") as file:
+            yaml.dump(dict_, file)
+    else:
+        with open(path, "w", encoding="utf-8") as file:
+            json.dump(dict_, file, indent=2)

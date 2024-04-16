@@ -22,16 +22,62 @@ from pathlib import Path
 import pytest
 import ruamel.yaml
 
-from schemapack import dump_schemapack, load_schemapack
-from tests.fixtures.examples import VALID_SCHEMAPACK_PATHS
+from schemapack import (
+    dump_schemapack,
+    dumps_datapack,
+    dumps_schemapack,
+    load_datapack,
+    load_schemapack,
+)
+from schemapack._internals.utils import read_json_or_yaml_mapping
+from tests.fixtures.examples import VALID_DATAPACK_PATHS, VALID_SCHEMAPACK_PATHS
+from tests.fixtures.utils import (
+    assert_formatted_string,
+    loads_json_or_yaml_mapping,
+)
 
-yaml = ruamel.yaml.YAML(typ="safe")
+yaml = ruamel.yaml.YAML(typ="rt")
 
 
 @pytest.mark.parametrize(
     "yaml_format", [True, False], ids=["yaml_format", "json_format"]
 )
-def test_dump_condensed(yaml_format: bool, tmp_path: Path):
+def test_dumps_datapack(yaml_format: bool):
+    """Tests using the dumps_datapack function."""
+    datapack_path = VALID_DATAPACK_PATHS["simple_relations.simple_resources"]
+    datapack = load_datapack(datapack_path)
+    expected_dict = read_json_or_yaml_mapping(datapack_path)
+
+    observed_str = dumps_datapack(datapack, yaml_format=yaml_format)
+    assert_formatted_string(observed_str, json_format=not yaml_format)
+
+    observed_dict = loads_json_or_yaml_mapping(observed_str)
+    assert observed_dict == expected_dict
+
+
+@pytest.mark.parametrize(
+    "yaml_format", [True, False], ids=["yaml_format", "json_format"]
+)
+def test_dumps_schemapack(yaml_format: bool):
+    """Tests using the dumps_schemapack function to dump a schemapack as a
+    condensed representation to string.
+    """
+    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations"])
+    expected_dict = read_json_or_yaml_mapping(
+        VALID_SCHEMAPACK_PATHS["simple_relations_condensed"]
+    )
+
+    observed_str = dumps_schemapack(schemapack, yaml_format=yaml_format)
+    assert_formatted_string(observed_str, json_format=not yaml_format)
+
+    observed_dict = loads_json_or_yaml_mapping(observed_str)
+    assert observed_dict == expected_dict
+
+
+@pytest.mark.parametrize(
+    "yaml_format", [True, False], ids=["yaml_format", "json_format"]
+)
+def test_dump_condensed_schemapack(yaml_format: bool, tmp_path: Path):
     """Tests using the dump_schemapack function to dump a schemapack as a
     condensed representation to file.
     """
@@ -49,7 +95,7 @@ def test_dump_condensed(yaml_format: bool, tmp_path: Path):
     assert observed_dict == expected_dict
 
 
-def test_dump_not_condensed(tmp_path: Path):
+def test_dump_not_condensed_schemapack(tmp_path: Path):
     """Tests using the dump_schemapack function to dump a schemapack as a representation
     to file with content schemas being written to dedicated files.
     """
@@ -80,4 +126,5 @@ def test_dump_not_condensed(tmp_path: Path):
         )
         with open(content_schema_path, encoding="utf-8") as file:
             observed_content_schema = json.load(file)
-        assert observed_content_schema == class_.content.json_schema_dict
+        expected_content_schema = json.loads(class_.model_dump_json())["content"]
+        assert observed_content_schema == expected_content_schema

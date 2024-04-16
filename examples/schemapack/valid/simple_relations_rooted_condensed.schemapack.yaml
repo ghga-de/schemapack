@@ -44,3 +44,4 @@ classes:
         - checksum
         - size
       type: object
+rootClass: Dataset

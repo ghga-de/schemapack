@@ -15,7 +15,7 @@
 
 """Logic for exporting schemapacks in mermaid format."""
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from schemapack._internals.spec.schemapack import ClassDefinition, Relation
@@ -34,13 +34,13 @@ def get_property_type(json_schema_props: Mapping[str, Any], prop_name: str) -> s
         The type of the property.
     """
     prop = json_schema_props[prop_name]
-    if isinstance(prop, dict):
+    if isinstance(prop, Mapping):
         type = prop.get("type", "object") if not prop.get("enum") else "enum"
         if type == "array":
             return f"array[{prop.get('items', {}).get('type', 'object')}]"
         return type
     raise ValueError(
-        f"Invalid JSON schema. Expected property {prop_name} to be a dict."
+        f"Invalid JSON schema. Expected property {prop_name} to be a mapping."
     )
 
 
@@ -61,11 +61,10 @@ def export_class_entity(
     if not content_properties:
         return f"{class_name} {{}}"
 
-    json_schema_obj = class_def.content.json_schema_dict
-    json_schema_obj_props = json_schema_obj.get("properties", {})
-    json_schema_obj_reqs = json_schema_obj.get("required", [])
+    json_schema_obj_props = class_def.content.get("properties", {})
+    json_schema_obj_reqs = class_def.content.get("required", [])
 
-    if not isinstance(json_schema_obj_reqs, list):
+    if not isinstance(json_schema_obj_reqs, Sequence):
         raise ValueError("Invalid JSON schema. Expected 'required' to be a list.")
 
     fields = "\n".join(
