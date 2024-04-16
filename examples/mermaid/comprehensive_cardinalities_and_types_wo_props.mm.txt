@@ -1,14 +1,20 @@
 erDiagram
 Customer {}
+
 Customer ||--o{ Address : "Customer.addresses"
 Customer ||--o{ Order : "Customer.orders"
+
 Address {}
 
 Order {}
+
 Order }o--|{ Product : "Order.products"
 Order ||--o| ShippingEvent : "Order.shipping_event"
+
 Product {}
+
 Product }|--|{ ProductCategory : "Product.categories"
+
 ProductCategory {}
 
 ShippingEvent {}

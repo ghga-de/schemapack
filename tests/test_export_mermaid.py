@@ -36,4 +36,4 @@ def test_export_mermaid(with_properties: bool, file_suffix: str):
     observed_output = export_mermaid(
         schemapack=input_schemapack, content_properties=with_properties
     )
-    assert observed_output == expected_output_path.read_text()
+    assert observed_output == expected_output_path.read_text().strip()

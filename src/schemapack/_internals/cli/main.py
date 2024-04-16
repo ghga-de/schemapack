@@ -279,29 +279,12 @@ def export_mermaid(
             help="Provide the path to a schemapack file to export.",
         ),
     ],
-    output: Annotated[
-        Path,
-        typer.Argument(
-            help="Provide the path to the mermaid output file to produce.",
-            file_okay=True,
-            dir_okay=False,
-            writable=True,
-        ),
-    ],
     content_properties: Annotated[
         bool,
         typer.Option(
             "--content-properties",
             "-c",
             help="Include properties in the output.",
-        ),
-    ] = False,
-    force: Annotated[
-        bool,
-        typer.Option(
-            "--force",
-            "-f",
-            help="Overwrite the output file if it exists.",
         ),
     ] = False,
 ):
@@ -311,11 +294,9 @@ def export_mermaid(
     with expect_schemapack_errors():
         schemapack_ = load_schemapack(schemapack)
 
-    output.write_text(
-        mermaid.export_mermaid(
-            schemapack=schemapack_, content_properties=content_properties
-        ),
-        encoding="utf-8",
+    erd_diagram = mermaid.export_mermaid(
+        schemapack=schemapack_, content_properties=content_properties
     )
+    print_output(erd_diagram)
 
     print_final_success("Schemapack exported successfully.")

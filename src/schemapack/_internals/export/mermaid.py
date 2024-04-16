@@ -37,7 +37,8 @@ def get_property_type(json_schema_props: Mapping[str, Any], prop_name: str) -> s
     if isinstance(prop, Mapping):
         type = prop.get("type", "object") if not prop.get("enum") else "enum"
         if type == "array":
-            return f"array[{prop.get('items', {}).get('type', 'object')}]"
+            element_type = prop.get("items", {}).get("type", "object")
+            return f"array[{element_type}]"
         return type
     raise ValueError(
         f"Invalid JSON schema. Expected property {prop_name} to be a mapping."
@@ -114,18 +115,23 @@ def export_class(
     Returns:
         A string representing the class in mermaid format.
     """
-    return (
-        export_class_entity(
-            class_name=class_name,
-            class_def=class_def,
-            content_properties=content_properties,
-        )
-        + "\n"
+    class_str = export_class_entity(
+        class_name=class_name,
+        class_def=class_def,
+        content_properties=content_properties,
+    )
+
+    relations_str = (
+        "\n\n"
         + "\n".join(
             export_class_relation(class_name, prop_name, relation)
             for prop_name, relation in class_def.relations.items()
         )
+        if class_def.relations
+        else ""
     )
+
+    return class_str + relations_str
 
 
 def export_mermaid(schemapack: SchemaPack, content_properties: bool = True) -> str:
@@ -139,7 +145,7 @@ def export_mermaid(schemapack: SchemaPack, content_properties: bool = True) -> s
     Returns:
         A string representing the SchemaPack in mermaid format.
     """
-    return "erDiagram\n" + "\n".join(
+    erd_str = "erDiagram\n" + "\n\n".join(
         export_class(
             class_name=class_name,
             class_def=class_def,
@@ -147,3 +153,5 @@ def export_mermaid(schemapack: SchemaPack, content_properties: bool = True) -> s
         )
         for class_name, class_def in schemapack.classes.items()
     )
+
+    return erd_str

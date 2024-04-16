@@ -4,8 +4,10 @@ string name "req"
 object attributes "req"
 boolean company "req"
 }
+
 Customer ||--o{ Address : "Customer.addresses"
 Customer ||--o{ Order : "Customer.orders"
+
 Address {
 string street "req"
 string city "req"
@@ -16,14 +18,18 @@ enum country "req"
 Order {
 string datetime "req"
 }
+
 Order }o--|{ Product : "Order.products"
 Order ||--o| ShippingEvent : "Order.shipping_event"
+
 Product {
 string name "req"
 number price "req"
 array[string] comments "opt"
 }
+
 Product }|--|{ ProductCategory : "Product.categories"
+
 ProductCategory {
 string name "req"
 }

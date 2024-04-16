@@ -345,15 +345,13 @@ def test_export_mermaid(tmp_path, props: list[str], example_suffix: str):
     """Test the export-mermaid command."""
     example = "comprehensive_cardinalities_and_types"
     schemapack = VALID_SCHEMAPACK_PATHS[example]
-    output_path = tmp_path / "output.mermaid"
     expected_output_path = EXAMPLES_DIR / "mermaid" / f"{example}{example_suffix}"
 
     args = [
         "export-mermaid",
         str(schemapack),
-        str(output_path),
         *props,
     ]
     result = runner.invoke(cli, args)
     assert result.exit_code == exit_codes.SUCCESS == 0
-    assert output_path.read_text() == expected_output_path.read_text()
+    assert result.output == expected_output_path.read_text()
