@@ -16,6 +16,7 @@
 
 """Logic for dumping schemapacks."""
 
+import json
 from pathlib import Path
 from typing import Any
 

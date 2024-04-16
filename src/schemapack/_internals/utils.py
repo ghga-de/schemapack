@@ -19,6 +19,7 @@
 Warning: This is an internal part of the library and might change without notice.
 """
 
+import json
 import os
 from collections.abc import Mapping
 from contextlib import contextmanager
