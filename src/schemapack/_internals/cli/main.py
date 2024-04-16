@@ -27,7 +27,6 @@ from schemapack._internals.cli.exception_handling import (
     expect_schemapack_errors,
     expect_user_errors,
 )
-from schemapack._internals.cli.io import check_force
 from schemapack._internals.cli.printing import print_final_success, print_info
 from schemapack._internals.export import mermaid
 from schemapack._internals.load import load_datapack, load_schemapack
@@ -139,11 +138,11 @@ def export_mermaid(
             writable=True,
         ),
     ],
-    with_properties: Annotated[
+    content_properties: Annotated[
         bool,
         typer.Option(
-            "--with-properties",
-            "-p",
+            "--content-properties",
+            "-c",
             help="Include properties in the output.",
         ),
     ] = False,
@@ -156,16 +155,17 @@ def export_mermaid(
         ),
     ] = False,
 ):
-    """Export a schemapack to a markdown file diagram."""
+    """Generate an entity relationship diagram based on the mermaid markup from the
+    provided schemapack.
+    """
     with expect_schemapack_errors():
         schemapack_ = load_schemapack(schemapack)
 
-    with check_force(output, force):
-        output.write_text(
-            mermaid.export_mermaid(
-                schemapack=schemapack_, with_properties=with_properties
-            ),
-            encoding="utf-8",
-        )
+    output.write_text(
+        mermaid.export_mermaid(
+            schemapack=schemapack_, content_properties=content_properties
+        ),
+        encoding="utf-8",
+    )
 
     print_final_success("Schemapack exported successfully.")

@@ -34,6 +34,6 @@ def test_export_mermaid(with_properties: bool, file_suffix: str):
     expected_output_path = EXAMPLES_DIR / "mermaid" / f"{example}{file_suffix}"
 
     observed_output = export_mermaid(
-        schemapack=input_schemapack, with_properties=with_properties
+        schemapack=input_schemapack, content_properties=with_properties
     )
     assert observed_output == expected_output_path.read_text()

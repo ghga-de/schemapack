@@ -45,7 +45,7 @@ def get_property_type(json_schema_props: Mapping[str, Any], prop_name: str) -> s
 
 
 def export_class_entity(
-    class_name: str, class_def: ClassDefinition, with_properties: bool
+    class_name: str, class_def: ClassDefinition, content_properties: bool
 ) -> str:
     """
     Export a class entity in mermaid format.
@@ -58,7 +58,7 @@ def export_class_entity(
     Returns:
         A string representing the class entity in mermaid format.
     """
-    if not with_properties:
+    if not content_properties:
         return f"{class_name} {{}}"
 
     json_schema_obj = class_def.content.json_schema_dict
@@ -103,7 +103,7 @@ def export_class_relation(
 
 
 def export_class(
-    class_name: str, class_def: ClassDefinition, with_properties: bool
+    class_name: str, class_def: ClassDefinition, content_properties: bool
 ) -> str:
     """Export a class in mermaid format.
 
@@ -117,7 +117,9 @@ def export_class(
     """
     return (
         export_class_entity(
-            class_name=class_name, class_def=class_def, with_properties=with_properties
+            class_name=class_name,
+            class_def=class_def,
+            content_properties=content_properties,
         )
         + "\n"
         + "\n".join(
@@ -127,7 +129,7 @@ def export_class(
     )
 
 
-def export_mermaid(schemapack: SchemaPack, with_properties: bool = True) -> str:
+def export_mermaid(schemapack: SchemaPack, content_properties: bool = True) -> str:
     """
     Export a SchemaPack in mermaid format.
 
@@ -140,7 +142,9 @@ def export_mermaid(schemapack: SchemaPack, with_properties: bool = True) -> str:
     """
     return "erDiagram\n" + "\n".join(
         export_class(
-            class_name=class_name, class_def=class_def, with_properties=with_properties
+            class_name=class_name,
+            class_def=class_def,
+            content_properties=content_properties,
         )
         for class_name, class_def in schemapack.classes.items()
     )
