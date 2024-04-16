@@ -23,11 +23,12 @@ from schemapack._internals.cli.printing import print_final_failure
 
 
 @contextmanager
-def check_force(output: Path, force: bool):
-    """Check if the output file exists and if so, whether to overwrite it."""
-    if output.exists() and not force:
+def check_writable(path: Path, overwrite: bool):
+    """Check if the specified path can be used for writing. A corresponding file does not yes exist
+     or `overwrite` is set to true."""
+    if path.exists() and not overwrite:
         print_final_failure(
-            "The specified output file exists. Use --force to overwrite."
+            "The specified output file exists. Use --overwrite to overwrite."
         )
         raise typer.Exit(exit_codes.OUTPUT_EXISTS) from None
     yield
