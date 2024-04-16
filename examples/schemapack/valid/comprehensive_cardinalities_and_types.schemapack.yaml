@@ -62,6 +62,7 @@ classes:
             - Austria
             - Switzerland
       additionalProperties: false
+      
   Order:
     id:
       propertyName: id
