@@ -22,7 +22,7 @@ from schemapack._internals.spec.schemapack import ClassDefinition, Relation
 from schemapack.spec.schemapack import SchemaPack
 
 
-def _get_property_type(json_schema_props: Mapping[str, Any], prop_name: str) -> str:
+def get_property_type(json_schema_props: Mapping[str, Any], prop_name: str) -> str:
     """Get the type of a property from a JSON schema properties map. If no type is
     specified, 'object' is assumed. If the property has an enum key, 'enum' is returned.
 
@@ -44,7 +44,7 @@ def _get_property_type(json_schema_props: Mapping[str, Any], prop_name: str) -> 
     )
 
 
-def _export_class_entity(
+def export_class_entity(
     class_name: str, class_def: ClassDefinition, with_properties: bool
 ) -> str:
     """
@@ -69,7 +69,7 @@ def _export_class_entity(
         raise ValueError("Invalid JSON schema. Expected 'required' to be a list.")
 
     fields = "\n".join(
-        f"{_get_property_type(json_schema_props=json_schema_obj_props, prop_name=field)}"
+        f"{get_property_type(json_schema_props=json_schema_obj_props, prop_name=field)}"
         + f" {field} "
         + ('"req"' if field in json_schema_obj_reqs else '"opt"')
         for field in json_schema_obj_props
@@ -77,7 +77,7 @@ def _export_class_entity(
     return f"{class_name} {{\n{fields}\n}}"
 
 
-def _export_class_relation(
+def export_class_relation(
     class_name: str, property_name: str, relation: Relation
 ) -> str:
     """Export a relation between two classes in mermaid format.
@@ -102,7 +102,7 @@ def _export_class_relation(
     )
 
 
-def _export_class(
+def export_class(
     class_name: str, class_def: ClassDefinition, with_properties: bool
 ) -> str:
     """Export a class in mermaid format.
@@ -116,12 +116,12 @@ def _export_class(
         A string representing the class in mermaid format.
     """
     return (
-        _export_class_entity(
+        export_class_entity(
             class_name=class_name, class_def=class_def, with_properties=with_properties
         )
         + "\n"
         + "\n".join(
-            _export_class_relation(class_name, prop_name, relation)
+            export_class_relation(class_name, prop_name, relation)
             for prop_name, relation in class_def.relations.items()
         )
     )
@@ -139,7 +139,7 @@ def export_mermaid(schemapack: SchemaPack, with_properties: bool = True) -> str:
         A string representing the SchemaPack in mermaid format.
     """
     return "erDiagram\n" + "\n".join(
-        _export_class(
+        export_class(
             class_name=class_name, class_def=class_def, with_properties=with_properties
         )
         for class_name, class_def in schemapack.classes.items()
