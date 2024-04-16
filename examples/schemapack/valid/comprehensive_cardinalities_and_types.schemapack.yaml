@@ -61,6 +61,14 @@ classes:
             - Germany
             - Austria
             - Switzerland
+        address_info:
+          type: object
+          properties:
+            foo:
+              type: string
+            bar:
+              type: integer
+          additionalProperties: false
       additionalProperties: false
 
   Order:
