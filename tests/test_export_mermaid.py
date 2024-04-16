@@ -19,20 +19,23 @@
 import pytest
 
 from schemapack import export_mermaid, load_schemapack
-from tests.fixtures.examples import EXAMPLES_DIR, VALID_SCHEMAPACK_PATHS
+from tests.fixtures.examples import ERD_PATHS, VALID_SCHEMAPACK_PATHS
 
 
 @pytest.mark.parametrize(
     "with_properties, file_suffix",
-    [(True, "_w_props.mm.txt"), (False, "_wo_props.mm.txt")],
+    [(True, "_w_props"), (False, "_wo_props")],
+    ids=("content_props", "no_content_props"),
 )
 def test_export_mermaid(with_properties: bool, file_suffix: str):
     """Test dumping a schemapack in mermaid format."""
     example = "comprehensive_cardinalities_and_types"
-    input_schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[example])
-    expected_output_path = EXAMPLES_DIR / "mermaid" / f"{example}{file_suffix}"
+    schemapack_path = VALID_SCHEMAPACK_PATHS[example]
+    schemapack = load_schemapack(schemapack_path)
+
+    erd_path = ERD_PATHS[example + file_suffix]
 
     observed_output = export_mermaid(
-        schemapack=input_schemapack, content_properties=with_properties
+        schemapack=schemapack, content_properties=with_properties
     )
-    assert observed_output == expected_output_path.read_text().strip()
+    assert observed_output == erd_path.read_text().strip()
