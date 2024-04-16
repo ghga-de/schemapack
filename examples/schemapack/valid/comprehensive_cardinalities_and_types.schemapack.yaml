@@ -62,19 +62,14 @@ classes:
             - Austria
             - Switzerland
       additionalProperties: false
-      
+
   Order:
     id:
       propertyName: id
     content:
       $schema: https://json-schema.org/draft/2020-12/schema
-      required:
-        - datetime
       type: object
-      properties:
-        datetime:
-          type: string
-      additionalProperties: false
+      additionalProperties: true
     relations:
       products:
         targetClass: Product
@@ -134,7 +129,7 @@ classes:
       properties:
         name:
           type: string
-      additionalProperties: false
+      additionalProperties: true
 
   ShippingEvent:
     id:
@@ -144,7 +139,4 @@ classes:
       required:
         - datetime
       type: object
-      properties:
-        datetime:
-          type: string
       additionalProperties: false

@@ -17,7 +17,7 @@ Address {
 }
 
 Order {
-  string datetime "req"
+  * * ""
 }
 
 Order }o--|{ Product : "Order.products"
@@ -33,8 +33,7 @@ Product }|--|{ ProductCategory : "Product.categories"
 
 ProductCategory {
   string name "req"
+  * * ""
 }
 
-ShippingEvent {
-  string datetime "req"
-}
+ShippingEvent {}

@@ -63,18 +63,25 @@ def export_class_entity(
         return f"{class_name} {{}}"
 
     json_schema_obj_props = class_def.content.get("properties", {})
+    additional_properties = class_def.content.get("additionalProperties", False)
     json_schema_obj_reqs = class_def.content.get("required", [])
 
     if not isinstance(json_schema_obj_reqs, Sequence):
         raise ValueError("Invalid JSON schema. Expected 'required' to be a list.")
 
-    fields = "\n".join(
+    fields = [
         f"  {get_property_type(json_schema_props=json_schema_obj_props, prop_name=field)}"
         + f" {field} "
         + ('"req"' if field in json_schema_obj_reqs else '"opt"')
         for field in json_schema_obj_props
-    )
-    return f"{class_name} {{\n{fields}\n}}"
+    ]
+
+    if additional_properties:
+        fields.append('  * * ""')
+
+    fields_str = "\n" + "\n".join(fields) + "\n" if fields else ""
+
+    return f"{class_name} {{{fields_str}}}"
 
 
 def export_class_relation(
