@@ -69,7 +69,7 @@ def export_class_entity(
         raise ValueError("Invalid JSON schema. Expected 'required' to be a list.")
 
     fields = "\n".join(
-        f"{get_property_type(json_schema_props=json_schema_obj_props, prop_name=field)}"
+        f"  {get_property_type(json_schema_props=json_schema_obj_props, prop_name=field)}"
         + f" {field} "
         + ('"req"' if field in json_schema_obj_reqs else '"opt"')
         for field in json_schema_obj_props
@@ -145,7 +145,7 @@ def export_mermaid(schemapack: SchemaPack, content_properties: bool = True) -> s
     Returns:
         A string representing the SchemaPack in mermaid format.
     """
-    erd_str = "erDiagram\n" + "\n\n".join(
+    erd_str = "erDiagram\n\n" + "\n\n".join(
         export_class(
             class_name=class_name,
             class_def=class_def,

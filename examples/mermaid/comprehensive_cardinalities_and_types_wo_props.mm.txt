@@ -1,4 +1,5 @@
 erDiagram
+
 Customer {}
 
 Customer ||--o{ Address : "Customer.addresses"
