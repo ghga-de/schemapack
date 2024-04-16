@@ -18,8 +18,7 @@
 
 import pytest
 
-from schemapack import load_schemapack
-from schemapack.export.mermaid import export_mermaid
+from schemapack import export_mermaid, load_schemapack
 from tests.fixtures.examples import EXAMPLES_DIR, VALID_SCHEMAPACK_PATHS
 
 

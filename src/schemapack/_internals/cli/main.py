@@ -33,7 +33,7 @@ from schemapack._internals.cli.printing import (
     print_output,
 )
 from schemapack._internals.dump import dumps_datapack, dumps_schemapack
-from schemapack._internals.export import mermaid
+from schemapack._internals.erd import export_mermaid as export_mermaid_impl
 from schemapack._internals.isolate import isolate_class as isolate_class_impl
 from schemapack._internals.isolate import isolate_resource as isolate_resource_impl
 from schemapack._internals.load import load_datapack, load_schemapack
@@ -294,7 +294,7 @@ def export_mermaid(
     with expect_schemapack_errors():
         schemapack_ = load_schemapack(schemapack)
 
-    erd_diagram = mermaid.export_mermaid(
+    erd_diagram = export_mermaid_impl(
         schemapack=schemapack_, content_properties=content_properties
     )
     print_output(erd_diagram)
