@@ -16,10 +16,8 @@
 
 """Custom types annotations used for type hinting."""
 
-from typing import Annotated, Any
+from typing import Annotated
 
-import arcticfreeze
-from pydantic import BeforeValidator
 from pydantic import Field as _Field
 from typing_extensions import TypeAlias
 
@@ -29,8 +27,3 @@ ResourceId: TypeAlias = _NonEmptyStr
 RelationPropertyName: TypeAlias = _NonEmptyStr
 ContentPropertyName: TypeAlias = _NonEmptyStr
 IdPropertyName: TypeAlias = _NonEmptyStr
-DeepFrozenObj: TypeAlias = Annotated[
-    Any,
-    # the value of a content property is deeply frozen:
-    BeforeValidator(lambda obj: arcticfreeze.freeze(obj, by_superclass=True)),
-]
