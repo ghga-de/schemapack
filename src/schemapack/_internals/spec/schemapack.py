@@ -33,6 +33,7 @@ from pydantic import (
 from pydantic_core import PydanticCustomError
 
 from schemapack._internals.spec.base import _FrozenNoExtraBaseModel
+from schemapack._internals.spec.custom_types import DeepFrozenObj
 from schemapack._internals.utils import JsonSchemaError, assert_valid_json_schema
 from schemapack.exceptions import ParsingError
 from schemapack.spec.custom_types import (
@@ -190,7 +191,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         ...,
         description="The ID property of the class definition.",
     )
-    content: FrozenDict[str, Any] = Field(
+    content: FrozenDict[str, DeepFrozenObj] = Field(
         ...,
         description=(
             "The content schema of the class definition. It must be a valid JSON schema"
