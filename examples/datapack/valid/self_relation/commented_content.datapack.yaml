@@ -1,0 +1,17 @@
+# This datapack has a circular relation between two resources:
+# (This is valid, but no denormalization can be performed.)
+datapack: 0.3.0
+resources:
+  SomeClass:
+    a:
+      content:
+        test:
+          - test # test
+      relations:
+        some_relation:
+          - b # <-
+    b:
+      content: {}
+      relations:
+        some_relation:
+          - a # <-

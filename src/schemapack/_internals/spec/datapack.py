@@ -82,7 +82,7 @@ ResourceIdSet: TypeAlias = Annotated[
 ContentPropertyValue: TypeAlias = Annotated[
     Any,
     # the value of a content property is deeply frozen:
-    BeforeValidator(arcticfreeze.freeze),
+    BeforeValidator(lambda obj: arcticfreeze.freeze(obj, by_superclass=True)),
 ]
 
 
