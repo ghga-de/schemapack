@@ -1,17 +1,12 @@
-# This datapack has a circular relation between two resources:
-# (This is valid, but no denormalization can be performed.)
+# Using comments in content should not cause any problems
+# but did in the past.
 datapack: 0.3.0
 resources:
   SomeClass:
     a:
       content:
         test:
-          - test # test
+          - test # Is this comment causing problems?
       relations:
         some_relation:
-          - b # <-
-    b:
-      content: {}
-      relations:
-        some_relation:
-          - a # <-
+          - a
