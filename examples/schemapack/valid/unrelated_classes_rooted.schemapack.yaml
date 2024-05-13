@@ -1,6 +1,6 @@
 schemapack: 0.3.0
 description: Two unrelated classes # but rooted to one class so that only that class is
-            # is kept.
+            # kept.
 classes:
   SomeClass:
     id:
