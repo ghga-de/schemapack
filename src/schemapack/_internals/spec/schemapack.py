@@ -130,7 +130,7 @@ class MultipleRelationSpec(_FrozenNoExtraBaseModel):
     )
 
 
-class Relation(_FrozenNoExtraBaseModel):
+class ClassRelation(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack relation definition."""
 
     description: Optional[str] = Field(
@@ -198,7 +198,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
             + " file containing the schema. It will be automatically loaded."
         ),
     )
-    relations: FrozenDict[RelationPropertyName, Relation] = Field(
+    relations: FrozenDict[RelationPropertyName, ClassRelation] = Field(
         immutabledict(),
         description=(
             "A mapping of relation names to relation definitions. Relation names"
@@ -280,8 +280,8 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
     @field_validator("relations", mode="after")
     @classmethod
     def relation_name_validator(
-        cls, v: FrozenDict[str, Relation]
-    ) -> FrozenDict[str, Relation]:
+        cls, v: FrozenDict[str, ClassRelation]
+    ) -> FrozenDict[str, ClassRelation]:
         """Validate relation names."""
         invalid_relation_names = [
             relation_name for relation_name in v if not relation_name.isidentifier()
