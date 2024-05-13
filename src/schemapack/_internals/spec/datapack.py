@@ -85,6 +85,47 @@ ContentPropertyValue: TypeAlias = Annotated[
 ]
 
 
+class ResourceRelation(_FrozenNoExtraBaseModel):
+    """A model defining relations of a resource to other resources."""
+
+    targetClass: ClassName = Field(  # noqa: N815 - following JSON conventions
+        ...,
+        description=("The name of the target class of the relation."),
+    )
+    targetResources: Union[  # noqa: N815 - following JSON conventions
+        Optional[ResourceId], ResourceIdSet
+    ] = Field(
+        ...,
+        description=(
+            "Provides the ID(s) of target resources of the targetClass. Depending on"
+            + " the corresponding schemapack definition, this field could be one of the"
+            + " following types:"
+            + " (1) a id of a single target resource (schemapack assumes that"
+            + " multiple.target is False),"
+            + " (2) None (schemapack assumes that multiple.target and mandatory.target"
+            + " are both False),"
+            + " (3) a set of ids of target resources (schemapack assumes that"
+            + " multiple.target is True),"
+            + " (4) an empty set (schemapack assumes that multiple.target is True and"
+            + " mandatory.target is False)."
+        ),
+    )
+
+    def get_target_resources_as_set(self) -> frozenset[ResourceId]:
+        """Get target resources as a set independent of the multiplicity or
+        mandatoriness. This is even the case if the actual value in the relations dict
+        is a single
+        string (translated into a list of length one) or None (translated into an
+        empty set). If do_not_raise is True, the method will return an empty set
+        even if the relation name does not exist in the relations dict.
+        """
+        if self.targetResources is None:
+            return frozenset()
+        if isinstance(self.targetResources, frozenset):
+            return self.targetResources
+        return frozenset({self.targetResources})
+
+
 class Resource(_FrozenNoExtraBaseModel):
     """A model defining content and relations of a resource
     of a specific class.
@@ -98,49 +139,14 @@ class Resource(_FrozenNoExtraBaseModel):
         ),
     )
 
-    relations: FrozenDict[
-        RelationPropertyName, Union[Optional[ResourceId], ResourceIdSet]
-    ] = Field(
+    relations: FrozenDict[RelationPropertyName, ResourceRelation] = Field(
         FrozenDict(),
         description=(
             "A dictionary containing the relations of the resource to other resources."
-            + " Each key correspond to the name of a relation property as per the"
-            + " schemapack definition. Each value could be one of the following types"
-            + " depending on the corresponding schemapack definition:"
-            + " (1) a id of a single target resource (multiple.target is False),"
-            + " (2) None (multiple.target and mandatory.target are both False),"
-            + " (3) a set of ids of target resources (multiple.target is True),"
-            + " (4) an empty set (multiple.target is True and mandatory.target is"
-            + " False)."
+            + " Each key correspond to the name of a relation property. Each value"
+            + "  contains the target class and target resource(s) of the relation."
         ),
     )
-
-    def get_target_id_set(
-        self, relation_name: RelationPropertyName, do_not_raise: bool = False
-    ) -> frozenset[ResourceId]:
-        """Get the target ids for the given relation always represented as a set.
-        This is even the case if the actual value in the relations dict is a single
-        string (translated into a list of length one) or None (translated into an
-        empty set). If do_not_raise is True, the method will return an empty set
-        even if the relation name does not exist in the relations dict.
-
-        Raises:
-            KeyError:
-                If the given relation name does not exist in the relations dict and
-                do_not_raise is False.
-        """
-        try:
-            targets = self.relations[relation_name]
-        except KeyError:
-            if do_not_raise:
-                return frozenset()
-            raise
-
-        if targets is None:
-            return frozenset()
-        if isinstance(targets, frozenset):
-            return targets
-        return frozenset({targets})
 
 
 class DataPack(_FrozenNoExtraBaseModel):
@@ -168,11 +174,20 @@ class DataPack(_FrozenNoExtraBaseModel):
     rootResource: Optional[str] = Field(  # noqa: N815 - following JSON conventions
         None,
         description=(
-            "Defines the id of the resource that should act as root. This means"
+            "Defines the id of the resource of the class defined in `className`"
+            + " that should act as root. This means"
             + " that, in addition to the root resource itself, the datapack must only"
             + " contain resources that are direct or indirect (dependencies of"
             + " dependencies) of the root resource."
-            + " Please note, the datapack must define a root resource if the"
-            + " corresponding schemapack defines a root class and vice versa."
+        ),
+    )
+
+    rootClass: Optional[ClassName] = Field(  # noqa: N815 - following JSON conventions
+        None,
+        description=(
+            "Defines the class name of the resource that should act as root. This means"
+            + " that, in addition to the root resource itself, the datapack must only"
+            + " contain resources that are direct or indirect (dependencies of"
+            + " dependencies) of the root resource."
         ),
     )
