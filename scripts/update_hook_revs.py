@@ -24,8 +24,6 @@ from pathlib import Path
 
 from packaging.requirements import Requirement
 
-print(sys.version)
-
 from script_utils import cli, lock_deps
 
 REPO_ROOT_DIR = Path(__file__).parent.parent.resolve()
