@@ -17,9 +17,9 @@
 """Custom types annotations used for type hinting."""
 
 from typing import Annotated as _Annotated
+from typing import TypeAlias as _TypeAlias
 
 from pydantic import Field as _Field
-from typing_extensions import TypeAlias as _TypeAlias
 
 __all__ = [
     "ClassName",

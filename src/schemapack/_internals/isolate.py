@@ -21,7 +21,6 @@ Warning: This is an internal part of the library and might change without notice
 
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import Optional
 
 from schemapack._internals.exceptions import (
     ClassNotFoundError,
@@ -41,7 +40,7 @@ def identify_resource_dependencies(  # noqa: C901, PLR0912
     resource_id: ResourceId,
     schemapack: SchemaPack,
     include_target: bool = False,
-    _resource_blacklist: Optional[Mapping[ClassName, set[ResourceId]]] = None,
+    _resource_blacklist: Mapping[ClassName, set[ResourceId]] | None = None,
 ) -> Mapping[ClassName, set[ResourceId]]:
     """Identify all dependencies (recursively) for a given resource
     of the given class in the given datapack. Please note that it is assumed that
@@ -222,7 +221,7 @@ def identify_class_dependencies(
     *,
     class_name: ClassName,
     schemapack: SchemaPack,
-    _class_blacklist: Optional[set[ClassName]] = None,
+    _class_blacklist: set[ClassName] | None = None,
 ) -> set[ClassName]:
     """Identify all dependencies (recursively) for a given class in the given schemapack.
 
