@@ -15,7 +15,7 @@ jobs:
 
       - name: Common steps
         id: common
-        uses: ghga-de/gh-action-common@v5
+        uses: ghga-de/gh-action-common@v6
 
       - name: Run tests
         id: pytest
