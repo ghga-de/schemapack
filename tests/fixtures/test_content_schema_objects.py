@@ -12,21 +12,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-"""Custom types annotations used for type hinting."""
-
-from collections.abc import Mapping, Sequence
-from typing import Annotated, Any, TypeAlias
+"""Objects to create a ClassDefinition object to test content schema load."""
 
 from arcticfreeze import FrozenDict
-from pydantic import Field as _Field
 
-_NonEmptyStr: TypeAlias = Annotated[str, _Field(..., min_length=1)]
-ClassName: TypeAlias = _NonEmptyStr
-ResourceId: TypeAlias = _NonEmptyStr
-RelationPropertyName: TypeAlias = _NonEmptyStr
-ContentPropertyName: TypeAlias = _NonEmptyStr
-IdPropertyName: TypeAlias = _NonEmptyStr
-FrozenType: TypeAlias = FrozenDict[str, Any] | frozenset
-ThawedType: TypeAlias = Mapping | Sequence
+from schemapack._internals.spec.schemapack import IDSpec
+
+DATASET_ID = IDSpec(propertyName="alias", description=None)
+
+DATASET_DESCRIPTION = "Dataset without relations"
+
+DATASET_CONTENT = FrozenDict(
+    {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": False,
+        "description": "A dataset that is a collection of files.",
+        "properties": FrozenDict({"dac_contact": FrozenDict({"type": "string"})}),
+        "type": "object",
+    }
+)
+
+DATASET_RELATIONS = FrozenDict({})

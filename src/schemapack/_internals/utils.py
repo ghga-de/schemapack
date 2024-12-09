@@ -32,8 +32,10 @@ import jsonschema.exceptions
 import jsonschema.protocols
 import jsonschema.validators
 import ruamel.yaml
+from arcticfreeze import FrozenDict
 from pydantic import BaseModel
 
+from schemapack._internals.spec.custom_types import FrozenType, ThawedType
 from schemapack.exceptions import ParsingError
 
 yaml = ruamel.yaml.YAML(typ="rt")
@@ -60,7 +62,8 @@ def read_json_or_yaml_mapping(path: Path) -> dict:
 
     if not isinstance(data, dict):
         raise ParsingError(
-            f"The file at '{path}' did not contain a JSON object or a YAML mapping."
+            f"The file at '{
+                path}' did not contain a JSON object or a YAML mapping."
         )
 
     return data
@@ -79,7 +82,8 @@ def assert_valid_json_schema(schema: Mapping[str, Any]) -> None:
     cls: type[jsonschema.protocols.Validator] = jsonschema.validators.validator_for(
         schema
     )
-
+    if isinstance(schema, FrozenDict):
+        schema = _thaw_content(schema)  # type: ignore
     try:
         cls.check_schema(schema)
     except jsonschema.exceptions.SchemaError as error:
@@ -107,6 +111,33 @@ def model_to_serializable_dict(
         A dictionary representation of the provided model.
     """
     return json.loads(model.model_dump_json(exclude_defaults=True))
+
+
+def thaw_frozendict(value: FrozenDict[str, Any]) -> ThawedType:
+    """Fn."""
+    return (
+        {key: thaw_frozendict(val) for key, val in value.items()}
+        if isinstance(value, FrozenDict)
+        else value
+    )
+
+
+def thaw_frozenset(value: frozenset) -> ThawedType:
+    """Fn"""
+    return (
+        [thaw_frozenset(item) for item in value]
+        if isinstance(value, frozenset)
+        else value
+    )
+
+
+def _thaw_content(frozen_thing: FrozenType) -> ThawedType:
+    """Converts a nested FrozenDict or frozenset to mutable types."""
+    if isinstance(frozen_thing, Mapping):
+        return thaw_frozendict(frozen_thing)
+    elif isinstance(frozen_thing, frozenset):
+        return thaw_frozenset(frozen_thing)
+    return frozen_thing
 
 
 def dumps_model(
