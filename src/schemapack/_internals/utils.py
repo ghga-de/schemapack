@@ -62,8 +62,7 @@ def read_json_or_yaml_mapping(path: Path) -> dict:
 
     if not isinstance(data, dict):
         raise ParsingError(
-            f"The file at '{
-                path}' did not contain a JSON object or a YAML mapping."
+            f"The file at '{path}' did not contain a JSON object or a YAML mapping."
         )
 
     return data
@@ -132,7 +131,9 @@ def thaw_frozenset(value: frozenset) -> ThawedType:
 
 
 def _thaw_content(frozen_thing: FrozenType) -> ThawedType:
-    """Converts a nested FrozenDict or frozenset to mutable types."""
+    """Converts a nested FrozenDict or frozenset to mutable types. Frozenset is only
+    seen as a nested structure within the frozen content schema.
+    """
     if isinstance(frozen_thing, Mapping):
         return thaw_frozendict(frozen_thing)
     elif isinstance(frozen_thing, frozenset):
