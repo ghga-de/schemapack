@@ -16,8 +16,7 @@
 
 """Custom types annotations used for type hinting."""
 
-from collections.abc import Mapping, Sequence
-from typing import Annotated, Any, TypeAlias
+from typing import Annotated, TypeAlias
 
 from arcticfreeze import FrozenDict
 from pydantic import Field as _Field
@@ -28,5 +27,5 @@ ResourceId: TypeAlias = _NonEmptyStr
 RelationPropertyName: TypeAlias = _NonEmptyStr
 ContentPropertyName: TypeAlias = _NonEmptyStr
 IdPropertyName: TypeAlias = _NonEmptyStr
-FrozenType: TypeAlias = FrozenDict[str, Any] | frozenset
-ThawedType: TypeAlias = Mapping | Sequence
+FrozenType: TypeAlias = FrozenDict[str, str | FrozenDict | tuple]
+ThawedType: TypeAlias = dict[str, str | dict | list]

@@ -27,8 +27,16 @@ DATASET_CONTENT = FrozenDict(
     {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "additionalProperties": False,
-        "description": "A dataset that is a collection of files.",
-        "properties": FrozenDict({"dac_contact": FrozenDict({"type": "string"})}),
+        "description": "A file is an object that contains information generated from a process, either an Experiment or an Analysis.",
+        "properties": FrozenDict(
+            {
+                "checksum": FrozenDict({"type": "string"}),
+                "filename": FrozenDict({"type": "string"}),
+                "format": FrozenDict({"type": "string"}),
+                "size": FrozenDict({"type": "integer"}),
+            }
+        ),
+        "required": ("filename", "format", "checksum", "size"),
         "type": "object",
     }
 )

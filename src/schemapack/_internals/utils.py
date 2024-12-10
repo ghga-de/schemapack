@@ -82,7 +82,7 @@ def assert_valid_json_schema(schema: Mapping[str, Any]) -> None:
         schema
     )
     if isinstance(schema, FrozenDict):
-        schema = _thaw_content(schema)  # type: ignore
+        schema = thaw_frozendict(schema)
     try:
         cls.check_schema(schema)
     except jsonschema.exceptions.SchemaError as error:
@@ -112,33 +112,16 @@ def model_to_serializable_dict(
     return json.loads(model.model_dump_json(exclude_defaults=True))
 
 
-def thaw_frozendict(value: FrozenDict[str, Any]) -> ThawedType:
-    """Fn."""
-    return (
-        {key: thaw_frozendict(val) for key, val in value.items()}
-        if isinstance(value, FrozenDict)
-        else value
-    )
-
-
-def thaw_frozenset(value: frozenset) -> ThawedType:
-    """Fn"""
-    return (
-        [thaw_frozenset(item) for item in value]
-        if isinstance(value, frozenset)
-        else value
-    )
-
-
-def _thaw_content(frozen_thing: FrozenType) -> ThawedType:
-    """Converts a nested FrozenDict or frozenset to mutable types. Frozenset is only
-    seen as a nested structure within the frozen content schema.
-    """
-    if isinstance(frozen_thing, Mapping):
-        return thaw_frozendict(frozen_thing)
-    elif isinstance(frozen_thing, frozenset):
-        return thaw_frozenset(frozen_thing)
-    return frozen_thing
+def thaw_frozendict(value: FrozenType) -> ThawedType:
+    """Recursively thaws a FrozenDict into a standard dictionary."""
+    return {
+        key: thaw_frozendict(val)
+        if isinstance(val, FrozenDict)
+        else list(val)
+        if isinstance(val, tuple)
+        else val
+        for key, val in value.items()
+    }
 
 
 def dumps_model(
