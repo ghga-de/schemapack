@@ -115,11 +115,11 @@ def model_to_serializable_dict(
 def thaw_frozendict(value: FrozenType) -> ThawedType:
     """Recursively thaws a FrozenDict into a standard dictionary."""
     return {
-        key: thaw_frozendict(val)
-        if isinstance(val, FrozenDict)
-        else list(val)
-        if isinstance(val, tuple)
-        else val
+        key: (
+            thaw_frozendict(val)
+            if isinstance(val, FrozenDict)
+            else (list(val) if isinstance(val, tuple) else val)
+        )
         for key, val in value.items()
     }
 
