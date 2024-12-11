@@ -120,7 +120,7 @@ def thaw_frozendict(frozen_dict: FrozenType) -> ThawedType:
             if isinstance(val, FrozenDict)
             else (list(val) if isinstance(val, tuple) else val)
         )
-        for key, val in value.items()
+        for key, val in frozen_dict.items()
     }
 
 
