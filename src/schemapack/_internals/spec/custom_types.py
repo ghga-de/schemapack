@@ -27,5 +27,5 @@ ResourceId: TypeAlias = _NonEmptyStr
 RelationPropertyName: TypeAlias = _NonEmptyStr
 ContentPropertyName: TypeAlias = _NonEmptyStr
 IdPropertyName: TypeAlias = _NonEmptyStr
-FrozenType: TypeAlias = FrozenDict[str, str | FrozenDict | tuple]
-ThawedType: TypeAlias = dict[str, str | dict | list]
+FrozenType: TypeAlias = FrozenDict[str, "str | FrozenType | tuple"]
+ThawedType: TypeAlias = dict[str, "str | ThawedType | list"]
