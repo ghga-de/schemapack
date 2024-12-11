@@ -3,10 +3,6 @@
 
 .devcontainer/docker-compose.yml
 
-.github/workflows/cd.yaml
-.github/workflows/dev_cd.yaml
-.github/workflows/check_openapi_spec.yaml
-
 scripts/script_utils/fastapi_app_location.py
 
 Dockerfile
