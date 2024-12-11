@@ -112,7 +112,7 @@ def model_to_serializable_dict(
     return json.loads(model.model_dump_json(exclude_defaults=True))
 
 
-def thaw_frozendict(value: FrozenType) -> ThawedType:
+def thaw_frozendict(frozen_dict: FrozenType) -> ThawedType:
     """Recursively thaws a FrozenDict into a standard dictionary."""
     return {
         key: (
