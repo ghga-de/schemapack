@@ -9,13 +9,11 @@ readme = "README.md"
 authors = [
     { name = "German Human Genome Phenome Archive (GHGA)", email = "contact@ghga.de" },
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 classifiers = [
     "Development Status :: 1 - Planning",
     "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: Apache Software License",
     "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
@@ -23,7 +21,7 @@ classifiers = [
     "Intended Audience :: Developers",
 ]
 name = "schemapack"
-version = "2.0.0-alpha.4"
+version = "2.0.0-alpha.5"
 description = "Make your JSON Schemas sociable and create linked data model."
 dependencies = [
     "pydantic >=2, <3",
@@ -63,13 +61,14 @@ src = [
     "examples",
     "scripts",
 ]
-target-version = "py39"
+target-version = "py312"
 
 [tool.ruff.lint]
 fixable = [
     "UP",
     "I",
     "D",
+    "RUF022",
 ]
 ignore = [
     "E111",
@@ -88,6 +87,8 @@ ignore = [
     "D107",
     "D206",
     "D300",
+    "UP040",
+    "PLC0206",
 ]
 select = [
     "C90",

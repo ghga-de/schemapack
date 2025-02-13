@@ -22,12 +22,11 @@ Warning: This is an internal part of the library and might change without notice
 import typing
 from collections import Counter
 from collections.abc import Iterable
-from typing import Annotated, Any, Literal, Optional, Union
+from typing import Annotated, Any, Literal, TypeAlias
 
 from arcticfreeze import FrozenDict, freeze
 from pydantic import BeforeValidator, Field, WrapSerializer
 from pydantic_core import PydanticCustomError
-from typing_extensions import TypeAlias
 
 from schemapack._internals.spec.base import _FrozenNoExtraBaseModel
 from schemapack._internals.spec.custom_types import (
@@ -92,9 +91,7 @@ class ResourceRelation(_FrozenNoExtraBaseModel):
         ...,
         description=("The name of the target class of the relation."),
     )
-    targetResources: Union[  # noqa: N815 - following JSON conventions
-        Optional[ResourceId], ResourceIdSet
-    ] = Field(
+    targetResources: ResourceId | None | ResourceIdSet = Field(# noqa: N815 - following JSON conventions
         ...,
         description=(
             "Provides the ID(s) of target resources of the targetClass. Depending on"
@@ -171,7 +168,7 @@ class DataPack(_FrozenNoExtraBaseModel):
         ),
     )
 
-    rootResource: Optional[str] = Field(  # noqa: N815 - following JSON conventions
+    rootResource: str | None = Field(  # noqa: N815 - following JSON conventions
         None,
         description=(
             "Defines the id of the resource of the class defined in `className`"
@@ -182,7 +179,7 @@ class DataPack(_FrozenNoExtraBaseModel):
         ),
     )
 
-    rootClass: Optional[ClassName] = Field(  # noqa: N815 - following JSON conventions
+    rootClass: ClassName | None = Field(  # noqa: N815 - following JSON conventions
         None,
         description=(
             "Defines the class name of the resource that should act as root. This means"

@@ -20,5 +20,4 @@ example_data/README.md
 .readme_generation/readme_template.md
 .readme_generation/README.md
 
-.devcontainer/Dockerfile
 .devcontainer/devcontainer.json
