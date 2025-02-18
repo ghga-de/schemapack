@@ -101,12 +101,13 @@ def denormalize(  # noqa: PLR0912,C901
         root_class_definition.id.propertyName: root_resource_id
     }
     denormalized_object.update(root_resource.content)
-
-    for relation_name, target_ids in root_resource.relations.items():
+    for relation_name, resource_relations in root_resource.relations.items():
+        target_ids = resource_relations.targetResources
         try:
             relation_definition = root_class_definition.relations[relation_name]
         except KeyError as error:
-            raise ValidationAssumptionError(context="relation resolution") from error
+            raise ValidationAssumptionError(
+                context="relation resolution") from error
 
         target_class_name = relation_definition.targetClass
 
@@ -135,7 +136,8 @@ def denormalize(  # noqa: PLR0912,C901
                     _alt_root_resource_id=target_id,
                 )
 
-                denormalized_object[relation_name].append(target_resource)  # type: ignore
+                denormalized_object[relation_name].append(  # type: ignore
+                    target_resource)
 
         elif isinstance(target_ids, str):
             denormalized_object[relation_name] = denormalize(

@@ -77,15 +77,18 @@ def identify_resource_dependencies(  # noqa: C901
     """
     target_class_resources = datapack.resources.get(class_name)
     if target_class_resources is None:
-        raise ClassNotFoundError(class_name=class_name, spec_type=SpecType.DATAPACK)
+        raise ClassNotFoundError(
+            class_name=class_name, spec_type=SpecType.DATAPACK)
 
     target_resource = target_class_resources.get(resource_id)
     if target_resource is None:
-        raise ResourceNotFoundError(class_name=class_name, resource_id=resource_id)
+        raise ResourceNotFoundError(
+            class_name=class_name, resource_id=resource_id)
 
     target_class_definition = schemapack.classes.get(class_name)
     if target_class_definition is None:
-        raise ClassNotFoundError(class_name=class_name, spec_type=SpecType.SCHEMAPACK)
+        raise ClassNotFoundError(
+            class_name=class_name, spec_type=SpecType.SCHEMAPACK)
 
     # Define a blacklist of resources to avoid getting lost in infinity loop for
     # circular dependencies:
@@ -108,7 +111,8 @@ def identify_resource_dependencies(  # noqa: C901
             ) from error
 
         try:
-            target_ids = target_resource.get_target_id_set(relation_name)
+            target_ids = target_resource.relations[relation_name].get_target_resources_as_set(
+            )
         except KeyError as error:
             raise ValidationAssumptionError(
                 context="relation resolution in datapack"
@@ -212,8 +216,10 @@ def isolate_resource(
         schemapack=schemapack,
         include_target=True,
     )
-    rooted_datapack = downscope_datapack(datapack=datapack, resource_map=dependency_map)
-    rooted_datapack = rooted_datapack.model_copy(update={"rootResource": resource_id})
+    rooted_datapack = downscope_datapack(
+        datapack=datapack, resource_map=dependency_map)
+    rooted_datapack = rooted_datapack.model_copy(
+        update={"rootResource": resource_id, "rootClass": class_name})
     return rooted_datapack
 
 
@@ -240,7 +246,8 @@ def identify_class_dependencies(
     """
     class_definition = schemapack.classes.get(class_name)
     if class_definition is None:
-        raise ClassNotFoundError(class_name=class_name, spec_type=SpecType.SCHEMAPACK)
+        raise ClassNotFoundError(
+            class_name=class_name, spec_type=SpecType.SCHEMAPACK)
 
     dependencies: set[ClassName] = set()
 
@@ -323,7 +330,8 @@ def isolate(
             If it became apparent that the datapack was not already validated against
             the schemapack.
     """
-    rooted_schemapack = isolate_class(class_name=class_name, schemapack=schemapack)
+    rooted_schemapack = isolate_class(
+        class_name=class_name, schemapack=schemapack)
     rooted_datapack = isolate_resource(
         datapack=datapack,
         class_name=class_name,

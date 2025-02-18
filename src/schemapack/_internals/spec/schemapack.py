@@ -205,7 +205,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
             + " should use snake_case and may only contain alphanumeric characters and"
             + " underscores. They must start with a letter."
         ),
-    )
+    )  # type: ignore
 
     def get_content_properties(self) -> frozenset[ContentPropertyName]:
         """Returns a set of the content properties."""

@@ -91,7 +91,7 @@ class ResourceRelation(_FrozenNoExtraBaseModel):
         ...,
         description=("The name of the target class of the relation."),
     )
-    targetResources: ResourceId | None | ResourceIdSet = Field(# noqa: N815 - following JSON conventions
+    targetResources: ResourceId | None | ResourceIdSet = Field(  # noqa: N815 - following JSON conventions
         ...,
         description=(
             "Provides the ID(s) of target resources of the targetClass. Depending on"

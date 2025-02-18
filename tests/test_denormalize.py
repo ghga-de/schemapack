@@ -40,8 +40,8 @@ def test_denormalize(name: str, expected_denomalizated_path: Path):
     schemapack_name = name.split(".")[0]
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
     datapack = load_datapack(VALID_DATAPACK_PATHS[name])
-    expected_denomalizated = read_json_or_yaml_mapping(expected_denomalizated_path)
-
+    expected_denomalizated = read_json_or_yaml_mapping(
+        expected_denomalizated_path)
     denomalizated = denormalize(datapack=datapack, schemapack=schemapack)
 
     assert denomalizated == expected_denomalizated
