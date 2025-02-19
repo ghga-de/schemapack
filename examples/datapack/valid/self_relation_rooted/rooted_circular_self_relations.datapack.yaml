@@ -11,3 +11,4 @@ resources:
           targetResources:
             - a # <-
 rootResource: a
+rootClass: SomeClass

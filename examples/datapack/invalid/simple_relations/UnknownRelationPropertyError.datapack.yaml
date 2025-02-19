@@ -17,4 +17,6 @@ resources:
           targetClass: File
           targetResources:
             - example_file_a
-        non_existing_property: [] # <-
+        non_existing_property: # <-
+          targetClass: File
+          targetResources: []

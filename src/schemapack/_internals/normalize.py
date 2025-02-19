@@ -106,8 +106,7 @@ def denormalize(  # noqa: PLR0912,C901
         try:
             relation_definition = root_class_definition.relations[relation_name]
         except KeyError as error:
-            raise ValidationAssumptionError(
-                context="relation resolution") from error
+            raise ValidationAssumptionError(context="relation resolution") from error
 
         target_class_name = relation_definition.targetClass
 
@@ -137,7 +136,8 @@ def denormalize(  # noqa: PLR0912,C901
                 )
 
                 denormalized_object[relation_name].append(  # type: ignore
-                    target_resource)
+                    target_resource
+                )
 
         elif isinstance(target_ids, str):
             denormalized_object[relation_name] = denormalize(
