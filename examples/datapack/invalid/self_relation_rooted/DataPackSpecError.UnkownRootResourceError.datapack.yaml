@@ -1,4 +1,4 @@
-# The corresponding schemapack expects no root but a root resource is defined:
+# The corresponding schemapack expects a root but no root resource is defined:
 datapack: 0.3.0
 resources:
   SomeClass:
@@ -17,4 +17,4 @@ resources:
           targetResources:
             - a
 rootClass: SomeClass
-rootResource: a # <-
+rootResource: non_existing_resource

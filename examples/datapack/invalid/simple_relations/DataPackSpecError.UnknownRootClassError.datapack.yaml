@@ -1,4 +1,4 @@
-# The corresponding schemapack expects a root but no root resource is defined:
+# Using a root resource that is not in datapack SomCelass resources
 datapack: 0.3.0
 resources:
   SomeClass:
@@ -16,4 +16,5 @@ resources:
           targetClass: SomeClass
           targetResources:
             - a
-rootResource: non_existing_resource
+rootClass: SomeOtherClass
+rootResource: a # <-

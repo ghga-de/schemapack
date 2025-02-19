@@ -21,11 +21,11 @@ Warning: This is an internal part of the library and might change without notice
 
 import typing
 from collections import Counter
-from collections.abc import Iterable
-from typing import Annotated, Any, Literal, TypeAlias
+from collections.abc import Iterable, Mapping
+from typing import Annotated, Any, Literal, Self, TypeAlias
 
 from arcticfreeze import FrozenDict, freeze
-from pydantic import BeforeValidator, Field, WrapSerializer
+from pydantic import BeforeValidator, Field, WrapSerializer, model_validator
 from pydantic_core import PydanticCustomError
 
 from schemapack._internals.spec.base import _FrozenNoExtraBaseModel
@@ -188,3 +188,42 @@ class DataPack(_FrozenNoExtraBaseModel):
             + " dependencies) of the root resource."
         ),
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def check_root_duality(cls, value: Mapping) -> Mapping | None:
+        """Ensures that both 'rootClass' and 'rootResource' are either present or absent."""
+        missing = [key for key in ("rootClass", "rootResource") if not value.get(key)]
+
+        if len(missing) == 1:
+            raise PydanticCustomError(
+                "DatapackRootDualityError",
+                "Invalid DataPack due to the missing field of '{missing}'.",
+                {"missing": missing[0]},
+            )
+
+        return value
+
+    @model_validator(mode="after")
+    def validate_root_class(self) -> Self:
+        """Checks if 'rootClass' exists in DataPack resources when specified."""
+        if self.rootClass and self.rootClass not in self.resources:
+            raise PydanticCustomError(
+                "UnknownRootClassError",
+                "The class '{root_class}'"
+                + " given as root class does not exist among the DataPack resources",
+                {"root_class": self.rootClass},
+            )
+        return self
+
+    @model_validator(mode="after")
+    def validate_root_resource(self) -> Self:
+        """Checks if 'rootResource' exists in DataPack resources when specified."""
+        if self.rootClass and self.rootResource not in self.resources[self.rootClass]:
+            raise PydanticCustomError(
+                "UnkownRootResourceError",
+                "The specified root resource with ID '{root_resource}' of class "
+                + " '{root_class}' does not exist.",
+                {"root_resource": self.rootResource, "root_class": self.rootClass},
+            )
+        return self

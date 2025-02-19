@@ -53,9 +53,6 @@ from schemapack._internals.validation.plugins.unknown_class import (
 from schemapack._internals.validation.plugins.unknown_relations import (
     UnknownRelationValidationPlugin,
 )
-from schemapack._internals.validation.plugins.unkown_root_resource import (
-    UnkownRootResourceValidationPlugin,
-)
 
 __all__ = [
     "ContentSchemaValidationPlugin",
@@ -70,5 +67,4 @@ __all__ = [
     "UnexpectedRootValidationPlugin",
     "UnknownClassSlotValidationPlugin",
     "UnknownRelationValidationPlugin",
-    "UnkownRootResourceValidationPlugin",
 ]
