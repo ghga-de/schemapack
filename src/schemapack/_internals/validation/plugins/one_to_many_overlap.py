@@ -73,7 +73,7 @@ class TargetOverlapValidationPlugin(ClassValidationPlugin):
                     resource_target_ids = resource.relations[
                         relation_name
                     ].get_target_resources_as_set()
-                except:
+                except KeyError:
                     resource_target_ids = frozenset()
 
                 counter.update(resource_target_ids)

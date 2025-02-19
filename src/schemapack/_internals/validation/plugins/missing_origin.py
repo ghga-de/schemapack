@@ -71,7 +71,7 @@ class MissingMandatoryOriginValidationPlugin(ClassValidationPlugin):
                         relation_name
                     ].get_target_resources_as_set()
                 }
-            except:
+            except KeyError:
                 referenced_target_ids = set()
 
             all_possible_target_ids = set(
