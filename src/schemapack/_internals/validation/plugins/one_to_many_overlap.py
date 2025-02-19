@@ -70,8 +70,9 @@ class TargetOverlapValidationPlugin(ClassValidationPlugin):
 
             for resource in class_resources.values():
                 try:
-                    resource_target_ids = resource.relations[relation_name].get_target_resources_as_set(
-                    )
+                    resource_target_ids = resource.relations[
+                        relation_name
+                    ].get_target_resources_as_set()
                 except:
                     resource_target_ids = frozenset()
 
@@ -90,6 +91,5 @@ class TargetOverlapValidationPlugin(ClassValidationPlugin):
                     + " relations:"
                     + ", ".join(overlapping_ids_by_relation)
                 ),
-                details={
-                    "overlapping_ids_by_relation": overlapping_ids_by_relation},
+                details={"overlapping_ids_by_relation": overlapping_ids_by_relation},
             )

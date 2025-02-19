@@ -101,4 +101,4 @@ def strip_ansi_escape_sequences(text: str) -> str:
     Returns:
         text: Text without ansi characters
     """
-    return re.sub(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])', '', text)
+    return re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", text)
