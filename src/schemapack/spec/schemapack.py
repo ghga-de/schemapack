@@ -35,5 +35,5 @@ __all__ = [
     "MandatoryRelationSpec",
     "MultipleRelationSpec",
     "SchemaPack",
-    "SupportedSchemaPackVersions"
+    "SupportedSchemaPackVersions",
 ]
