@@ -198,7 +198,7 @@ class DataPack(_FrozenNoExtraBaseModel):
         if len(missing) == 1:
             raise PydanticCustomError(
                 "DatapackRootDualityError",
-                "Invalid DataPack due to the missing field of '{missing}'.",
+                "Invalid DataPack due to missing field '{missing}'.",
                 {"missing": missing[0]},
             )
 
