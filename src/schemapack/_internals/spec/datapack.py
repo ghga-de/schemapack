@@ -91,7 +91,7 @@ class ResourceRelation(_FrozenNoExtraBaseModel):
         ...,
         description=("The name of the target class of the relation."),
     )
-    targetResources: ResourceId | None | ResourceIdSet = Field(  # noqa: N815 - following JSON conventions
+    targetResources: ResourceId | ResourceIdSet | None = Field(  # noqa: N815 - following JSON conventions
         ...,
         description=(
             "Provides the ID(s) of target resources of the targetClass. Depending on"
@@ -193,7 +193,8 @@ class DataPack(_FrozenNoExtraBaseModel):
     @classmethod
     def check_root_duality(cls, value: Mapping) -> Mapping | None:
         """Ensures that both 'rootClass' and 'rootResource' are either present or absent."""
-        missing = [key for key in ("rootClass", "rootResource") if not value.get(key)]
+        missing = [key for key in (
+            "rootClass", "rootResource") if not value.get(key)]
 
         if len(missing) == 1:
             raise PydanticCustomError(
