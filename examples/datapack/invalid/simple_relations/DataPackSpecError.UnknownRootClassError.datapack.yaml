@@ -1,4 +1,4 @@
-# Using a root resource that is not in datapack SomCelass resources
+# Using a root class that is not in datapack classes
 datapack: 0.3.0
 resources:
   SomeClass:
@@ -16,5 +16,5 @@ resources:
           targetClass: SomeClass
           targetResources:
             - a
-rootClass: SomeOtherClass
-rootResource: a # <-
+rootClass: SomeOtherClass # <-
+rootResource: a
