@@ -53,22 +53,18 @@ from schemapack._internals.validation.plugins.unknown_class import (
 from schemapack._internals.validation.plugins.unknown_relations import (
     UnknownRelationValidationPlugin,
 )
-from schemapack._internals.validation.plugins.unkown_root_resource import (
-    UnkownRootResourceValidationPlugin,
-)
 
 __all__ = [
     "ContentSchemaValidationPlugin",
     "ExpectedRootValidationPlugin",
     "MissingClassSlotValidationPlugin",
-    "MissingRelationValidationPlugin",
+    "MissingMandatoryOriginValidationPlugin",
     "MissingMandatoryTargetValidationPlugin",
+    "MissingRelationValidationPlugin",
     "MultipleTargetValidationPlugin",
-    "TargetOverlapValidationPlugin",
     "TargetIdValidationPlugin",
+    "TargetOverlapValidationPlugin",
     "UnexpectedRootValidationPlugin",
     "UnknownClassSlotValidationPlugin",
     "UnknownRelationValidationPlugin",
-    "UnkownRootResourceValidationPlugin",
-    "MissingMandatoryOriginValidationPlugin",
 ]

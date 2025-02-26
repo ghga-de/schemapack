@@ -34,14 +34,12 @@ from schemapack._internals.validation.plugins import (
     UnexpectedRootValidationPlugin,
     UnknownClassSlotValidationPlugin,
     UnknownRelationValidationPlugin,
-    UnkownRootResourceValidationPlugin,
 )
 
 DEFAULT_GLOBAL_PLUGIN_REGISTRY: list[type[GlobalValidationPlugin]] = [
     MissingClassSlotValidationPlugin,
     UnknownClassSlotValidationPlugin,
     ExpectedRootValidationPlugin,
-    UnkownRootResourceValidationPlugin,
     UnexpectedRootValidationPlugin,
 ]
 DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = [

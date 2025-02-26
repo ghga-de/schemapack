@@ -21,7 +21,7 @@ Warning: This is an internal part of the library and might change without notice
 import typing
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Literal, Optional, Union, cast
+from typing import Any, Literal, cast
 
 from arcticfreeze import FrozenDict, freeze
 from immutabledict import immutabledict
@@ -133,7 +133,7 @@ class MultipleRelationSpec(_FrozenNoExtraBaseModel):
 class ClassRelation(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack relation definition."""
 
-    description: Optional[str] = Field(
+    description: str | None = Field(
         None,
         description="A description of the relation.",
     )
@@ -173,7 +173,7 @@ class IDSpec(_FrozenNoExtraBaseModel):
             + " denormalized representation."
         ),
     )
-    description: Optional[str] = Field(
+    description: str | None = Field(
         None,
         description="A description of the ID property.",
     )
@@ -182,7 +182,7 @@ class IDSpec(_FrozenNoExtraBaseModel):
 class ClassDefinition(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack class definition."""
 
-    description: Optional[str] = Field(
+    description: str | None = Field(
         None,
         description=("A description of the class definition."),
     )
@@ -205,7 +205,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
             + " should use snake_case and may only contain alphanumeric characters and"
             + " underscores. They must start with a letter."
         ),
-    )
+    )  # pyright: ignore
 
     def get_content_properties(self) -> frozenset[ContentPropertyName]:
         """Returns a set of the content properties."""
@@ -214,7 +214,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
     @field_validator("content", mode="before")
     @classmethod
     def load_and_validate_content_schema(
-        cls, value: Union[str, Path, Mapping]
+        cls, value: str | Path | Mapping
     ) -> FrozenDict:
         """A validator function for content schemas that:
         - loads a JSON or YAML file if a path is provided
@@ -230,10 +230,8 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
                 absolute_path = value.absolute().resolve()
                 raise PydanticCustomError(
                     "ContentSchemaNotFoundError",
-                    (
-                        "Content schema path does not exist or is not a file."
-                        + " Absolute path: {absolute_path}"
-                    ),
+                    "Content schema path does not exist or is not a file."
+                    + " Absolute path: {absolute_path}",
                     {
                         "absolute_path": absolute_path,
                     },
@@ -244,20 +242,15 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
             except ParsingError as error:
                 raise PydanticCustomError(
                     "InvalidContentSchemaError",
-                    (
-                        "Content schema at the specified path could not be parsed as"
-                        + " valid JSON or YAML."
-                    ),
+                    "Content schema at the specified path could not be parsed as"
+                    + " valid JSON or YAML.",
                 ) from error
 
         if not isinstance(value, Mapping):
             raise PydanticCustomError(
                 "InvalidContentSchemaError",
-                (
-                    "Expected a Mapping or a"
-                    + " path (pathlib.Path or str) to a JSON or"
-                    + " YAML file."
-                ),
+                "Expected a Mapping or a path (pathlib.Path or str) to a JSON or"
+                + " YAML file.",
             )
 
         try:
@@ -271,8 +264,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
 
         if value.get("type") != "object":
             raise PydanticCustomError(
-                "InvalidContentSchemaError",
-                "The content schema must be an object.",
+                "InvalidContentSchemaError", "The content schema must be an object."
             )
 
         return cast(FrozenDict, freeze(value, by_superclass=True))
@@ -290,11 +282,9 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         if invalid_relation_names:
             raise PydanticCustomError(
                 "InvalidRelationNameError",
-                (
-                    "Relation names may only contain alphanumeric characters and"
-                    + " underscores. They must not start with a number."
-                    + " Got {number} invalid names: {invalid_relation_names}"
-                ),
+                "Relation names may only contain alphanumeric characters and"
+                + " underscores. They must not start with a number."
+                + " Got {number} invalid names: {invalid_relation_names}",
                 {
                     "number": len(invalid_relation_names),
                     "invalid_relation_names": invalid_relation_names,
@@ -312,10 +302,8 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         if collisions:
             raise PydanticCustomError(
                 "RelationsContentPropertyCollisionError",
-                (
-                    "The following properties occur both in the content and the"
-                    + " relations: {collisions}"
-                ),
+                "The following properties occur both in the content and the"
+                + " relations: {collisions}",
                 {
                     "number": len(collisions),
                     "collisions": collisions,
@@ -330,7 +318,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         if self.id.propertyName in self.get_content_properties():
             raise PydanticCustomError(
                 "IdContentPropertyCollisionError",
-                ("The id property '{id_property}' also occurs in the content."),
+                "The id property '{id_property}' also occurs in the content.",
                 {
                     "id_property": self.id.propertyName,
                 },
@@ -344,7 +332,7 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         if self.id.propertyName in self.relations:
             raise PydanticCustomError(
                 "IdRelationsPropertyCollisionError",
-                ("The id property '{id_property}' also occurs in the relations."),
+                "The id property '{id_property}' also occurs in the relations.",
                 {
                     "id_property": self.id.propertyName,
                 },
@@ -364,7 +352,7 @@ class SchemaPack(_FrozenNoExtraBaseModel):
             + " schemapack specification."
         ),
     )
-    description: Optional[str] = Field(
+    description: str | None = Field(
         None,
         description=("A description of the schemapack definition."),
     )
@@ -377,7 +365,7 @@ class SchemaPack(_FrozenNoExtraBaseModel):
         min_length=1,
     )
 
-    rootClass: Optional[ClassName] = Field(  # noqa: N815 - following JSON conventions
+    rootClass: ClassName | None = Field(  # noqa: N815 - following JSON conventions
         None,
         description=(
             "Optionally, define the name of a class that should acting as the root of"
@@ -399,19 +387,15 @@ class SchemaPack(_FrozenNoExtraBaseModel):
             if "schemapack" not in data:
                 raise PydanticCustomError(
                     "MissingSchemaPackVersionError",
-                    (
-                        "Missing a `schemapack` field. Are you sure you have passed a"
-                        + " schemapack definition?"
-                    ),
+                    "Missing a `schemapack` field. Are you sure you have passed a"
+                    + " schemapack definition?",
                 )
 
             if data["schemapack"] not in SUPPORTED_SCHEMA_PACK_VERSIONS:
                 raise PydanticCustomError(
                     "UnsupportedSchemaPackVersionError",
-                    (
-                        "Unsupported schemapack version '{current_version}'."
-                        " Supported versions are: {supported_versions}"
-                    ),
+                    "Unsupported schemapack version '{current_version}'."
+                    " Supported versions are: {supported_versions}",
                     {
                         "current_version": data["schemapack"],
                         "supported_versions": SUPPORTED_SCHEMA_PACK_VERSIONS,
@@ -433,11 +417,9 @@ class SchemaPack(_FrozenNoExtraBaseModel):
         if invalid_class_names:
             raise PydanticCustomError(
                 "InvalidClassNameError",
-                (
-                    "Class names may only contain alphanumeric characters and"
-                    + " underscores. They must not start with a number."
-                    + " Got {number} invalid names: {invalid_class_names}"
-                ),
+                "Class names may only contain alphanumeric characters and"
+                + " underscores. They must not start with a number."
+                + " Got {number} invalid names: {invalid_class_names}",
                 {
                     "number": len(invalid_class_names),
                     "invalid_class_names": invalid_class_names,
@@ -460,10 +442,8 @@ class SchemaPack(_FrozenNoExtraBaseModel):
         if invalid_relations:
             raise PydanticCustomError(
                 "RelationClassNotFoundError",
-                (
-                    "Found {number} relation(s) that point to non-existing classes:"
-                    + " {invalid_relations}"
-                ),
+                "Found {number} relation(s) that point to non-existing classes:"
+                + " {invalid_relations}",
                 {
                     "number": len(invalid_relations),
                     "invalid_relations": invalid_relations,
@@ -478,7 +458,7 @@ class SchemaPack(_FrozenNoExtraBaseModel):
         if self.rootClass and self.rootClass not in self.classes:
             raise PydanticCustomError(
                 "RootClassNotFoundError",
-                ("The specified root class '{self.rootClass}' does not exist."),
+                "The specified root class '{self.rootClass}' does not exist.",
                 {
                     "rootClass": self.rootClass,
                 },

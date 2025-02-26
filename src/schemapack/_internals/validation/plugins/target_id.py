@@ -53,7 +53,12 @@ class TargetIdValidationPlugin(ResourceValidationPlugin):
         """
         non_found_target_ids: dict[str, str] = {}  # target_id -> relation_name
         for relation_name, relation in self._relations.items():
-            target_ids = resource.get_target_id_set(relation_name, do_not_raise=True)
+            try:
+                target_ids = resource.relations[
+                    relation_name
+                ].get_target_resources_as_set()
+            except:
+                target_ids = frozenset()
 
             for target_id in target_ids:
                 if target_id not in datapack.resources.get(relation.targetClass, set()):

@@ -92,8 +92,8 @@ def test_isolate(
     expected_rooted_schemapack = load_schemapack(expected_rooted_schemapack_path)
 
     rooted_schemapack, rooted_datapack = isolate(
-        class_name=resource_class,
-        resource_id=resource_id,
+        root_class_name=resource_class,
+        root_resource_id=resource_id,
         schemapack=schemapack,
         datapack=datapack,
     )
@@ -111,8 +111,8 @@ def test_isolate_with_non_existing_class():
 
     with pytest.raises(exceptions.ClassNotFoundError) as error:
         isolate(
-            class_name="NonExistingClass",
-            resource_id="example_dataset_1",
+            root_class_name="NonExistingClass",
+            root_resource_id="example_dataset_1",
             schemapack=schemapack,
             datapack=datapack,
         )
@@ -128,8 +128,8 @@ def test_isolate_with_non_existing_resource():
 
     with pytest.raises(exceptions.ResourceNotFoundError):
         isolate(
-            class_name="Dataset",
-            resource_id="NonExistingResource",
+            root_class_name="Dataset",
+            root_resource_id="NonExistingResource",
             schemapack=schemapack,
             datapack=datapack,
         )
@@ -167,3 +167,14 @@ def test_isolate_class_non_exisiting_class():
             schemapack=schemapack,
             class_name="NonExistingClass",
         )
+
+
+def test_isolate_class_downscoping():
+    """Test that unrelated classes are not included in the isolated schemapack."""
+    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS["unrelated_classes"])
+    expected_schemapack = load_schemapack(
+        VALID_SCHEMAPACK_PATHS["unrelated_classes_rooted"]
+    )
+
+    observed_schemapack = isolate_class(class_name="SomeClass", schemapack=schemapack)
+    assert observed_schemapack == expected_schemapack
