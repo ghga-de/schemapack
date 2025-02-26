@@ -54,7 +54,6 @@ def test_load_and_validate_invalid(name: str, path: Path):
     schemapack_path = VALID_SCHEMAPACK_PATHS[schemapack_name]
     with pytest.raises(BaseError) as exception_info:
         _ = load_and_validate(schemapack_path=schemapack_path, datapack_path=path)
-
     # Either a DataPackSpecError or ValidationError is expected:
     if error_type == "DataPackSpecError":
         assert isinstance(exception_info.value, DataPackSpecError)
