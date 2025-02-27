@@ -237,9 +237,6 @@ class DataPack(_FrozenNoExtraBaseModel):
 
         for resources in self.resources.values():
             for resource in resources.values():
-                if not resource.relations:
-                    continue
-
                 for relation_name, relation in resource.relations.items():
                     if relation.targetClass not in self.resources:
                         non_found_classes[relation.targetClass] = relation_name
@@ -247,10 +244,10 @@ class DataPack(_FrozenNoExtraBaseModel):
         if non_found_classes:
             raise PydanticCustomError(
                 "TargetClassNotFoundError",
-                "Did not find the target class if the following relations (relation"
+                "Did not find the target class of the following relations (relation"
                 + " names): {non_found_classes}",
                 {
-                    "non_found_target_ids": ", ".join(
+                    "non_found_classes": ", ".join(
                         f"'{target_class}' ('{relation_name}')"
                         for target_class, relation_name in non_found_classes.items()
                     )
@@ -267,12 +264,8 @@ class DataPack(_FrozenNoExtraBaseModel):
 
         for resources in self.resources.values():
             for resource in resources.values():
-                if not resource.relations:
-                    continue
-
                 for relation_name, relation in resource.relations.items():
                     target_ids = relation.get_target_resources_as_set()
-
                     for target_id in target_ids:
                         if target_id not in self.resources.get(
                             relation.targetClass, set()
