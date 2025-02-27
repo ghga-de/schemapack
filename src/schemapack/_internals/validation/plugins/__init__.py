@@ -41,9 +41,6 @@ from schemapack._internals.validation.plugins.multiple_target import (
 from schemapack._internals.validation.plugins.one_to_many_overlap import (
     TargetOverlapValidationPlugin,
 )
-from schemapack._internals.validation.plugins.target_id import (
-    TargetIdValidationPlugin,
-)
 from schemapack._internals.validation.plugins.unexpected_root import (
     UnexpectedRootValidationPlugin,
 )

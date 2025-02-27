@@ -29,7 +29,6 @@ from schemapack._internals.validation.plugins import (
     MissingMandatoryTargetValidationPlugin,
     MissingRelationValidationPlugin,
     MultipleTargetValidationPlugin,
-    TargetIdValidationPlugin,
     TargetOverlapValidationPlugin,
     UnexpectedRootValidationPlugin,
     UnknownClassSlotValidationPlugin,
@@ -48,7 +47,6 @@ DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = [
 ]
 DEFAULT_RESOURCE_PLUGIN_REGISTRY: list[type[ResourceValidationPlugin]] = [
     ContentSchemaValidationPlugin,
-    TargetIdValidationPlugin,
     MissingRelationValidationPlugin,
     UnknownRelationValidationPlugin,
     MultipleTargetValidationPlugin,

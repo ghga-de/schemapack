@@ -227,3 +227,61 @@ class DataPack(_FrozenNoExtraBaseModel):
                 {"root_resource": self.rootResource, "root_class": self.rootClass},
             )
         return self
+
+    @model_validator(mode="after")
+    def validate_relation_classes(self) -> Self:
+        """Checks if the `targetClass` of relations defined in a datapack exists
+        within datapack resources.
+        """
+        non_found_classes: dict[str, str] = {}  # target_class -> relation_name
+
+        for resources in self.resources.values():
+            for resource in resources.values():
+                for relation_name, relation in resource.relations.items():
+                    if relation.targetClass not in self.resources:
+                        non_found_classes[relation.targetClass] = relation_name
+
+        if non_found_classes:
+            raise PydanticCustomError(
+                "TargetClassNotFoundError",
+                "Did not find the target class of the following relations (relation"
+                + " names): {non_found_classes}",
+                {
+                    "non_found_classes": ", ".join(
+                        f"'{target_class}' ('{relation_name}')"
+                        for target_class, relation_name in non_found_classes.items()
+                    )
+                },
+            )
+        return self
+
+    @model_validator(mode="after")
+    def validate_relation_resources(self) -> Self:
+        """Checks if the `targetResources` of relations defined in a datapack exists
+        within its corresponding `targetClass`.
+        """
+        non_found_target_ids: dict[str, str] = {}  # target_id -> relation_name
+
+        for resources in self.resources.values():
+            for resource in resources.values():
+                for relation_name, relation in resource.relations.items():
+                    target_ids = relation.get_target_resources_as_set()
+                    for target_id in target_ids:
+                        if target_id not in self.resources.get(
+                            relation.targetClass, set()
+                        ):
+                            non_found_target_ids[target_id] = relation_name
+
+        if non_found_target_ids:
+            raise PydanticCustomError(
+                "TargetIdNotFoundError",
+                "Did not find a target resource for the following ID(s) (relation"
+                + " names): {non_found_target_ids}",
+                {
+                    "non_found_target_ids": ", ".join(
+                        f"'{target_id}' ('{relation_name}')"
+                        for target_id, relation_name in non_found_target_ids.items()
+                    )
+                },
+            )
+        return self
