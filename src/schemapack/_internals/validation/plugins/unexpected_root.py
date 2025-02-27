@@ -58,6 +58,6 @@ class UnexpectedRootValidationPlugin(GlobalValidationPlugin):
                 type_="UnexpectedRootDefinitionError",
                 message=(
                     "The schemapack has no root class defined but the datapack "
-                    f"specifies {' and '.join(defined)}."
+                    f"specifies a {' and '.join(defined)}."
                 ),
             )
