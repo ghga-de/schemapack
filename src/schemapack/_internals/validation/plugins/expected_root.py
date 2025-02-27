@@ -57,6 +57,6 @@ class ExpectedRootValidationPlugin(GlobalValidationPlugin):
                 type_="ExpectedRootDefinitionError",
                 message=(
                     "The schemapack has a root class defined but the datapack "
-                    f"is missing {' and '.join(missing)}."
+                    f"is missing a {' and '.join(missing)}."
                 ),
             )
