@@ -24,26 +24,53 @@ from schemapack import denormalize, load_datapack, load_schemapack
 from schemapack.exceptions import CircularRelationError
 from schemapack.utils import read_json_or_yaml_mapping
 from tests.fixtures.examples import (
-    DENORMALIZED_PATHS,
+    DENORMALIZED_CUSTOM_EMBEDDING_PATHS,
+    DENORMALIZED_DEEP_EMBEDDING_PATHS,
     VALID_DATAPACK_PATHS,
     VALID_SCHEMAPACK_PATHS,
 )
 
 
 @pytest.mark.parametrize(
-    "name, expected_denomalizated_path",
-    DENORMALIZED_PATHS.items(),
-    ids=DENORMALIZED_PATHS.keys(),
+    "name, expected_denormalizated_path",
+    DENORMALIZED_DEEP_EMBEDDING_PATHS.items(),
+    ids=DENORMALIZED_DEEP_EMBEDDING_PATHS.keys(),
 )
-def test_denormalize(name: str, expected_denomalizated_path: Path):
+def test_denormalize_deep_embedding(name: str, expected_denormalizated_path: Path):
     """Test the denormalize function with valid datapacks."""
     schemapack_name = name.split(".")[0]
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
     datapack = load_datapack(VALID_DATAPACK_PATHS[name])
-    expected_denomalizated = read_json_or_yaml_mapping(expected_denomalizated_path)
-    denomalizated = denormalize(datapack=datapack, schemapack=schemapack)
+    expected_denormalizated = read_json_or_yaml_mapping(expected_denormalizated_path)
+    denormalizated = denormalize(datapack=datapack, schemapack=schemapack)
 
-    assert denomalizated == expected_denomalizated
+    assert denormalizated == expected_denormalizated
+
+
+IGNORED_RELATIONS = {
+    "simple_nested_relations": {"B": ["c"]},
+    "rooted_simple_resources": {"Dataset": ["files"]},
+    "rooted_circular_relations": {"SomeClass": ["some_relation"]},
+}
+
+
+@pytest.mark.parametrize(
+    "name, expected_denormalizated_path",
+    DENORMALIZED_CUSTOM_EMBEDDING_PATHS.items(),
+    ids=DENORMALIZED_CUSTOM_EMBEDDING_PATHS.keys(),
+)
+def test_denormalize_custom_embedding(name: str, expected_denormalizated_path: Path):
+    """Test the denormalize function with valid datapacks."""
+    schemapack_name = name.split(".")[0]
+    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
+    datapack = load_datapack(VALID_DATAPACK_PATHS[name])
+    expected_denormalizated = read_json_or_yaml_mapping(expected_denormalizated_path)
+    ignored_relations = IGNORED_RELATIONS[name.split(".")[-1]]
+    denormalizated = denormalize(
+        datapack=datapack, schemapack=schemapack, ignored_relations=ignored_relations
+    )
+
+    assert denormalizated == expected_denormalizated
 
 
 @pytest.mark.parametrize(

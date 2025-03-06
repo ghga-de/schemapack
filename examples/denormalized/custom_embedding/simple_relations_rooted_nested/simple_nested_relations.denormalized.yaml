@@ -1,0 +1,15 @@
+# The result of partial embedding where embedding relation c is not prohibited for
+# class A, but prohibited for class B. Since the embedding starts from A,
+# the condition implies c is prohibited for A(b)>B. Thus c is embedded in A, but not
+# embedded within A(b)>B
+alias: a1
+b:
+  - alias: b1
+    c: c1
+  - alias: b2
+    c: c2
+  - alias: b3
+    c: c2
+c:
+  - alias: c1
+  - alias: c2
