@@ -70,7 +70,7 @@ def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Pat
         datapack=datapack, schemapack=schemapack, ignored_relations=ignored_relations
     )
 
-    assert denormalizated == expected_denormalizated
+    assert denormalized == expected_denormalized
 
 
 @pytest.mark.parametrize(
