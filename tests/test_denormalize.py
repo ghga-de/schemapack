@@ -55,7 +55,7 @@ IGNORED_RELATIONS = {
 
 
 @pytest.mark.parametrize(
-    "name, expected_denormalizated_path",
+    "name, expected_denormalized_path",
     DENORMALIZED_CUSTOM_EMBEDDING_PATHS.items(),
     ids=DENORMALIZED_CUSTOM_EMBEDDING_PATHS.keys(),
 )
