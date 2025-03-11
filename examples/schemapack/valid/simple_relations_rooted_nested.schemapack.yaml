@@ -4,7 +4,7 @@ classes:
   A:
     id:
       propertyName: alias
-    content: ../../content_schemas/ObjectWithProperty.schema.json
+    content: ../../content_schemas/AnyObject.schema.json
     relations:
       b:
         targetClass: B
@@ -25,7 +25,7 @@ classes:
   B:
     id:
       propertyName: alias
-    content: ../../content_schemas/ObjectWithProperty.schema.json
+    content: ../../content_schemas/AnyObject.schema.json
     relations:
       c:
         targetClass: C
@@ -38,5 +38,5 @@ classes:
   C:
     id:
       propertyName: alias
-    content: ../../content_schemas/ObjectWithProperty.schema.json
+    content: ../../content_schemas/AnyObject.schema.json
 rootClass: A
