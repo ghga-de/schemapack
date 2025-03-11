@@ -32,7 +32,7 @@ from tests.fixtures.examples import (
 
 
 def run_denormalization_test(
-    name: str, expected_denormalized_path: Path, ignored_relations: dict | None = None
+    name: str, expected_denormalized_path: Path, ignored_relations: dict[str, list[str]] | None = None
 ):
     """Run the denormalization test with optional ignored relations."""
     schemapack_name = name.split(".")[0]
