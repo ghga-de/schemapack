@@ -59,7 +59,7 @@ IGNORED_RELATIONS = {
     DENORMALIZED_CUSTOM_EMBEDDING_PATHS.items(),
     ids=DENORMALIZED_CUSTOM_EMBEDDING_PATHS.keys(),
 )
-def test_denormalize_custom_embedding(name: str, expected_denormalizated_path: Path):
+def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Path):
     """Test the denormalize function with valid datapacks."""
     schemapack_name = name.split(".")[0]
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
