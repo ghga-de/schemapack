@@ -32,7 +32,7 @@ from tests.fixtures.examples import (
 
 
 @pytest.mark.parametrize(
-    "name, expected_denormalizated_path",
+    "name, expected_denormalized_path",
     DENORMALIZED_DEEP_EMBEDDING_PATHS.items(),
     ids=DENORMALIZED_DEEP_EMBEDDING_PATHS.keys(),
 )
