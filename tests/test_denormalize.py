@@ -41,8 +41,7 @@ def test_denormalize_deep_embedding(name: str, expected_denormalized_path: Path)
     schemapack_name = name.split(".")[0]
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
     datapack = load_datapack(VALID_DATAPACK_PATHS[name])
-    expected_denormalized = read_json_or_yaml_mapping(
-        expected_denormalized_path)
+    expected_denormalized = read_json_or_yaml_mapping(expected_denormalized_path)
     denormalized = denormalize(datapack=datapack, schemapack=schemapack)
 
     assert denormalized == expected_denormalized
@@ -65,8 +64,7 @@ def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Pat
     schemapack_name = name.split(".")[0]
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
     datapack = load_datapack(VALID_DATAPACK_PATHS[name])
-    expected_denormalized = read_json_or_yaml_mapping(
-        expected_denormalized_path)
+    expected_denormalized = read_json_or_yaml_mapping(expected_denormalized_path)
     ignored_relations = IGNORED_RELATIONS[name.split(".")[-1]]
     denormalized = denormalize(
         datapack=datapack, schemapack=schemapack, ignored_relations=ignored_relations
