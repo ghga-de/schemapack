@@ -31,6 +31,27 @@ from tests.fixtures.examples import (
 )
 
 
+def run_denormalization_test(
+    name: str, expected_denormalized_path: Path, ignored_relations: dict | None = None
+):
+    """Run the denormalization test with optional ignored relations."""
+    schemapack_name = name.split(".")[0]
+    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
+    datapack = load_datapack(VALID_DATAPACK_PATHS[name])
+    expected_denormalized = read_json_or_yaml_mapping(expected_denormalized_path)
+    denormalized = (
+        denormalize(
+            datapack=datapack,
+            schemapack=schemapack,
+            ignored_relations=ignored_relations,
+        )
+        if ignored_relations
+        else denormalize(datapack=datapack, schemapack=schemapack)
+    )
+
+    assert denormalized == expected_denormalized
+
+
 @pytest.mark.parametrize(
     "name, expected_denormalized_path",
     DENORMALIZED_DEEP_EMBEDDING_PATHS.items(),
@@ -38,13 +59,7 @@ from tests.fixtures.examples import (
 )
 def test_denormalize_deep_embedding(name: str, expected_denormalized_path: Path):
     """Test the denormalize function with valid datapacks."""
-    schemapack_name = name.split(".")[0]
-    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
-    datapack = load_datapack(VALID_DATAPACK_PATHS[name])
-    expected_denormalized = read_json_or_yaml_mapping(expected_denormalized_path)
-    denormalized = denormalize(datapack=datapack, schemapack=schemapack)
-
-    assert denormalized == expected_denormalized
+    run_denormalization_test(name, expected_denormalized_path)
 
 
 IGNORED_RELATIONS = {
@@ -61,16 +76,8 @@ IGNORED_RELATIONS = {
 )
 def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Path):
     """Test the denormalize function with valid datapacks."""
-    schemapack_name = name.split(".")[0]
-    schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
-    datapack = load_datapack(VALID_DATAPACK_PATHS[name])
-    expected_denormalized = read_json_or_yaml_mapping(expected_denormalized_path)
     ignored_relations = IGNORED_RELATIONS[name.split(".")[-1]]
-    denormalized = denormalize(
-        datapack=datapack, schemapack=schemapack, ignored_relations=ignored_relations
-    )
-
-    assert denormalized == expected_denormalized
+    run_denormalization_test(name, expected_denormalized_path, ignored_relations)
 
 
 @pytest.mark.parametrize(
