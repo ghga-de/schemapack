@@ -193,8 +193,7 @@ class DataPack(_FrozenNoExtraBaseModel):
     @classmethod
     def check_root_duality(cls, value: Mapping) -> Mapping | None:
         """Ensures that both 'rootClass' and 'rootResource' are either present or absent."""
-        missing = [key for key in (
-            "rootClass", "rootResource") if not value.get(key)]
+        missing = [key for key in ("rootClass", "rootResource") if not value.get(key)]
 
         if len(missing) == 1:
             raise PydanticCustomError(
