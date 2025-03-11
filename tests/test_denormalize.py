@@ -66,7 +66,7 @@ def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Pat
     datapack = load_datapack(VALID_DATAPACK_PATHS[name])
     expected_denormalized = read_json_or_yaml_mapping(expected_denormalized_path)
     ignored_relations = IGNORED_RELATIONS[name.split(".")[-1]]
-    denormalizated = denormalize(
+    denormalized = denormalize(
         datapack=datapack, schemapack=schemapack, ignored_relations=ignored_relations
     )
 
