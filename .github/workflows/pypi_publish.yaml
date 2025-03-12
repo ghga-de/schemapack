@@ -6,7 +6,7 @@ jobs:
   call-pypi-publish:
     uses: ghga-de/gh-action-pypi/.github/workflows/pypi_publish.yml@v2.0.0
     with:
-      package_version: 2.0.0-alpha.5
+      package_version: 2.0.0
       test_pypi: "false"
       python_latest: true
     secrets: inherit
