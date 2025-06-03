@@ -46,7 +46,6 @@ from tests.fixtures.utils import (
 
 yaml = ruamel.yaml.YAML(typ="rt")
 runner = CliRunner(
-    mix_stderr=False,
 )
 
 
@@ -54,7 +53,8 @@ def test_version():
     """Test the version command."""
     result = runner.invoke(cli, ["--version"])
     assert result.exit_code == exit_codes.SUCCESS == 0
-    assert strip_ansi_escape_sequences(result.stdout).strip() == str(schemapack_version)
+    assert strip_ansi_escape_sequences(
+        result.stdout).strip() == str(schemapack_version)
 
 
 def generate_validate_command(
