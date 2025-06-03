@@ -10,6 +10,7 @@ dependencies = [
     "jsonschema >=4.19.2, <5",
     "arcticfreeze ~=0.1.1",
     "rich >13, <14",
+    "typer >= 0.16.0",
 ]
 
 [project.urls]
