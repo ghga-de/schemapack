@@ -45,8 +45,7 @@ from tests.fixtures.utils import (
 )
 
 yaml = ruamel.yaml.YAML(typ="rt")
-runner = CliRunner(
-)
+runner = CliRunner()
 
 
 def test_version():
