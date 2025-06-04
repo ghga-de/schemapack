@@ -88,7 +88,8 @@ def validate(
     with expect_common_user_errors():
         load_and_validate(schemapack_path=schemapack, datapack_path=datapack)
 
-    print_final_success("The provided datapack is valid wrt the provided schemapack.")
+    print_final_success(
+        "The provided datapack is valid wrt the provided schemapack.")
 
 
 @cli.command()
@@ -124,7 +125,8 @@ def check_datapack(
     with expect_datapackspec_errors():
         load_datapack(datapack)
 
-    print_final_success("The provided document complies with the specs of a datapack.")
+    print_final_success(
+        "The provided document complies with the specs of a datapack.")
 
 
 @cli.command()
@@ -150,7 +152,8 @@ def condense_schemapack(
     """
     with expect_schemapack_errors():
         schemapack_dict = load_schemapack(schemapack)
-        condensed_schemapack = dumps_schemapack(schemapack_dict, yaml_format=not json)
+        condensed_schemapack = dumps_schemapack(
+            schemapack_dict, yaml_format=not json)
         print_output(condensed_schemapack)
 
 
@@ -266,7 +269,8 @@ def isolate_class(
             class_name=class_name,
         )
 
-    rooted_schemapack_str = dumps_schemapack(rooted_schemapack, yaml_format=not json)
+    rooted_schemapack_str = dumps_schemapack(
+        rooted_schemapack, yaml_format=not json)
     print_output(rooted_schemapack_str)
 
 
@@ -299,4 +303,4 @@ def export_mermaid(
     )
     print_output(erd_diagram)
 
-    print_final_success("Schemapack exported successfully.")
+#    print_final_success("Schemapack exported successfully.")
