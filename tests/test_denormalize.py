@@ -40,8 +40,7 @@ def run_denormalization_test(
     schemapack_name = name.split(".")[0]
     schemapack = load_schemapack(VALID_SCHEMAPACK_PATHS[schemapack_name])
     datapack = load_datapack(VALID_DATAPACK_PATHS[name])
-    expected_denormalized = read_json_or_yaml_mapping(
-        expected_denormalized_path)
+    expected_denormalized = read_json_or_yaml_mapping(expected_denormalized_path)
     denormalized = (
         denormalize(
             datapack=datapack,
@@ -80,8 +79,7 @@ IGNORED_RELATIONS = {
 def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Path):
     """Test the denormalize function with valid datapacks."""
     ignored_relations = IGNORED_RELATIONS[name.split(".")[-1]]
-    run_denormalization_test(
-        name, expected_denormalized_path, ignored_relations)
+    run_denormalization_test(name, expected_denormalized_path, ignored_relations)
 
 
 @pytest.mark.parametrize(

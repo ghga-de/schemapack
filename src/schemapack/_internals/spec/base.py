@@ -21,5 +21,4 @@ from pydantic import BaseModel, ConfigDict
 class _FrozenNoExtraBaseModel(BaseModel):
     """A BaseModel that does not allow any extra fields."""
 
-    model_config = ConfigDict(use_enum_values=True,
-                              extra="forbid", frozen=True)
+    model_config = ConfigDict(use_enum_values=True, extra="forbid", frozen=True)

@@ -146,8 +146,7 @@ def dump_schemapack(
     """
     parent_dir = path.parent
     if not parent_dir.exists():
-        raise FileNotFoundError(
-            f"The parent directory of '{path}' does not exist.")
+        raise FileNotFoundError(f"The parent directory of '{path}' does not exist.")
 
     schemapack_dict = model_to_serializable_dict(schemapack)
 

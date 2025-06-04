@@ -173,13 +173,11 @@ class ValidationError(BaseError, ValueError):
             records: A list of ValidationErrorRecords.
         """
         if not records:
-            raise ValueError(
-                "ValidationError must be raised with at least one record.")
+            raise ValueError("ValidationError must be raised with at least one record.")
 
         self.records = _sorted_val_records(records)
         n_records = len(self.records)
-        record_messages = "\n".join(_val_record_to_str(r)
-                                    for r in self.records)
+        record_messages = "\n".join(_val_record_to_str(r) for r in self.records)
         message = f"Validation failed with {n_records} issue(s):\n{record_messages}"
 
         super().__init__(message)

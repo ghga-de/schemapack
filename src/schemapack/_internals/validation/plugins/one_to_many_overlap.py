@@ -91,6 +91,5 @@ class TargetOverlapValidationPlugin(ClassValidationPlugin):
                     + " relations:"
                     + ", ".join(overlapping_ids_by_relation)
                 ),
-                details={
-                    "overlapping_ids_by_relation": overlapping_ids_by_relation},
+                details={"overlapping_ids_by_relation": overlapping_ids_by_relation},
             )

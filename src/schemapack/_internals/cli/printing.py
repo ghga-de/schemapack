@@ -26,8 +26,7 @@ OUTPUT_CONSOLE = rich.console.Console(soft_wrap=True, markup=False)
 
 def print_exception(exception: Exception, exception_name: str = "Exception"):
     """Print an exception."""
-    EXCEPTION_CONSOLE.print(rich.panel.Panel(
-        str(exception), title=exception_name))
+    EXCEPTION_CONSOLE.print(rich.panel.Panel(str(exception), title=exception_name))
 
 
 def print_final_success(

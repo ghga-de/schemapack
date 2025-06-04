@@ -87,8 +87,7 @@ def test_content_schema_serialization():
 
 def test_datapack_is_hashable():
     """Test that instances of DataPack are hashable."""
-    datapack = load_datapack(
-        VALID_DATAPACK_PATHS["simple_relations.simple_resources"])
+    datapack = load_datapack(VALID_DATAPACK_PATHS["simple_relations.simple_resources"])
     _ = hash(datapack)
 
 

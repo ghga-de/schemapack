@@ -50,5 +50,4 @@ def load_datapack(path: Path):
     try:
         return DataPack.model_validate(datapack_dict)
     except pydantic.ValidationError as error:
-        raise DataPackSpecError(message=str(
-            error), details=error.errors()) from error
+        raise DataPackSpecError(message=str(error), details=error.errors()) from error

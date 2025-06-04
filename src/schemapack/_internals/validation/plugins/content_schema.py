@@ -61,8 +61,7 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
 
     def __init__(self, *, class_: ClassDefinition):
         """This plugin is configured with one specific class definition of a schemapack."""
-        self._json_schema_validator = _get_json_schema_validator(
-            class_.content)
+        self._json_schema_validator = _get_json_schema_validator(class_.content)
 
     def validate(
         self, *, resource: Resource, resource_id: ResourceId, datapack: DataPack
@@ -73,8 +72,7 @@ class ContentSchemaValidationPlugin(ResourceValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        json_compatible_content = json.loads(
-            resource.model_dump_json())["content"]
+        json_compatible_content = json.loads(resource.model_dump_json())["content"]
         try:
             self._json_schema_validator.validate(json_compatible_content)
         except jsonschema.exceptions.ValidationError as error:

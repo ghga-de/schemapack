@@ -53,8 +53,7 @@ class MissingClassSlotValidationPlugin(GlobalValidationPlugin):
         if missing_classes:
             raise ValidationPluginError(
                 type_="MissingClassSlotError",
-                message=("Missing slot(s) for class(es):" +
-                         ", ".join(missing_classes)),
+                message=("Missing slot(s) for class(es):" + ", ".join(missing_classes)),
                 details={
                     "missing_classes": missing_classes,
                 },
