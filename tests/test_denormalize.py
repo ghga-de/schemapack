@@ -16,7 +16,9 @@
 
 """Test the normalize module."""
 
+from collections.abc import Mapping
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -34,7 +36,7 @@ from tests.fixtures.examples import (
 def run_denormalization_test(
     name: str,
     expected_denormalized_path: Path,
-    ignored_relations: dict[str, list[str]] | None = None,
+    embedding_profile: Mapping[str, Any] | None = None,
 ):
     """Run the denormalization test with optional ignored relations."""
     schemapack_name = name.split(".")[0]
@@ -45,9 +47,9 @@ def run_denormalization_test(
         denormalize(
             datapack=datapack,
             schemapack=schemapack,
-            ignored_relations=ignored_relations,
+            embedding_profile=embedding_profile,
         )
-        if ignored_relations
+        if embedding_profile
         else denormalize(datapack=datapack, schemapack=schemapack)
     )
 
@@ -64,10 +66,14 @@ def test_denormalize_deep_embedding(name: str, expected_denormalized_path: Path)
     run_denormalization_test(name, expected_denormalized_path)
 
 
-IGNORED_RELATIONS = {
-    "simple_nested_relations": {"B": ["c"]},
-    "rooted_simple_resources": {"Dataset": ["files"]},
-    "rooted_circular_relations": {"SomeClass": ["some_relation"]},
+IGNORED_RELATIONS: Mapping[str, Any] = {
+    "simple_nested_relations": {"c": True, "b": {"c": False}},
+    "rooted_simple_resources": {"files": False},
+    "rooted_circular_relations": {"some_relation": {"some_relation": False}},
+    "team_rooted_self_relation": {
+        "teammates": {"teammates": False, "manager": False},
+        "manager": True,
+    },
 }
 
 
@@ -78,7 +84,7 @@ IGNORED_RELATIONS = {
 )
 def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Path):
     """Test the denormalize function with valid datapacks."""
-    ignored_relations = IGNORED_RELATIONS[name.split(".")[-1]]
+    ignored_relations = IGNORED_RELATIONS.get(name.split(".")[-1])
     run_denormalization_test(name, expected_denormalized_path, ignored_relations)
 
 
