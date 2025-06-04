@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,4 +21,5 @@ from pydantic import BaseModel, ConfigDict
 class _FrozenNoExtraBaseModel(BaseModel):
     """A BaseModel that does not allow any extra fields."""
 
-    model_config = ConfigDict(use_enum_values=True, extra="forbid", frozen=True)
+    model_config = ConfigDict(use_enum_values=True,
+                              extra="forbid", frozen=True)

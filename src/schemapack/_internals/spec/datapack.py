@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -193,7 +193,8 @@ class DataPack(_FrozenNoExtraBaseModel):
     @classmethod
     def check_root_duality(cls, value: Mapping) -> Mapping | None:
         """Ensures that both 'rootClass' and 'rootResource' are either present or absent."""
-        missing = [key for key in ("rootClass", "rootResource") if not value.get(key)]
+        missing = [key for key in (
+            "rootClass", "rootResource") if not value.get(key)]
 
         if len(missing) == 1:
             raise PydanticCustomError(

@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,5 +91,6 @@ class TargetOverlapValidationPlugin(ClassValidationPlugin):
                     + " relations:"
                     + ", ".join(overlapping_ids_by_relation)
                 ),
-                details={"overlapping_ids_by_relation": overlapping_ids_by_relation},
+                details={
+                    "overlapping_ids_by_relation": overlapping_ids_by_relation},
             )

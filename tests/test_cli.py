@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,7 +52,8 @@ def test_version():
     """Test the version command."""
     result = runner.invoke(cli, ["--version"])
     assert result.exit_code == exit_codes.SUCCESS == 0
-    assert strip_ansi_escape_sequences(result.stdout).strip() == str(schemapack_version)
+    assert strip_ansi_escape_sequences(
+        result.stdout).strip() == str(schemapack_version)
 
 
 def generate_validate_command(

@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,9 +131,11 @@ def _run_class_plugins(
     for class_name, class_resources in datapack.resources.items():
         for plugin in plugins.get(class_name, []):
             try:
-                plugin.validate(class_resources=class_resources, datapack=datapack)
+                plugin.validate(class_resources=class_resources,
+                                datapack=datapack)
             except ValidationPluginError as error:
-                records.append(_plugin_error_to_record(error, subject_class=class_name))
+                records.append(_plugin_error_to_record(
+                    error, subject_class=class_name))
 
     return records
 
@@ -153,7 +155,8 @@ def _run_resource_plugins(
                     )
                 except ValidationPluginError as error:
                     records.append(
-                        _plugin_error_to_record(error, subject_class=class_name)
+                        _plugin_error_to_record(
+                            error, subject_class=class_name)
                     )
 
     return records
@@ -168,7 +171,8 @@ class SchemaPackValidator:
         schemapack: SchemaPack,
         add_global_plugins: list[type[GlobalValidationPlugin]] | None = None,
         add_class_plugins: list[type[ClassValidationPlugin]] | None = None,
-        add_resource_plugins: list[type[ResourceValidationPlugin]] | None = None,
+        add_resource_plugins: list[type[ResourceValidationPlugin]
+                                   ] | None = None,
     ):
         """Initialize with a specific schemapack.
 
@@ -184,11 +188,13 @@ class SchemaPackValidator:
         """
         self._global_plugins = _create_global_plugins(
             schemapack=schemapack,
-            plugin_classes=DEFAULT_GLOBAL_PLUGIN_REGISTRY + (add_global_plugins or []),
+            plugin_classes=DEFAULT_GLOBAL_PLUGIN_REGISTRY +
+            (add_global_plugins or []),
         )
         self._class_plugins = _create_plugins_by_class(
             schemapack=schemapack,
-            plugin_classes=DEFAULT_CLASS_PLUGIN_REGISTRY + (add_class_plugins or []),
+            plugin_classes=DEFAULT_CLASS_PLUGIN_REGISTRY +
+            (add_class_plugins or []),
         )
         self._resource_plugins = _create_plugins_by_class(
             schemapack=schemapack,
@@ -215,7 +221,8 @@ class SchemaPackValidator:
 
         if not error_records:
             error_records.extend(
-                _run_class_plugins(datapack=datapack, plugins=self._class_plugins)
+                _run_class_plugins(datapack=datapack,
+                                   plugins=self._class_plugins)
             )
 
             if not error_records:

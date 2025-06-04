@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,11 +63,13 @@ def export_class_entity(
         return f"{class_name} {{}}"
 
     json_schema_obj_props = class_def.content.get("properties", {})
-    additional_properties = class_def.content.get("additionalProperties", False)
+    additional_properties = class_def.content.get(
+        "additionalProperties", False)
     json_schema_obj_reqs = class_def.content.get("required", [])
 
     if not isinstance(json_schema_obj_reqs, Sequence):
-        raise ValueError("Invalid JSON schema. Expected 'required' to be a list.")
+        raise ValueError(
+            "Invalid JSON schema. Expected 'required' to be a list.")
 
     fields = [
         f"  {get_property_type(json_schema_props=json_schema_obj_props, prop_name=field)}"

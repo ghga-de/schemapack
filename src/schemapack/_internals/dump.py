@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -146,7 +146,8 @@ def dump_schemapack(
     """
     parent_dir = path.parent
     if not parent_dir.exists():
-        raise FileNotFoundError(f"The parent directory of '{path}' does not exist.")
+        raise FileNotFoundError(
+            f"The parent directory of '{path}' does not exist.")
 
     schemapack_dict = model_to_serializable_dict(schemapack)
 

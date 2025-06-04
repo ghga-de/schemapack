@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,7 +89,8 @@ def test_isolate(
     datapack = load_datapack(datapack_path)
     expected_rooted_datapack = load_datapack(expected_rooted_datapack_path)
     schemapack = load_schemapack(schemapack_path)
-    expected_rooted_schemapack = load_schemapack(expected_rooted_schemapack_path)
+    expected_rooted_schemapack = load_schemapack(
+        expected_rooted_schemapack_path)
 
     rooted_schemapack, rooted_datapack = isolate(
         root_class_name=resource_class,
@@ -176,5 +177,6 @@ def test_isolate_class_downscoping():
         VALID_SCHEMAPACK_PATHS["unrelated_classes_rooted"]
     )
 
-    observed_schemapack = isolate_class(class_name="SomeClass", schemapack=schemapack)
+    observed_schemapack = isolate_class(
+        class_name="SomeClass", schemapack=schemapack)
     assert observed_schemapack == expected_schemapack

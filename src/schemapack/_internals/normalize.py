@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,8 @@ def denormalize(  # noqa: PLR0912,C901
     *,
     datapack: DataPack,
     schemapack: SchemaPack,
-    ignored_relations: Mapping[ClassName, list[RelationPropertyName]] | None = None,
+    ignored_relations: Mapping[ClassName,
+        list[RelationPropertyName]] | None = None,
     _resource_blacklist: Mapping[ClassName, set[ResourceId]] | None = None,
     _alt_root_class_name: ClassName | None = None,
     _alt_root_resource_id: ResourceId | None = None,

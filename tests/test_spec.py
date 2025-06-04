@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -87,7 +87,8 @@ def test_content_schema_serialization():
 
 def test_datapack_is_hashable():
     """Test that instances of DataPack are hashable."""
-    datapack = load_datapack(VALID_DATAPACK_PATHS["simple_relations.simple_resources"])
+    datapack = load_datapack(
+        VALID_DATAPACK_PATHS["simple_relations.simple_resources"])
     _ = hash(datapack)
 
 

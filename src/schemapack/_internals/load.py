@@ -1,4 +1,4 @@
-# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,4 +50,5 @@ def load_datapack(path: Path):
     try:
         return DataPack.model_validate(datapack_dict)
     except pydantic.ValidationError as error:
-        raise DataPackSpecError(message=str(error), details=error.errors()) from error
+        raise DataPackSpecError(message=str(
+            error), details=error.errors()) from error
