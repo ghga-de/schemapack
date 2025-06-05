@@ -93,6 +93,7 @@ def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Pat
     [
         "self_relation_rooted.rooted_circular_relations",
         "self_relation_rooted.rooted_circular_self_relations",
+        "team_rooted.team_rooted_self_relation",
     ],
 )
 def test_denormalize_circular_relation(name: str):
