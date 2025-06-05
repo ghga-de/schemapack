@@ -86,8 +86,7 @@ def denormalize(
         embedding_profile, root_class_name, root_resource_id, _resource_blacklist
     )
 
-    root_resource = _get_root_resource(
-        datapack, root_class_name, root_resource_id)
+    root_resource = _get_root_resource(datapack, root_class_name, root_resource_id)
 
     root_class_definition = _get_class_definition(schemapack, root_class_name)
 
@@ -158,7 +157,9 @@ def _get_root_resource(
     return root_resource
 
 
-def _get_class_definition(schemapack: SchemaPack, root_class_name: ClassName) -> ClassDefinition:
+def _get_class_definition(
+    schemapack: SchemaPack, root_class_name: ClassName
+) -> ClassDefinition:
     """Function to get the class definition from the schemapack."""
     root_class_definition = schemapack.classes.get(root_class_name)
     if not root_class_definition:
@@ -169,7 +170,9 @@ def _get_class_definition(schemapack: SchemaPack, root_class_name: ClassName) ->
     return root_class_definition
 
 
-def _should_embed(embedding_profile: Mapping[str, Any] | None, relation_name: str) -> bool:
+def _should_embed(
+    embedding_profile: Mapping[str, Any] | None, relation_name: str
+) -> bool:
     """Function to decide whether to embed a relation based on the embedding profile."""
     if embedding_profile is None:
         return True
@@ -179,7 +182,9 @@ def _should_embed(embedding_profile: Mapping[str, Any] | None, relation_name: st
     return isinstance(value, dict)
 
 
-def _get_next_embedding_profile(embedding_profile: Mapping[str, Any] | None, relation_name: str) -> dict[str, Any] | None:
+def _get_next_embedding_profile(
+    embedding_profile: Mapping[str, Any] | None, relation_name: str
+) -> dict[str, Any] | None:
     """Function to get the next embedding profile for a relation."""
     return (
         embedding_profile.get(relation_name)
@@ -219,7 +224,6 @@ def _process_recursion(  # noqa: PLR0913
             resource_blacklist,
         )
     else:
-        print(resource_ids)
         return None
 
 
