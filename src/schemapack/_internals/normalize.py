@@ -194,12 +194,12 @@ def _get_next_embedding_profile(
 
 
 def _process_recursion(  # noqa: PLR0913
-    datapack,
-    schemapack,
-    class_name,
-    resource_ids,
-    embedding_profile,
-    resource_blacklist,
+    datapack: DataPack,
+    schemapack: SchemaPack,
+    class_name: ClassName,
+    resource_ids: frozenset[ResourceId] | ResourceId | None,
+    embedding_profile: Mapping[str, Any] | None,
+    resource_blacklist: dict[ClassName, set[ResourceId]],
 ) -> list[JsonObjectCompatible] | JsonObjectCompatible | None:
     """Function to process the recursion for denormalization."""
     if isinstance(resource_ids, frozenset):
