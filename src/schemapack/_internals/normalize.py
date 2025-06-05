@@ -18,6 +18,7 @@
 
 from collections import defaultdict
 from collections.abc import Mapping
+from dataclasses import dataclass
 from typing import Any, TypeAlias
 
 from schemapack._internals.spec.datapack import Resource
@@ -28,6 +29,16 @@ from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
 
 JsonObjectCompatible: TypeAlias = dict[str, object]
+
+
+@dataclass
+class DenormalizationContext:
+    """Context for denormalization to group repeated arguments."""
+
+    datapack: DataPack
+    schemapack: SchemaPack
+    embedding_profile: Mapping[str, Any] | None
+    resource_blacklist: dict[ClassName, set[ResourceId]]
 
 
 def denormalize(
@@ -86,7 +97,8 @@ def denormalize(
         embedding_profile, root_class_name, root_resource_id, _resource_blacklist
     )
 
-    root_resource = _get_root_resource(datapack, root_class_name, root_resource_id)
+    root_resource = _get_root_resource(
+        datapack, root_class_name, root_resource_id)
 
     root_class_definition = _get_class_definition(schemapack, root_class_name)
 
@@ -115,14 +127,16 @@ def denormalize(
         next_embedding_profile = _get_next_embedding_profile(
             embedding_profile, relation_name
         )
-
+        denormalization_context = DenormalizationContext(
+            datapack=datapack,
+            schemapack=schemapack,
+            embedding_profile=next_embedding_profile,
+            resource_blacklist=resource_blacklist,
+        )
         denormalized_object[relation_name] = _process_recursion(
-            datapack,
-            schemapack,
+            denormalization_context,
             target_class_name,
             target_ids,
-            next_embedding_profile,
-            resource_blacklist,
         )
 
     return denormalized_object
@@ -193,60 +207,48 @@ def _get_next_embedding_profile(
     )
 
 
-def _process_recursion(  # noqa: PLR0913
-    datapack: DataPack,
-    schemapack: SchemaPack,
+def _process_recursion(
+    context: DenormalizationContext,
     class_name: ClassName,
     resource_ids: frozenset[ResourceId] | ResourceId | None,
-    embedding_profile: Mapping[str, Any] | None,
-    resource_blacklist: dict[ClassName, set[ResourceId]],
 ) -> list[JsonObjectCompatible] | JsonObjectCompatible | None:
     """Function to process the recursion for denormalization."""
     if isinstance(resource_ids, frozenset):
         return [
             _recursive_denormalize(
-                datapack,
-                schemapack,
+                context,
                 class_name,
                 target_id,
-                embedding_profile,
-                resource_blacklist,
             )
             for target_id in sorted(resource_ids)
         ]
     elif isinstance(resource_ids, str):
         return _recursive_denormalize(
-            datapack,
-            schemapack,
+            context,
             class_name,
             resource_ids,
-            embedding_profile,
-            resource_blacklist,
         )
     else:
         return None
 
 
-def _recursive_denormalize(  # noqa: PLR0913
-    datapack: DataPack,
-    schemapack: SchemaPack,
+def _recursive_denormalize(
+    context: DenormalizationContext,
     class_name: ClassName,
     resource_id: ResourceId,
-    embedding_profile: Mapping[str, Any] | None,
-    resource_blacklist: dict[ClassName, set[ResourceId]],
 ):
     """Function used in recursively denormalize a resource by calling the function 'denormalize'."""
-    if resource_id in resource_blacklist.get(class_name, set()):
+    if resource_id in context.resource_blacklist.get(class_name, set()):
         raise CircularRelationError(
             f"Cannot perform denormalization of datapack with circular relations. "
             f"The circular relation involved the resource with id {resource_id} of class {class_name}."
         )
 
     return denormalize(
-        datapack=datapack,
-        schemapack=schemapack,
-        embedding_profile=embedding_profile,
-        _resource_blacklist=resource_blacklist,
+        datapack=context.datapack,
+        schemapack=context.schemapack,
+        embedding_profile=context.embedding_profile,
+        _resource_blacklist=context.resource_blacklist,
         _alt_root_class_name=class_name,
         _alt_root_resource_id=resource_id,
     )
