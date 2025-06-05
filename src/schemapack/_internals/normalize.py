@@ -97,8 +97,7 @@ def denormalize(
         embedding_profile, root_class_name, root_resource_id, _resource_blacklist
     )
 
-    root_resource = _get_root_resource(
-        datapack, root_class_name, root_resource_id)
+    root_resource = _get_root_resource(datapack, root_class_name, root_resource_id)
 
     root_class_definition = _get_class_definition(schemapack, root_class_name)
 
