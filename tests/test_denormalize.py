@@ -84,7 +84,7 @@ EMBEDDING_PROFILE: Mapping[str, Any] = {
 )
 def test_denormalize_custom_embedding(name: str, expected_denormalized_path: Path):
     """Test the denormalize function with valid datapacks."""
-    ignored_relations = IGNORED_RELATIONS.get(name.split(".")[-1])
+    ignored_relations = EMBEDDING_PROFILE.get(name.split(".")[-1])
     run_denormalization_test(name, expected_denormalized_path, ignored_relations)
 
 
