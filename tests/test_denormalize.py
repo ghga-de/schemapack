@@ -66,7 +66,7 @@ def test_denormalize_deep_embedding(name: str, expected_denormalized_path: Path)
     run_denormalization_test(name, expected_denormalized_path)
 
 
-IGNORED_RELATIONS: Mapping[str, Any] = {
+EMBEDDING_PROFILE: Mapping[str, Any] = {
     "simple_nested_relations": {"c": True, "b": {"c": False}},
     "rooted_simple_resources": {"files": False},
     "rooted_circular_relations": {"some_relation": {"some_relation": False}},
