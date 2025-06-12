@@ -252,8 +252,20 @@ class ResourceNotFoundError(BaseError, KeyError):
 
 
 class InvalidEmbeddingProfileError(BaseError, ValueError):
-    """Raised when an embedding profile is invalid.
-    e.g. when it contains a value that is not a boolean or a nested dictionary:
-    {"some_relation": "this is not a boolean or a dictionary"}}
-    {"some_relation": {"some_relation": "this is not a boolean"}}
+    """Raised when an embedding profile is invalid. A profile is invalid if the value
+    of any key is neither a boolean nor a nested dictionary following the same rules
+    recursively (i.e., the nested dictionary values must also be booleans or
+    nested dictionaries).
+
+    Invalid examples:
+
+    A value that is neither a boolean nor a dictionary:
+        {"some_relation": "this is not a boolean or a dictionary"}
+    A nested dictionary containing invalid values (e.g., a string instead of a boolean):
+        {"some_relation": {"nested_relation": "this is not a boolean"}}
+
+    Valid examples:
+        {"some_relation": True}
+        {"some_relation": {"nested_relation": False}}
+        {"some_relation": {"nested_relation": {"another_nested_relation": True}}}
     """

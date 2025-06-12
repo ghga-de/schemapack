@@ -72,7 +72,7 @@ EMBEDDING_PROFILE: Mapping[str, Any] = {
     },  # direct relation c is not defined but embedded by default
     "rooted_simple_resources": {"files": False},
     "rooted_circular_relations": {"some_relation": {"some_relation": False}},
-    "rooted_nested_relations": {},
+    "rooted_nested_relations": {"some_relation":{}}, # this is equivalent of profile {}
     "team_rooted_self_relation": {
         "teammates": {"teammates": False, "manager": False},
         "manager": True,

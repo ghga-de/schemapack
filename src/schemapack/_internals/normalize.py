@@ -191,7 +191,7 @@ def _get_class_definition(
 
 def _should_embed(
     embedding_profile: EmbeddingProfile, relation_name: str
-) -> bool | None:
+) -> bool:
     """Function to decide whether to embed a relation based on the embedding profile.
     When a relation_name is not found in the profile, it returns True by default.
     If the profile is None, it returns True for all relations.
