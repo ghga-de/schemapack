@@ -249,3 +249,11 @@ class ResourceNotFoundError(BaseError, KeyError):
         super().__init__(message)
         self.class_name = class_name
         self.resource_id = resource_id
+
+
+class InvalidEmbeddingProfileError(BaseError, ValueError):
+    """Raised when an embedding profile is invalid.
+    e.g. when it contains a value that is not a boolean or a nested dictionary:
+    {"some_relation": "this is not a boolean or a dictionary"}}
+    {"some_relation": {"some_relation": "this is not a boolean"}}
+    """

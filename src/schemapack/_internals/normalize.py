@@ -21,6 +21,8 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, TypeAlias
 
+from schemapack._internals.exceptions import InvalidEmbeddingProfileError
+from schemapack._internals.spec.custom_types import EmbeddingProfile
 from schemapack._internals.spec.datapack import Resource
 from schemapack._internals.spec.schemapack import ClassDefinition
 from schemapack.exceptions import CircularRelationError, ValidationAssumptionError
@@ -45,7 +47,7 @@ def denormalize(
     *,
     datapack: DataPack,
     schemapack: SchemaPack,
-    embedding_profile: Mapping[str, Any] | None = None,
+    embedding_profile: EmbeddingProfile = None,
     _resource_blacklist: Mapping[ClassName, set[ResourceId]] | None = None,
     _alt_root_class_name: ClassName | None = None,
     _alt_root_resource_id: ResourceId | None = None,
@@ -61,7 +63,8 @@ def denormalize(
             The schemapack to be used for looking up the classes of relations.
         embedding_profile:
             An optional profile defining which relations should be embedded and which
-            should not. If None, all relations will be embedded.
+            should not. If None, all relations will be embedded. If a relation is not
+            present in the profile, it will be embedded by default.
         _resource_blacklist:
             An optional blacklist of resources (a mapping with resource ids as values
             and class names as keys) that cause an error to be raised if they are
@@ -142,11 +145,14 @@ def denormalize(
 
 
 def _initialize_blacklist(
-    embedding_profile, root_class_name, root_resource_id, _resource_blacklist
+    embedding_profile: EmbeddingProfile,
+    root_class_name: ClassName,
+    root_resource_id: ResourceId,
+    _resource_blacklist: Mapping[ClassName, set[ResourceId]] | None,
 ) -> dict[ClassName, set[ResourceId]]:
     """Function to initialize the resource blacklist."""
     resource_blacklist: dict[ClassName, set[ResourceId]] = defaultdict(set)
-    if embedding_profile is None:
+    if not embedding_profile:
         resource_blacklist[root_class_name].add(root_resource_id)
 
     if _resource_blacklist:
@@ -184,27 +190,40 @@ def _get_class_definition(
 
 
 def _should_embed(
-    embedding_profile: Mapping[str, Any] | None, relation_name: str
-) -> bool:
-    """Function to decide whether to embed a relation based on the embedding profile."""
-    if embedding_profile is None:
+    embedding_profile: EmbeddingProfile, relation_name: str
+) -> bool | None:
+    """Function to decide whether to embed a relation based on the embedding profile.
+    When a relation_name is not found in the profile, it returns True by default.
+    If the profile is None, it returns True for all relations.
+    If the profile is empty, it returns True for all relations.
+    """
+    if not embedding_profile:
         return True
+
     value = embedding_profile.get(relation_name)
+    if value is None:
+        return True
+
     if isinstance(value, bool):
         return value
-    return isinstance(value, dict)
+    if isinstance(value, dict):
+        return True
+
+    raise InvalidEmbeddingProfileError(
+        f"Invalid embedding profile: expected bool or dict for '{relation_name}', got {type(value).__name__}"
+    )
 
 
 def _get_next_embedding_profile(
-    embedding_profile: Mapping[str, Any] | None, relation_name: str
-) -> dict[str, Any] | None:
+    embedding_profile: EmbeddingProfile, relation_name: str
+) -> EmbeddingProfile:
     """Function to get the next embedding profile for a relation."""
-    return (
-        embedding_profile.get(relation_name)
-        if embedding_profile and isinstance(embedding_profile.get(relation_name), dict)
-        else None
-    )
-
+    if not embedding_profile:
+        return None
+    value = embedding_profile.get(relation_name)
+    if isinstance(value, dict):
+        return value
+    return None
 
 def _process_recursion(
     context: DenormalizationContext,

@@ -67,9 +67,10 @@ def test_denormalize_deep_embedding(name: str, expected_denormalized_path: Path)
 
 
 EMBEDDING_PROFILE: Mapping[str, Any] = {
-    "simple_nested_relations": {"c": True, "b": {"c": False}},
+    "simple_nested_relations": {"b": {"c": False}}, # direct relation c is not defined but embedded by default
     "rooted_simple_resources": {"files": False},
     "rooted_circular_relations": {"some_relation": {"some_relation": False}},
+    "rooted_nested_relations": {},
     "team_rooted_self_relation": {
         "teammates": {"teammates": False, "manager": False},
         "manager": True,
