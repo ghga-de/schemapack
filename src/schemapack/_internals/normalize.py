@@ -225,6 +225,7 @@ def _get_next_embedding_profile(
         return value
     return None
 
+
 def _process_recursion(
     context: DenormalizationContext,
     class_name: ClassName,
