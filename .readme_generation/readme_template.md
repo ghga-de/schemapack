@@ -1,32 +1,15 @@
-[![tests](https://github.com/ghga-de/schemapack/actions/workflows/tests.yaml/badge.svg)](https://github.com/ghga-de/schemapack/actions/workflows/tests.yaml)
-[![Coverage Status](https://coveralls.io/repos/github/ghga-de/schemapack/badge.svg?branch=main)](https://coveralls.io/github/ghga-de/schemapack?branch=main)
-[![PyPI version shields.io](https://img.shields.io/pypi/v/schemapack.svg)](https://pypi.python.org/pypi/schemapack/)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/schemapack.svg)](https://pypi.python.org/pypi/schemapack/)
+[![tests](https://github.com/ghga-de/$repo_name/actions/workflows/tests.yaml/badge.svg)](https://github.com/ghga-de/$repo_name/actions/workflows/tests.yaml)
+[![Coverage Status](https://coveralls.io/repos/github/ghga-de/$repo_name/badge.svg?branch=main)](https://coveralls.io/github/ghga-de/$repo_name?branch=main)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/$repo_name.svg)](https://pypi.python.org/pypi/$repo_name/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/$repo_name.svg)](https://pypi.python.org/pypi/$repo_name/)
 
-# Schemapack
+# $title
 
-Make your JSON Schemas sociable and create linked data model.
+$summary
 
 ## Description
 
-<!-- Please provide a short overview of the features of this service. -->
-
-Make your JSON Schemas sociable and create linked data model.
-
-Schemapack is a lightweight framework for modeling linked data. It introduces a clear separation between schemas and data.
-
-* A schemapack defines the structure and relationships of your resources.
-* A datapack represents the actual data conforming to this model.
-
-
-Schemapack builds on JSON Schema to describe the structure of individual resources. In addition, it defines how resources are linked to each other. Links are described in terms of multiplicity (e.g. one-to-one, one-to-many) and mandatoriness (required or optional). Resources refer to one another by ID, rather than by embedding, which avoids redundancy and simplifies reference resolution.
-
-Schemapack is suitable for ETL operations that transform a model and its corresponding data into other model and data representations. It is designed to support such transformations in a structured and consistent manner.
-
-Validation is built into the framework. SJSON Schema is used to validate the internal structure of each resource. For validating links across resources, Schemapack includes an extended validation layer that checks reference integrity and enforces multiplicity and mandatoriness constraints.
-
-Schemapack includes tooling to isolate individual resources and their dependencies from larger datasets. This can be useful for partial extraction, targeted validation, or incremental processing.
-
+$description
 
 ## Installation
 
@@ -37,12 +20,12 @@ Install:
 ```
 bash
 
-pip install schemapack
+pip install $shortname
 ```
 
 Upgrade:
 ```
-pip install --upgrade schemapack
+pip install --upgrade $shortname
 ```
 
 
@@ -53,7 +36,7 @@ To view the help message:
 ```
 bash
 
-schemapack --help
+$shortname --help
 ```
 
 ```
@@ -88,12 +71,7 @@ Commands
 ```
 
 ## Architecture and Design:
-<!-- Please provide an overview of the architecture and design of the code base.
-Mention anything that deviates from the standard Triple Hexagonal Architecture and
-the corresponding structure. -->
-
-This is a Python-based CLI tool.
-
+$design_description
 
 ## Development
 
