@@ -39,6 +39,7 @@ OPENAPI_YAML_REL_PATH = "./openapi.yaml"
 README_PATH = ROOT_DIR / "README.md"
 
 
+
 class PackageHeader(BaseModel):
     """A basic summary of a package."""
 
@@ -75,6 +76,7 @@ class PackageDetails(PackageHeader, PackageName):
             + " the package."
         ),
     )
+
 
 
 def read_toml_package_header() -> PackageHeader:

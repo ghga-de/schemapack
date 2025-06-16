@@ -1,21 +1,3 @@
-<!--
- Copyright 2021 - 2025 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
- for the German Human Genome-Phenome Archive (GHGA)
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
-
-
 ### Keywords:
 
 `schemapack`: Specifies the Schemapack version the schema is built under.
@@ -25,8 +7,7 @@
 `classes`: A mapping of class names to *class definitions*. Class names must use PascalCase.
 
 Example:
-```
-yaml
+```yaml
 
 schemapack: 3.0.0
 description: Schema for experimental metadata
@@ -35,7 +16,7 @@ classes:
         ...
 ```
 
-### Class Definition
+#### Class Definition
 
 A class definition includes the following properties:
 
@@ -48,8 +29,7 @@ A class definition includes the following properties:
 * `description` *(optional)*: A human-readable description of the identifier.
 
     Example:
-    ```
-    yaml
+    ```yaml
 
     id:
         propertyName: alias
@@ -58,13 +38,12 @@ A class definition includes the following properties:
 
 `content`: A schema describing the structure of the class content. Must be a valid JSON Schema object. You may embed it inline or reference an external JSON or YAML file, which will be automatically loaded.
 
-```
-yaml
+```yaml
 
 content: content_schemas/Experiment.schema.json # <- path to the json schema
 ```
 
-```
+``` yaml
 content: # <- content schema embedded here
     type: object
     properties:
@@ -97,8 +76,7 @@ Given that the content of the Experiment.schema.json file is:
 
 Example:
 
-```
-yaml
+```yaml
 
 schemapack: 3.0.0
 description: Schema for experimental metadata
@@ -114,30 +92,30 @@ classes:
 ```
 
 
-### Relation Definition
+#### Relation Definition
 
-A relation is defined with the mapping of the relation name to the relation specification. It specifies:
+Each relation defines how a class relates to another class. Relation definition include the following properties:
 
-**description:** (optional) A description of the relation.
+`description` **(optional)**: A short description of the relation.
 
-**targetClass:** The name of the target class meaning the class name that is being referred by the class where the relation is described.
+`targetClass`: The name of the class being referenced.
 
-**mandatory:** The modality of the relation. It describes the minimum number of instances the origin and the target end must contribute to the relation. TODO iyice yaz nasil belirlendigini cunku en karisik yeri burasi
+`mandatory`: Describes the minimum number of instances required from the origin and target side. `origin` is true if every target must have at least one instance from the origin side, and `target` is true if every origin must have at least one instance from the target side.
 
 Example:
-```
-yaml
+```yaml
 
 mandatory:
     origin: true
     target: true
 ```
 
-**multiple:** The cardinality of the relation. It describes the maximum number of instances the origin and the target end may contribute to the relation. For instance, if the origin is `True` and target is `False`, the origin may contribute multiple instances to the relation, while the target may at most contribute a single instance to the relation. This is equivalent to a 'many-to-one' cardinality.
+`multiple`: Describes the maximum number of instances allowed from each side of the relation.
 
-Example:
-```
-yaml
+The cardinality of the relation. It describes the maximum number of instances the origin and the target end may contribute to the relation. `origin` is true if the target may have multiple instances from the origin side, and `target` is true if the origin may have multiple instances from the target side.
+
+Example (for a many-to-one relation):
+```yaml
 
 multiple:
     origin: true
@@ -147,8 +125,7 @@ multiple:
 
 A full schemapack example:
 
-```
-yaml
+```yaml
 
 schemapack: 3.0.0
 description: Schema for experimental metadata
@@ -173,4 +150,4 @@ classes:
             description: alias is id
         content: content_schemas/Sample.schema.json
 ```
-This example describes Experiment and Sample classes and their relations.
+This schema defines two classes, Experiment and Sample, and a relation between them. The content schemas are loaded from external JSON files.
