@@ -11,6 +11,10 @@ $summary
 
 $description
 
+## Schema Specification
+
+<!-- $schema_spec -->
+
 ## Installation
 
 This package is available at PyPI:
@@ -69,6 +73,8 @@ Commands
                             markup from the provided schemapack.
 
 ```
+
+### Quick Start:
 
 ## Architecture and Design:
 $design_description
