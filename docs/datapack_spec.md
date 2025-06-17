@@ -1,3 +1,12 @@
+This document defines the structure and required fields of a `datapack.yaml` file, which represents a structured data conforming to a given schemapack. Each datapack consists of:
+
+* A datapack version identifier,
+
+* A resources section containing all data instances grouped by class and uniquely identified, following a format with clearly separated content (data fields) and relations (links to other resources),
+
+* Optional rootResource and rootClass fields to restrict the datapack to a subgraph of interest.
+
+
 ### Keywords:
 
 `datapack`:  Specifies the version of the datapack specification being used.

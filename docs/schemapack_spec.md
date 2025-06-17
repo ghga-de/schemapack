@@ -1,3 +1,11 @@
+This document describes the structure and components of a `schemapack.yaml` file, which defines the schema used to validate and interpret datapacks. Each schemapack includes:
+
+* A schemapack version identifier
+
+* An optional schema description
+
+* A classes section, where each class represents a distinct entity type with associated content and its relations. Classes define the internal structure (content) of their instances using JSON Schema and may specify relationships (relations) to other classes defining constraints on how instances of different classes are linked, including their multiplicity and participation.
+
 ### Keywords:
 
 `schemapack`: Specifies the Schemapack version the schema is built under.
