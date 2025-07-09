@@ -119,7 +119,7 @@ def thaw(frozen: Any) -> Any:
         return {key: thaw(value) for key, value in frozen.items()}
     elif isinstance(frozen, Set):
         return {thaw(item) for item in frozen}
-    elif isinstance(frozen, list|tuple):
+    elif isinstance(frozen, list | tuple):
         return [thaw(item) for item in frozen]
     else:
         return frozen
