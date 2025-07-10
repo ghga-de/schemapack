@@ -54,11 +54,13 @@ resources:
 
     * `targetClass`:  The name of the referenced class.
 
-    * `targetResources`: The ID(s) of target resources of the targetClass. Based on the schemapack definition, this field can be one of the following types:
-    1. A single resource ID, if multiple.target is False.
-    2. None, if both multiple.target and mandatory.target are False.
-    3. A set of resource IDs, if multiple.target is True.
-    4. An empty set, if multiple.target is True and mandatory.target is False.
+    * `targetResources`: The ID(s) of target resources of the targetClass. Based on the schemapack relation definition, this field can get the following values:
+
+
+    |                             | **mandatory.target = True** | **mandatory.target = False**        |
+    | --------------------------- | --------------------------- | ----------------------------------- |
+    | **multiple.target = True**  | set of resource IDs         | set of resource IDs or an empty set |
+    | **multiple.target = False** | a single ID                 | a single ID or None                 |
 
     ```yaml
 
