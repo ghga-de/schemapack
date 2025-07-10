@@ -103,11 +103,19 @@ resources:
 
 `rootClass` *(optional)*: Defines the class name of the resource that should act as root.
 
-<div style="border: 1px solid #007acc; border-left: 4px solid #007acc; padding: 1em; border-radius: 6px; background: transparent;">
+<div style="border: 1px solid #007acc; border-left: 4px solid #007acc; padding: 1em; border-radius: 6px; background: transparent; margin-bottom: 1em;">
   <strong>Note:</strong> A rooted <code>datapack</code> requires its corresponding <code>schemapack</code> to be rooted as well. If you're validating a rooted <code>datapack</code> agains a schema, make sure that its <code>schemapack</code> counterpart is also rooted.
 </div>
 
-A full (rooted) datapack example:
+A full rooted datapack example with its schemapack counterpart:
+
+<table>
+<tr>
+<th>datapack</th>
+<th>schemapack</th>
+</tr>
+<tr>
+<td>
 
 ```yaml
 datapack: 3.0.0
@@ -130,3 +138,36 @@ resources:
 rootResource: exp1
 rootClass: Experiment
 ```
+
+</td>
+<td>
+
+```yaml
+schemapack: 3.0.0
+description: Schema for experimental metadata
+classes:
+    Experiment:
+        id:
+            propertyName: alias
+            description: alias is id
+        content: content_schemas/Experiment.schema.json
+        relations:
+            samples:
+                targetClass: Sample
+                mandatory:
+                    origin: true
+                    target: true
+                multiple:
+                    origin: true
+                    target: false
+    Sample:
+        id:
+            propertyName: alias
+            description: alias is id
+        content: content_schemas/Sample.schema.json
+rootClass: Experiment
+```
+
+</td>
+</tr>
+</table>
