@@ -46,8 +46,6 @@ resources:
         description: This is an example resource.
     ```
 
- A dictionary specifying the relations of this resource to other resources. Each key is the name of a relation property. Each value contains the targetClass and targetResources of the relation. It maps relation names to their datapack relation definitions.
-
 * `relations`: A dictionary containing the relations of the resource to other resources. Each key is the name of a relation mapped to their datapack relation definitions. Each value contains the target class and target resource(s) of the relation.
 
   Relation definition must follow the following structure:
