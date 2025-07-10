@@ -146,10 +146,12 @@ def read_design_description() -> str:
 
     return DESIGN_PATH.read_text()
 
+
 def read_package_installation() -> str:
     """Read the installation and usage guide."""
 
     return INSTALLATION_PATH.read_text()
+
 
 def read_quick_start() -> str:
     """Read the quick start guide."""
@@ -186,7 +188,7 @@ def get_package_details() -> PackageDetails:
         description=description,
         design_description=read_design_description(),
         installation=read_package_installation(),
-        quick_start=read_quick_start()
+        quick_start=read_quick_start(),
     )
 
 

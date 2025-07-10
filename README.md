@@ -115,11 +115,9 @@ validator.validate(datapack=datapack)
 
 ## Documentation
 
-- Installation and usage instructions: [docs/installation.md](./docs/installation_usage.md)
-- SchemaPack specification: [docs/schemapack_spec.md](./docs/schemapack_spec.md)
-- DataPack specification: [docs/datapack_spec.md](./docs/datapack_spec.md)
-- Quickstart guide: [docs/quickstart.md](./docs/quickstart.md)
-- Development guide: [docs/development.md](./docs/development.md)
+- [SchemaPack specification](./docs/schemapack_spec.md)
+- [DataPack specification](./docs/datapack_spec.md)
+- [Development guide](./docs/development.md)
 
 
 ## License
