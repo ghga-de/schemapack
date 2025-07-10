@@ -120,9 +120,7 @@ mandatory:
     target: true
 ```
 
-`multiple`: Describes the maximum number of instances allowed from each side of the relation.
-
-The cardinality of the relation. It describes the maximum number of instances the origin and the target end may contribute to the relation. `origin` is true if the target may have multiple instances from the origin side, and `target` is true if the origin may have multiple instances from the target side.
+`multiple`: Describes the maximum number of instances allowed from from the origin and target side. `origin` is true if the target may have multiple instances from the origin side, and `target` is true if the origin may have multiple instances from the target side.
 
 Example (for a many-to-one relation):
 ```yaml
