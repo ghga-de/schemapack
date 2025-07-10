@@ -74,7 +74,7 @@ resources:
 `rootClass` *(optional)*: Defines the class name of the resource that should act as root.
 
 
-A full datapack example:
+A full (rooted) datapack example:
 
 ```yaml
 datapack: 3.0.0
