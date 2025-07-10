@@ -88,14 +88,6 @@ resources:
                 samples:
                     targetClass: Sample
                     targetResources: sample1
-        exp2:
-            content:
-                name: Experiment 2
-                description: This is the second experiment.
-            relations:
-                samples:
-                    targetClass: Sample
-                    targetResources: sample1
     Sample:
         sample1:
             content:
