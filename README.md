@@ -127,5 +127,5 @@ This repository is free to use and modify according to the
 
 ## README Generation
 
-This README file is auto-generated, please see [`readme_generation.md`](./readme_generation.md)
+This README file is auto-generated, please see [`readme_template`](./.readme_generation/readme_template.md)
 for details.
