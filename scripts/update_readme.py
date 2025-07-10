@@ -34,6 +34,8 @@ README_GENERATION_DIR = ROOT_DIR / ".readme_generation"
 TEMPLATE_OVERVIEW_PATH = README_GENERATION_DIR / "template_overview.md"
 DESCRIPTION_PATH = README_GENERATION_DIR / "description.md"
 DESIGN_PATH = README_GENERATION_DIR / "design.md"
+INSTALLATION_PATH = README_GENERATION_DIR / "installation_usage.md"
+QUICK_START_PATH = README_GENERATION_DIR / "quickstart.md"
 README_TEMPLATE_PATH = README_GENERATION_DIR / "readme_template.md"
 OPENAPI_YAML_REL_PATH = "./openapi.yaml"
 README_PATH = ROOT_DIR / "README.md"
@@ -74,6 +76,17 @@ class PackageDetails(PackageHeader, PackageName):
             "A markdown-formatted description of overall architecture and design of"
             + " the package."
         ),
+    )
+    installation: str = Field(
+        ...,
+        description="A markdown-formatted description of"
+        + " how to install schemapack library.",
+    )
+
+    quick_start: str = Field(
+        ...,
+        description=" A markdown-formatted description of"
+        + " how to run fundamental schemapack functions in Python.",
     )
 
 
@@ -133,6 +146,16 @@ def read_design_description() -> str:
 
     return DESIGN_PATH.read_text()
 
+def read_package_installation() -> str:
+    """Read the installation and usage guide."""
+
+    return INSTALLATION_PATH.read_text()
+
+def read_quick_start() -> str:
+    """Read the quick start guide."""
+
+    return QUICK_START_PATH.read_text()
+
 
 def generate_openapi_docs() -> str:
     """Generate markdown-formatted documentation linking to or rendering an OpenAPI
@@ -162,6 +185,8 @@ def get_package_details() -> PackageDetails:
         **name.model_dump(),
         description=description,
         design_description=read_design_description(),
+        installation=read_package_installation(),
+        quick_start=read_quick_start()
     )
 
 

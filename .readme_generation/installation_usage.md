@@ -1,4 +1,3 @@
-# Installation
 
 This package is available at PyPI:
 https://pypi.org/project/schemapack
@@ -17,7 +16,7 @@ pip install --upgrade $shortname
 
 
 
-# Usage:
+## Usage:
 
 To view the help message:
 
