@@ -1,7 +1,7 @@
 # Datapack Specification
 # =========================
 
-This document defines the structure and required fields of a `datapack.yaml` file, which represents a structured data conforming to a given schemapack. Each datapack consists of:
+This document defines the structure and required fields of a `datapack.yaml` file, which represents structured data conforming to a given schemapack. Each datapack consists of:
 
 * A datapack version identifier,
 
