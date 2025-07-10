@@ -1,5 +1,4 @@
 # Quickstart Guide
-# =========================
 
 This example shows how to validate a `datapack.yaml` file against a `schemapack.yaml` using the `schemapack` Python library. The `schemapack` defines the schema and validation rules, while the `datapack` contains the actual data to be validated. The steps below demonstrate how to load both files and run validation with `SchemaPackValidator`.
 

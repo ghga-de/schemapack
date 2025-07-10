@@ -1,5 +1,4 @@
 # Schemapack Specification
-# =========================
 
 This document describes the structure and components of a `schemapack.yaml` file, which defines the schema used to validate and interpret datapacks. Each schemapack includes:
 

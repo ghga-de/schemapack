@@ -1,5 +1,4 @@
 # Development
-# =========================
 
 For setting up the development environment, we rely on the
 [devcontainer feature](https://code.visualstudio.com/docs/remote/containers) of VS Code
