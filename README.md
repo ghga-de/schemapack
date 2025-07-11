@@ -63,8 +63,8 @@ Commands
                             the schemapack specs.
     check-datapack        Check if the provided JSON/YAML document complies with
                             the datapack specs.
-    condense-schemapack   Writes a condensed version of the provided schemapack that
-                            contains content schemas to stdout.
+    condense-schemapack   Writes a version of the provided schemapack with embedded
+                            content schemas to stdout.
     isolate-resource      Isolate a resource from the given datapack and write a datapack
                             that is rooted to this resource to stdout.
     isolate-class         Isolate a class from the given schemapack and write a condensed
@@ -107,6 +107,7 @@ validator.validate(datapack=datapack)
 
 - [SchemaPack specification](./docs/schemapack_spec.md)
 - [DataPack specification](./docs/datapack_spec.md)
+- [Data isolation](./docs/data_isolation.md)
 - [Development guide](./docs/development.md)
 
 
@@ -117,5 +118,5 @@ This repository is free to use and modify according to the
 
 ## README Generation
 
-This README file is auto-generated, please see [`readme_generation`](./README.md)
+This README file is auto-generated, please see [`readme_generation`](.readme_generation/README.md)
 for details.

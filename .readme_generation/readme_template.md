@@ -24,6 +24,7 @@ $quick_start
 
 - [SchemaPack specification](./docs/schemapack_spec.md)
 - [DataPack specification](./docs/datapack_spec.md)
+- [Data isolation](./docs/data_isolation.md)
 - [Development guide](./docs/development.md)
 
 
@@ -34,5 +35,5 @@ This repository is free to use and modify according to the
 
 ## README Generation
 
-This README file is auto-generated, please see [`readme_generation`](./README.md)
+This README file is auto-generated, please see [`readme_generation`](.readme_generation/README.md)
 for details.
