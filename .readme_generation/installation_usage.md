@@ -45,8 +45,8 @@ Commands
                             the schemapack specs.
     check-datapack        Check if the provided JSON/YAML document complies with
                             the datapack specs.
-    condense-schemapack   Writes a condensed version of the provided schemapack that
-                            contains content schemas to stdout.
+    condense-schemapack   Writes a version of the provided schemapack with embedded
+                            content schemas to stdout.
     isolate-resource      Isolate a resource from the given datapack and write a datapack
                             that is rooted to this resource to stdout.
     isolate-class         Isolate a class from the given schemapack and write a condensed
