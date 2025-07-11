@@ -21,8 +21,8 @@ classifiers = [
     "Intended Audience :: Developers",
 ]
 name = "schemapack"
-version = "3.0.0"
-description = "Make your JSON Schemas sociable and create linked data models."
+version = "3.1.0"
+description = "Make your JSON Schemas sociable and create linked data model."
 dependencies = [
     "pydantic >=2, <3",
     "pydantic_settings >=2, <3",
