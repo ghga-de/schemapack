@@ -28,9 +28,7 @@ classes:
 
 `rootClass` *(optional)*: Defines the name of a class that should acting as the root of the schemapack.
 
-<div style="border: 1px solid #007acc; border-left: 4px solid #007acc; padding: 1em; border-radius: 6px; background: transparent; margin-bottom: 1em;">
-  <strong>Note:</strong> A rooted <code>schemapack</code> requires its corresponding <code>datapack</code> to be rooted as well. If you're validating a rooted <code>datapack</code> agains a schema, make sure that its <code>schemapack</code> counterpart is also rooted. If not specified , i.e. set to None (the default), the datapack must not specify a root resource.
-</div>
+> [!IMPORTANT] A rooted schemapack requires its corresponding datapack to be rooted as well. If you're validating a rooted datapack agains a schema, make sure that its schemapack counterpart is also rooted. If not specified , i.e. set to None (the default), the datapack must not specify a root resource.
 
 
 #### Class Definition

@@ -21,9 +21,8 @@ The Schemapack library provides tooling to isolate individual resources and thei
 
 It creates a rooted datapack that contains only the specified resource and all its dependencies, e.g., the resulting datapack will only contain resources referenced by the root resource as well as the root resource itself.
 
-<div style="border: 1px solid #007acc; border-left: 4px solid #007acc; padding: 1em; border-radius: 6px; background: transparent; margin-bottom: 1em;">
-  <strong>Note:</strong> The isolated <code>datapack</code> will not be compatible with the original non-rooted schemapack anymore.
-</div>
+> [!IMPORTANT] The isolated datapack will not be compatible with the original non-rooted schemapack anymore.
+
 
 Example
 
