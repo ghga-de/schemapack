@@ -60,12 +60,16 @@ resources:
     | **multiple.target = True**  | set of resource IDs         | set of resource IDs or an empty set |
     | **multiple.target = False** | a single ID                 | a single ID or None                 |
 
+    Example:
+
     ```yaml
 
     relations:
         samples: # <- relation name
             targetClass: Sample
-            targetResources: [sample1, sample2]
+            targetResources:
+                - sample1 # <- resource ID of the target resource
+                - sample2 # <- resource ID of another target resource
     ```
 
 
