@@ -103,7 +103,7 @@ resources:
 ```
 
 
-`rootResource` *(optional)*: Defines the id of the resource of the class defined in `className` that should act as root. This means that, in addition to the root resource itself, the datapack must only contain resources that are direct or indirect (dependencies of dependencies) of the root resource.
+`rootResource` *(optional)*: Defines the id of the resource of the class defined in `className` that should act as root. This means that, in addition to the root resource itself, the datapack must only contain resources that are direct or transitive dependencies of the root resource.
 
 `rootClass` *(optional)*: Defines the class name of the resource that should act as root.
 
