@@ -13,8 +13,30 @@ $description
 
 ## Installation
 
-$installation
+This package is available at PyPI:
+https://pypi.org/project/schemapack
 
+Install:
+```
+bash
+
+pip install $shortname
+```
+
+Upgrade:
+```
+pip install --upgrade $shortname
+```
+
+## Usage
+
+```
+bash
+
+$shortname --help
+
+$usage
+```
 ## Quick Start
 
 $quick_start
