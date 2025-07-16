@@ -52,7 +52,7 @@ resources:
 
     * `targetClass`:  The name of the referenced class.
 
-    * `targetResources`: The ID(s) of target resources of the targetClass. Based on the schemapack relation definition, this field can get the following values:
+    * `targetResources`: The ID(s) of target resources of the targetClass. Based on the schemapack relation definition, this field can have the following values:
 
 
     |                             | **mandatory.target = True** | **mandatory.target = False**        |
