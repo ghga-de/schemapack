@@ -88,6 +88,7 @@ Given that the content of the Experiment.schema.json file is:
   * Use `snake_case`.
   * Start with a letter.
   * Contain only alphanumeric characters and underscores.
+  * Must not conflict with property names used in `content`
 
 Example:
 
