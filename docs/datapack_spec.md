@@ -35,7 +35,7 @@ resources:
             ... # <- resource definition
 ```
 
-*Resource definition* must follow the following structure:
+*Resource definition* must adhere to the following structure:
 
 * `content`: The content of the resource that complies with the content schema defined in the corresponding schemapack.
 
