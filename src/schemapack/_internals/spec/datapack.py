@@ -35,7 +35,7 @@ from schemapack._internals.spec.custom_types import (
     ResourceId,
 )
 
-SupportedDataPackVersions = Literal["0.3.0"]
+SupportedDataPackVersions =  Literal["3.0.0", "3.1.0", "3.1.1"]
 SUPPORTED_DATA_PACK_VERSIONS = typing.get_args(SupportedDataPackVersions)
 
 
