@@ -1,0 +1,3 @@
+<!-- Please provide a short overview of the features of this service. -->
+
+Schemapack is a library that defines a lightweight data modeling framework based on a schema description, a compatible data instance format, and the tooling that supports them. It introduces two main components: the schemapack, which describes linked data structures, and the datapack, which represents the data conforming to those structures. The tooling around `schemapack` and `datapack` focuses on loading, extraction, and validation, and supports partial extraction and data embedding operations. The Schemapack library includes a CLI component that provides access to core functionality via the command line.
