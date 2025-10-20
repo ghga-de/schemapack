@@ -57,9 +57,9 @@ def identify_resource_dependencies(
             The schemapack used for looking up the classes of relations.
         include_target:
             Set to true if the target dependency shall be included in the result.
-        dependencies_by_class:
+        _dependencies_by_class:
             A mapping containing resource ids (values) of dependencies by class names
-            (keys). If not provided, a new mapping will be created.
+            (keys) that are already in the recursion.
 
     Returns:
         A mapping containing resource ids (values) of dependencies by class names
