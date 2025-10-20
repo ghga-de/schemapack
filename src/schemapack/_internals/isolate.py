@@ -33,14 +33,14 @@ from schemapack.spec.datapack import DataPack, Resource
 from schemapack.spec.schemapack import SchemaPack
 
 
-def identify_resource_dependencies(  # noqa: PLR0913
+def identify_resource_dependencies(
     *,
     datapack: DataPack,
     class_name: ClassName,
     resource_id: ResourceId,
     schemapack: SchemaPack,
     include_target: bool = False,
-    dependencies_by_class: dict[ClassName, set[ResourceId]] | None = None,
+    _dependencies_by_class: dict[ClassName, set[ResourceId]] | None = None,
 ) -> dict[ClassName, set[ResourceId]]:
     """Identify all dependencies (recursively) for a given resource
     of the given class in the given datapack. Please note that it is assumed that
@@ -86,11 +86,11 @@ def identify_resource_dependencies(  # noqa: PLR0913
     if target_class_definition is None:
         raise ClassNotFoundError(class_name=class_name, spec_type=SpecType.SCHEMAPACK)
 
-    if dependencies_by_class is None:
-        dependencies_by_class = defaultdict(set)
+    if _dependencies_by_class is None:
+        _dependencies_by_class = defaultdict(set)
     else:  # do not remove the target in recursion
         include_target = True
-    dependencies_by_class[class_name].add(resource_id)
+    _dependencies_by_class[class_name].add(resource_id)
 
     for relation_name in target_resource.relations:
         try:
@@ -112,10 +112,10 @@ def identify_resource_dependencies(  # noqa: PLR0913
             ) from error
 
         # Remove already known dependencies to avoid circular loops
-        target_ids -= dependencies_by_class.get(target_class_name, set())
+        target_ids -= _dependencies_by_class.get(target_class_name, set())
 
         for target_id in target_ids:
-            dependencies_by_class[target_class_name].add(target_id)
+            _dependencies_by_class[target_class_name].add(target_id)
 
             # Recursively add dependencies of this target resource:
             identify_resource_dependencies(
@@ -123,13 +123,13 @@ def identify_resource_dependencies(  # noqa: PLR0913
                 class_name=target_class_name,
                 resource_id=target_id,
                 schemapack=schemapack,
-                dependencies_by_class=dependencies_by_class,
+                _dependencies_by_class=_dependencies_by_class,
             )
 
     if not include_target:
-        dependencies_by_class[class_name].discard(resource_id)
+        _dependencies_by_class[class_name].discard(resource_id)
 
-    return dependencies_by_class
+    return _dependencies_by_class
 
 
 def downscope_datapack(
