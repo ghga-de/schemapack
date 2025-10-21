@@ -126,7 +126,7 @@ def identify_resource_dependencies(
                 _dependencies_by_class=_dependencies_by_class,
             )
 
-    if not include_target:
+    if not include_target:  # only removed in the initial call
         _dependencies_by_class[class_name].discard(resource_id)
 
     return _dependencies_by_class
