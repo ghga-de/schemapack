@@ -137,7 +137,7 @@ class Resource(_FrozenNoExtraBaseModel):
     )
 
     relations: FrozenDict[RelationPropertyName, ResourceRelation] = Field(
-        FrozenDict(),
+        default_factory = FrozenDict,
         description=(
             "A dictionary containing the relations of the resource to other resources."
             + " Each key correspond to the name of a relation property. Each value"
