@@ -28,9 +28,8 @@ from arcticfreeze import FrozenDict, freeze
 from pydantic import (
     BeforeValidator,
     Field,
-    SerializerFunctionWrapHandler,
     WrapSerializer,
-    model_serializer,
+    field_serializer,
     model_validator,
 )
 from pydantic_core import PydanticCustomError
@@ -197,12 +196,11 @@ class DataPack(_FrozenNoExtraBaseModel):
         ),
     )
 
-    @model_serializer(mode="wrap")
-    def serialize_model(
-        self, handler: SerializerFunctionWrapHandler
+    @field_serializer("resources",mode="wrap")
+    def serialize_resources(
+        self, value: Any
     ) -> dict[str, object]:
-        serialized = handler(self)
-        return thaw(serialized)
+        return thaw(value)
 
     @model_validator(mode="before")
     @classmethod
