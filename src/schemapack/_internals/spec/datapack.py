@@ -196,7 +196,7 @@ class DataPack(_FrozenNoExtraBaseModel):
         ),
     )
 
-    @field_serializer("resources",mode="wrap")
+    @field_serializer("resources", mode="plain")
     def serialize_resources(
         self, value: Any
     ) -> dict[str, object]:
