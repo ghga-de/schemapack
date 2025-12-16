@@ -25,7 +25,14 @@ from collections.abc import Iterable, Mapping
 from typing import Annotated, Any, Literal, Self, TypeAlias
 
 from arcticfreeze import FrozenDict, freeze
-from pydantic import BeforeValidator, Field, WrapSerializer, model_validator
+from pydantic import (
+    BeforeValidator,
+    Field,
+    SerializerFunctionWrapHandler,
+    WrapSerializer,
+    model_serializer,
+    model_validator,
+)
 from pydantic_core import PydanticCustomError
 
 from schemapack._internals.spec.base import _FrozenNoExtraBaseModel
@@ -34,6 +41,7 @@ from schemapack._internals.spec.custom_types import (
     RelationPropertyName,
     ResourceId,
 )
+from schemapack._internals.utils import thaw
 
 SupportedDataPackVersions = Literal["3.0.0", "3.1.0", "4.0.0"]
 SUPPORTED_DATA_PACK_VERSIONS = typing.get_args(SupportedDataPackVersions)
@@ -188,6 +196,13 @@ class DataPack(_FrozenNoExtraBaseModel):
             + " dependencies) of the root resource."
         ),
     )
+
+    @model_serializer(mode="wrap")
+    def serialize_model(
+        self, handler: SerializerFunctionWrapHandler
+    ) -> dict[str, object]:
+        serialized = handler(self)
+        return thaw(serialized)
 
     @model_validator(mode="before")
     @classmethod
