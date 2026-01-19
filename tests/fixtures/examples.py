@@ -143,7 +143,7 @@ def list_example_pairs_in_nested_dir(
     ]
 
 
-def list_comparison_schemapacks_in_dir(dir: Path)->list[tuple[str, Path, Path]]:
+def list_comparison_schemapacks_in_dir(dir: Path) -> list[tuple[str, Path, Path]]:
     """List all comparison schemapack files in the given dir.
     Returns:
         A list of tuples of (case_name, path1, path2).

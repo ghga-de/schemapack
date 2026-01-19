@@ -64,10 +64,10 @@ def compare_class_definitions(
     """Compare two ClassDefinition objects for equality."""
     return (
         class_def1.id.propertyName == class_def2.id.propertyName
-        and
-        compare_relations(class_def1.relations, class_def2.relations)
+        and compare_relations(class_def1.relations, class_def2.relations)
         and compare_content(class_def1.content, class_def2.content)
     )
+
 
 def compare_schemapacks(
     schemapack1: SchemaPack,
