@@ -1,7 +1,7 @@
 
 [project]
 name = "schemapack"
-version = "4.0.1"
+version = "4.1.0"
 description = "Make your JSON Schemas sociable and create linked data models."
 dependencies = [
     "pydantic >=2, <3",
@@ -11,6 +11,7 @@ dependencies = [
     "arcticfreeze ~=0.1.1",
     "rich >13, <14",
     "typer >= 0.16.0",
+    "jsonsubschema >= 0.0.7"
 ]
 requires-python = ">=3.12"
 classifiers = [

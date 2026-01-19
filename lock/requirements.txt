@@ -23,24 +23,43 @@ click==8.3.1 \
     # via
     #   -c lock/requirements-dev.txt
     #   typer
+greenery==3.3.3 \
+    --hash=sha256:c489d3d111ab49fc522e4796f349994d953d20ec8289aef107f2e7f240534d85 \
+    --hash=sha256:fb5f9439401ba01f256c7aff0aef9ecb482a3468e489532cfd8590743463d7c3
+    # via
+    #   -c lock/requirements-dev.txt
+    #   jsonsubschema
 immutabledict==4.2.2 \
     --hash=sha256:97c31d098a2c850e93a958badeef765e4736ed7942ec73e439facd764a3a7217 \
     --hash=sha256:cb6ed3090df593148f94cb407d218ca526fd2639694afdb553dc4f50ce6feeca
     # via
     #   -c lock/requirements-dev.txt
     #   arcticfreeze
-jsonschema==4.25.1 \
-    --hash=sha256:3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63 \
-    --hash=sha256:e4a9655ce0da0c0b67a085847e00a3a51449e1157f4f75e9fb5aa545e122eb85
+jsonref==1.1.0 \
+    --hash=sha256:32fe8e1d85af0fdefbebce950af85590b22b60f9e95443176adbde4e1ecea552 \
+    --hash=sha256:590dc7773df6c21cbf948b5dac07a72a251db28b0238ceecce0a2abfa8ec30a9
+    # via
+    #   -c lock/requirements-dev.txt
+    #   jsonsubschema
+jsonschema==4.26.0 \
+    --hash=sha256:0c26707e2efad8aa1bfc5b7ce170f3fccc2e4918ff85989ba9ffa9facb2be326 \
+    --hash=sha256:d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce
     # via
     #   -c lock/requirements-dev.txt
     #   schemapack (pyproject.toml)
+    #   jsonsubschema
 jsonschema-specifications==2025.9.1 \
     --hash=sha256:98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe \
     --hash=sha256:b540987f239e745613c7a9176f3edb72b832a4ac465cf02712288397832b5e8d
     # via
     #   -c lock/requirements-dev.txt
     #   jsonschema
+jsonsubschema==0.0.7 \
+    --hash=sha256:4133bd1f7a2529b28aa7150f71bbcd5d6acf3663f0b83dedd9e6df71c4585779 \
+    --hash=sha256:852e0878842122a046fce5b3db1bfb801a26de20a2dfaebd8df20f366a762d2c
+    # via
+    #   -c lock/requirements-dev.txt
+    #   schemapack (pyproject.toml)
 markdown-it-py==4.0.0 \
     --hash=sha256:87327c59b172c5011896038353a81343b6754500a08cd7a4973bb48c6d578147 \
     --hash=sha256:cb0a2b4aa34f932c007117b194e945bd74e0ec24133ceb5bac59009cda1cb9f3
@@ -53,6 +72,12 @@ mdurl==0.1.2 \
     # via
     #   -c lock/requirements-dev.txt
     #   markdown-it-py
+portion==2.6.1 \
+    --hash=sha256:44b1f7d57e052993c4157e519dc447e57b87a4e5e00a77c1c50e7044104e53c6 \
+    --hash=sha256:764d0be5479842f011feccc6f4bf80454dd944ef16309fceb2b5ae229cf05df3
+    # via
+    #   -c lock/requirements-dev.txt
+    #   jsonsubschema
 pydantic==2.12.5 \
     --hash=sha256:4d351024c75c0f085a9febbb665ce8c0c6ec5d30e903bdb6394b7ede26aebb49 \
     --hash=sha256:e561593fccf61e8a20fc46dfc2dfe075b8be7d0188df33f221ad1f0139180f9d
@@ -337,9 +362,9 @@ rpds-py==0.30.0 \
     #   -c lock/requirements-dev.txt
     #   jsonschema
     #   referencing
-ruamel-yaml==0.18.16 \
-    --hash=sha256:048f26d64245bae57a4f9ef6feb5b552a386830ef7a826f235ffb804c59efbba \
-    --hash=sha256:a6e587512f3c998b2225d68aa1f35111c29fad14aed561a26e73fab729ec5e5a
+ruamel-yaml==0.18.17 \
+    --hash=sha256:9091cd6e2d93a3a4b157ddb8fabf348c3de7f1fb1381346d985b6b247dcd8d3c \
+    --hash=sha256:9c8ba9eb3e793efdf924b60d521820869d5bf0cb9c6f1b82d82de8295e290b9d
     # via
     #   -c lock/requirements-dev.txt
     #   schemapack (pyproject.toml)
@@ -414,9 +439,15 @@ shellingham==1.5.4 \
     # via
     #   -c lock/requirements-dev.txt
     #   typer
-typer==0.20.0 \
-    --hash=sha256:1aaf6494031793e4876fb0bacfa6a912b551cf43c1e63c800df8b1a866720c37 \
-    --hash=sha256:5b463df6793ec1dca6213a3cf4c0f03bc6e322ac5e16e13ddd622a889489784a
+sortedcontainers==2.4.0 \
+    --hash=sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88 \
+    --hash=sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0
+    # via
+    #   -c lock/requirements-dev.txt
+    #   portion
+typer==0.21.1 \
+    --hash=sha256:7985e89081c636b88d172c2ee0cfe33c253160994d47bdfdc302defd7d1f1d01 \
+    --hash=sha256:ea835607cd752343b6b2b7ce676893e5a0324082268b48f27aa058bdb7d2145d
     # via
     #   -c lock/requirements-dev.txt
     #   schemapack (pyproject.toml)
@@ -427,7 +458,6 @@ typing-extensions==4.15.0 \
     #   -c lock/requirements-dev.txt
     #   pydantic
     #   pydantic-core
-    #   referencing
     #   typer
     #   typing-inspection
 typing-inspection==0.4.2 \
