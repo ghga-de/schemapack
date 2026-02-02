@@ -34,7 +34,7 @@ COMPARISON_SCHEMAPACK_DIR = EXAMPLES_DIR / "comparison_schemapacks"
 
 schemapack_suffix = ".schemapack.yaml"
 datapack_suffix = ".datapack.yaml"
-denormalizated_suffix = ".denormalized.yaml"
+denormalized_suffix = ".denormalized.yaml"
 erd_suffix = ".mm.txt"
 
 
