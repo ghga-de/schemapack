@@ -102,7 +102,7 @@ def list_denormalized_in_dir(dir: Path) -> dict[str, Path]:
     Returns:
         A dict of {example_name: path}.
     """
-    return list_examples_in_nested_dir(dir, suffix=denormalizated_suffix)
+    return list_examples_in_nested_dir(dir, suffix=denormalized_suffix)
 
 
 DENORMALIZED_DEEP_EMBEDDING_PATHS = list_denormalized_in_dir(
