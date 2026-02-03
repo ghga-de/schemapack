@@ -31,11 +31,15 @@ dependencies = [
     "arcticfreeze ~=0.1.1",
     "rich >13, <14",
     "typer >= 0.16.0",
-    "jsonsubschema >= 0.0.7",
 ]
 
 [project.license]
 text = "Apache 2.0"
+
+[project.optional-dependencies]
+schema-comparison = [
+    "jsonsubschema >= 0.0.7",
+]
 
 [project.urls]
 Repository = "https://github.com/ghga-de/schemapack"

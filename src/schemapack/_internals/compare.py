@@ -18,6 +18,11 @@
 from arcticfreeze import FrozenDict
 from jsonsubschema import isEquivalent
 
+from schemapack._internals.exceptions import (
+    ComparisonError,
+    InequivalentContentSchemas,
+    InequivalentSchemapacks,
+)
 from schemapack._internals.spec.custom_types import ContentSchema, RelationPropertyName
 from schemapack._internals.spec.schemapack import ClassDefinition, ClassRelation
 from schemapack.spec.schemapack import SchemaPack
@@ -54,7 +59,10 @@ def compare_class_relations(
 
 def compare_content(schema1: ContentSchema, schema2: ContentSchema) -> bool:
     """Compare two content schemas for equality."""
-    return isEquivalent(schema1, schema2)
+    try:
+        return isEquivalent(schema1, schema2)
+    except Exception as exp:
+        raise ComparisonError("An error happened while comparing the schemas.") from exp
 
 
 def compare_class_definitions(
@@ -69,22 +77,35 @@ def compare_class_definitions(
     )
 
 
-def compare_schemapacks(
-    schemapack1: SchemaPack,
-    schemapack2: SchemaPack,
-) -> bool:
-    """Compare two SchemaPack objects for semantic equality."""
-    if schemapack1.classes.keys() != schemapack2.classes.keys():
-        return False
-
+def assert_equivalent_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> None:
+    """Assert that two schemapacks are semantically equivalent."""
     if schemapack1.rootClass != schemapack2.rootClass:
-        return False
+        raise InequivalentSchemapacks(
+            f"Root class mismatch between schemapacks: "
+            f"{schemapack1.rootClass} != {schemapack2.rootClass}"
+        )
+
+    # Compare class names as sets (order doesn't matter, only membership).
+    if schemapack1.classes.keys() != schemapack2.classes.keys():
+        difference = schemapack1.classes.keys() ^ schemapack2.classes.keys()
+        raise InequivalentSchemapacks(
+            f"Class set mismatch between schemapacks for classes: {difference}."
+        )
 
     for class_name in schemapack1.classes:
         if not compare_class_definitions(
             schemapack1.classes[class_name],
             schemapack2.classes[class_name],
         ):
-            return False
+            raise InequivalentContentSchemas(
+                f"Class definition mismatch for '{class_name}'"
+            )
 
-    return True
+
+def is_equivalent_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> bool:
+    """Check if two schemapacks are semantically equivalent."""
+    try:
+        assert_equivalent_schemapack(schemapack1, schemapack2)
+        return True
+    except (InequivalentSchemapacks, InequivalentContentSchemas):
+        return False
