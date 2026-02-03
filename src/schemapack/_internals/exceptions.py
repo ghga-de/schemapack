@@ -275,7 +275,6 @@ class InequivalentSchemapacks(Exception):
     """Base exception for schemapacks that are not semantically equivalent."""
 
 
-
 class InequivalentContentSchemas(InequivalentSchemapacks):
     """Raised when two content schemas are not semantically equivalent."""
 

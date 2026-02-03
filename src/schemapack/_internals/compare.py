@@ -77,7 +77,9 @@ def compare_class_definitions(
     )
 
 
-def assert_equivalent_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> None:
+def assert_equivalent_schemapack(
+    schemapack1: SchemaPack, schemapack2: SchemaPack
+) -> None:
     """Assert that two schemapacks are semantically equivalent."""
     if schemapack1.rootClass != schemapack2.rootClass:
         raise InequivalentSchemapacks(
