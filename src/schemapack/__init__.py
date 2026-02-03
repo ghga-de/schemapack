@@ -19,7 +19,10 @@ schema.
 
 from importlib.metadata import version
 
-from schemapack._internals.compare import is_equivalent_schemapack
+from schemapack._internals.compare import (
+    assert_equivalent_schemapack,
+    is_equivalent_schemapack,
+)
 
 from ._internals.dump import dump_schemapack, dumps_datapack, dumps_schemapack
 from ._internals.erd import export_mermaid
@@ -31,6 +34,7 @@ from ._internals.validation import SchemaPackValidator
 
 __all__ = [
     "SchemaPackValidator",
+    "assert_equivalent_schemapack",
     "denormalize",
     "dump_schemapack",
     "dumps_datapack",
