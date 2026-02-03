@@ -19,6 +19,8 @@ schema.
 
 from importlib.metadata import version
 
+from schemapack._internals.compare import is_equivalent_schemapack
+
 from ._internals.dump import dump_schemapack, dumps_datapack, dumps_schemapack
 from ._internals.erd import export_mermaid
 from ._internals.isolate import isolate, isolate_class, isolate_resource
@@ -34,6 +36,7 @@ __all__ = [
     "dumps_datapack",
     "dumps_schemapack",
     "export_mermaid",
+    "is_equivalent_schemapack",
     "isolate",
     "isolate_class",
     "isolate_resource",
