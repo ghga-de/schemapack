@@ -56,6 +56,8 @@ EXPECTED_EXCEPTIONS = {
     "unequal_schemas_different_relation_spec": InequivalentContentSchemas,
     "unequal_schemas_different_content": InequivalentContentSchemas,
 }
+
+
 @dataclass
 class _Relation:
     """Defines constraints and cardinality rules for a test relation."""
@@ -116,9 +118,7 @@ def _make_relation(*relations: tuple[str, _Relation]) -> FrozenDict:
                 ("a", _Relation(target_class="B", mandatory_origin=True)),
                 ("c", _Relation(target_class="C")),
             ),
-            _make_relation(
-                ("a", _Relation(target_class="B", mandatory_origin=True))
-            ),
+            _make_relation(("a", _Relation(target_class="B", mandatory_origin=True))),
             False,
             id="different_relation_counts",
         ),
@@ -136,7 +136,6 @@ def test_compare_class_relations_happy():
     relation1 = _make_class_relation(_Relation(target_class="B"))
     relation2 = _make_class_relation(_Relation(target_class="B"))
     assert compare_class_relations(relation1, relation2)
-
 
 
 @pytest.mark.parametrize(
@@ -169,16 +168,19 @@ def test_compare_class_relations_happy():
         ),
     ],
 )
-def test_compare_class_relations_unhappy(relation1: ClassRelation, relation2: ClassRelation):
+def test_compare_class_relations_unhappy(
+    relation1: ClassRelation, relation2: ClassRelation
+):
     """Test semantic equality of ClassRelation objects."""
     assert not compare_class_relations(relation1, relation2)
-
 
 
 @pytest.mark.parametrize(
     "case_name, schema1_path, schema2_path", COMPARISON_SCHEMAPACK_PATHS
 )
-def test_assert_equivalent_schemapack(case_name: str, schema1_path: Path, schema2_path: Path):
+def test_assert_equivalent_schemapack(
+    case_name: str, schema1_path: Path, schema2_path: Path
+):
     """Test that assert_equivalent_schemapack raises the correct exception."""
     schema1 = load_schemapack(schema1_path)
     schema2 = load_schemapack(schema2_path)
@@ -194,7 +196,9 @@ def test_assert_equivalent_schemapack(case_name: str, schema1_path: Path, schema
 @pytest.mark.parametrize(
     "case_name, schema1_path, schema2_path", COMPARISON_SCHEMAPACK_PATHS
 )
-def test_is_equivalent_schemapack(case_name: str, schema1_path: Path, schema2_path: Path):
+def test_is_equivalent_schemapack(
+    case_name: str, schema1_path: Path, schema2_path: Path
+):
     """Test comparing two schemapacks semantically."""
     schema1 = load_schemapack(schema1_path)
     schema2 = load_schemapack(schema2_path)
