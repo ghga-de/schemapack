@@ -26,6 +26,7 @@ from schemapack import load_schemapack
 from schemapack._internals.compare import (
     compare_class_relations_semantically,
     compare_relations_semantically,
+    is_equal_schemapack,
     is_equivalent_schemapack,
 )
 from schemapack._internals.exceptions import (
@@ -227,3 +228,24 @@ def test_inequivalence(path1: Path, path2: Path):
     schema1 = load_schemapack(path1)
     schema2 = load_schemapack(path2)
     assert not is_equivalent_schemapack(schema1, schema2)
+
+
+def test_equal_schemapack_with_identical_file_loaded_twice():
+    """Test that the same file loaded twice produces equal objects."""
+    path = COMPARISON_SCHEMAPACK_PATHS["ghga_ingress.ingress"]
+
+    schema1 = load_schemapack(path)
+    schema2 = load_schemapack(path)
+
+    assert is_equal_schemapack(schema1, schema2)
+
+
+def test_structurally_different_schemapacks():
+    """Test that semantically equivalent schemapacks are not structurally equal."""
+    path1 = COMPARISON_SCHEMAPACK_PATHS["all_mandatory.some_descriptions"]
+    path2 = COMPARISON_SCHEMAPACK_PATHS["all_mandatory.no_descriptions"]
+
+    schema1 = load_schemapack(path1)
+    schema2 = load_schemapack(path2)
+
+    assert not is_equal_schemapack(schema1, schema2)

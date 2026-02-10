@@ -129,7 +129,7 @@ def assert_equal_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) ->
         raise InequivalentSchemapacks("Schemapacks are not equal.")
 
 
-def if_equal_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> bool:
+def is_equal_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> bool:
     """Check structural equality of two schemapacks.
 
     Returns 'True' if the schemapacks are structurally equal according to
