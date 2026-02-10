@@ -99,16 +99,20 @@ VALID_DATAPACK_PATHS = list_datapacks_in_dir(VALID_DATAPACK_DIR)
 INVALID_DATAPACK_PATHS = list_datapacks_in_dir(INVALID_DATAPACK_DIR)
 
 
-def list_schmapacks_in_nested_dir(dir: Path) -> dict[str, Path]:
+def list_schemapacks_in_nested_dir(dir: Path) -> dict[str, Path]:
     """List all schemapack files contained in the subdirectories."""
     return list_examples_in_nested_dir(dir, suffix=schemapack_suffix)
 
 
-COMPARISON_SCHEMAPACK_PATHS = list_schmapacks_in_nested_dir(EQUIVALENT_SCHEMAPACK_DIR)
+COMPARISON_SCHEMAPACK_PATHS = list_schemapacks_in_nested_dir(EQUIVALENT_SCHEMAPACK_DIR)
 
 
 def list_representative_schemapacks_in_dir(dir: Path) -> dict[str, Path]:
-    """List all representative schemapack files in the given dir."""
+    """List all representative schemapack files in the given directory.
+
+    Representative schemapacks are used as canonical examples for inequivalence tests.
+    The returned mapping uses the example name as key and the schemapack file path as value.
+    """
     return list_examples_in_nested_dir(dir, suffix=representative_suffix)
 
 
@@ -120,9 +124,17 @@ REPRESENTATIVE_SCHEMAPACK_PATHS = list_representative_schemapacks_in_dir(
 def group_comparison_schemapacks_by_test_case(
     comparison_schemapack_paths: dict[str, Path],
 ) -> dict[str, list[Path]]:
-    """Group the comparison schemapack paths by their test case (derived from the class name).
-    Example: {"all_mandatory": [path1, path2, path3],
-              "rooted": [...], ...}
+    """
+    Group comparison schemapack paths by test case identifier.
+
+    The test case identifier is derived from the schemapack name by taking the prefix
+    before the first dot.
+
+    Example:
+        {
+            "all_mandatory": [path1, path2, path3],
+            "rooted": [path4, path5],
+        }
     """
     by_class: dict[str, list[Path]] = defaultdict(list)
 
@@ -133,8 +145,15 @@ def group_comparison_schemapacks_by_test_case(
 
 
 def list_schemapack_comparison_pairs(comparison_schemapack_paths: dict[str, Path]):
-    """List all pairs of schemapack paths that should be compared for equivalence.
-    Example: [("all_mandatory", path1, path2), ("all_mandatory", path1, path3), ...]
+    """
+    Generate all schemapack path pairs that should be compared for equivalence.
+
+    Each returned tuple consists of:
+        (test_case_name, schemapack_path_1, schemapack_path_2)
+
+    Raises:
+        ValueError:
+            If a test case contains fewer than two schemapack examples.
     """
     by_class = group_comparison_schemapacks_by_test_case(comparison_schemapack_paths)
 
@@ -157,7 +176,7 @@ SCHEMAPACK_PAIRED_COMPARISON_PATHS = list_schemapack_comparison_pairs(
 
 
 def list_denormalized_in_dir(dir: Path) -> dict[str, Path]:
-    """List all denomalizated example files in the given dir.
+    """List all denormalized example files in the given dir.
 
     Returns:
         A dict of {example_name: path}.

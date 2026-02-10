@@ -119,15 +119,22 @@ def is_equivalent_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -
 
 
 def assert_equal_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> None:
-    """Assert that two schemapacks are equal.
-    Returns None if equal, or the exception when equality is not detected.
+    """Assert structural equality of two schemapacks.
+
+    The schemapacks are considered equal if their model instances compare equal
+    via '=='. If they are not equal, an 'InequivalentSchemapacks' exception
+    is raised.
     """
     if schemapack1 != schemapack2:
         raise InequivalentSchemapacks("Schemapacks are not equal.")
 
 
 def if_equal_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> bool:
-    """Check if two schemapacks are equal."""
+    """Check structural equality of two schemapacks.
+
+    Returns 'True' if the schemapacks are structurally equal according to
+    'assert_equal_schemapack', otherwise returns 'False'.
+    """
     try:
         assert_equal_schemapack(schemapack1, schemapack2)
         return True

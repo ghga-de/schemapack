@@ -176,7 +176,11 @@ def test_compare_class_relations_unhappy(
     "path", COMPARISON_SCHEMAPACK_PATHS.values(), ids=COMPARISON_SCHEMAPACK_PATHS
 )
 def test_equivalence_reflexivity(path: Path):
-    """Test that each schema is equivalent to itself (reflexivity)."""
+    """
+    Verify reflexivity of schemapack equivalence.
+
+    A schemapack must be equivalent to itself.
+    """
     schema = load_schemapack(path)
     assert is_equivalent_schemapack(schema, schema)
 
@@ -190,8 +194,14 @@ def test_equivalence_reflexivity(path: Path):
     ],
 )
 def test_equivalence_symmetry_and_transitivity(name: str, path1: Path, path2: Path):
-    """Test that equivalence is symmetric and transitive. Since all possible pairs are tested
-    in an order sensitive manner, both symmetry and transitivity are implicitly tested.
+    """
+    Verify symmetry of schemapack equivalence on known equivalent pairs.
+
+    For each known equivalent pair (A, B), equivalence must hold in both
+    directions: A ≡ B and B ≡ A.
+
+    Transitivity is covered implicitly by the completeness of the equivalent
+    pair set used for parametrization.
     """
     schema1 = load_schemapack(path1)
     schema2 = load_schemapack(path2)
@@ -208,7 +218,12 @@ def test_equivalence_symmetry_and_transitivity(name: str, path1: Path, path2: Pa
     ],
 )
 def test_inequivalence(path1: Path, path2: Path):
-    """Test that the representative schemapacks from different test cases are not equivalent."""
+    """
+    Verify inequivalence across representative schemapacks from different test cases.
+
+    Any two schemapacks chosen from different representative scenarios must
+    not be considered equivalent.
+    """
     schema1 = load_schemapack(path1)
     schema2 = load_schemapack(path2)
     assert not is_equivalent_schemapack(schema1, schema2)
