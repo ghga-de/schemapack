@@ -16,6 +16,7 @@
 """Test schema comparison functionality."""
 
 from dataclasses import dataclass
+from itertools import combinations
 from pathlib import Path
 
 import pytest
@@ -23,9 +24,8 @@ from arcticfreeze import FrozenDict
 
 from schemapack import load_schemapack
 from schemapack._internals.compare import (
-    assert_equivalent_schemapack,
-    compare_class_relations,
-    compare_relations,
+    compare_class_relations_semantically,
+    compare_relations_semantically,
     is_equivalent_schemapack,
 )
 from schemapack._internals.exceptions import (
@@ -37,7 +37,11 @@ from schemapack._internals.spec.schemapack import (
     MandatoryRelationSpec,
     MultipleRelationSpec,
 )
-from tests.fixtures.examples import COMPARISON_SCHEMAPACK_PATHS
+from tests.fixtures.examples import (
+    COMPARISON_SCHEMAPACK_PATHS,
+    REPRESENTATIVE_SCHEMAPACK_PATHS,
+    SCHEMAPACK_PAIRED_COMPARISON_PATHS,
+)
 
 # Expected comparison results for each test case
 # True indicates schemapacks should be considered equal
@@ -81,61 +85,54 @@ def _make_class_relation(relation: _Relation) -> ClassRelation:
     )
 
 
-def _make_relation(*relations: tuple[str, _Relation]) -> FrozenDict:
+def _relation(*relations: tuple[str, _Relation]) -> FrozenDict:
     """Create one or more ClassRelation entries."""
     return FrozenDict({name: _make_class_relation(rel) for name, rel in relations})
 
 
 @pytest.mark.parametrize(
-    "relations1, relations2, expected",
+    "relations1, relations2",
     [
         pytest.param(
             FrozenDict(),
-            FrozenDict(),
-            True,
-            id="both_empty",
-        ),
-        pytest.param(
-            FrozenDict(),
-            _make_relation(("a", _Relation(target_class="B"))),
-            False,
+            _relation(("a", _Relation(target_class="B"))),
             id="one_empty",
         ),
         pytest.param(
-            _make_relation(("a", _Relation(target_class="B"))),
-            _make_relation(("b", _Relation(target_class="B"))),
-            False,
+            _relation(("a", _Relation(target_class="B"))),
+            _relation(("b", _Relation(target_class="B"))),
             id="different_keys",
         ),
         pytest.param(
-            _make_relation(("a", _Relation(target_class="B"))),
-            _make_relation(("a", _Relation(target_class="C"))),
-            False,
+            _relation(("a", _Relation(target_class="B"))),
+            _relation(("a", _Relation(target_class="C"))),
             id="different_target_class",
         ),
         pytest.param(
-            _make_relation(
+            _relation(
                 ("a", _Relation(target_class="B", mandatory_origin=True)),
                 ("c", _Relation(target_class="C")),
             ),
-            _make_relation(("a", _Relation(target_class="B", mandatory_origin=True))),
-            False,
+            _relation(("a", _Relation(target_class="B", mandatory_origin=True))),
             id="different_relation_counts",
         ),
     ],
 )
-def test_compare_relations(
-    relations1: FrozenDict, relations2: FrozenDict, expected: bool
-):
+def test_compare_relations_unhappy(relations1: FrozenDict, relations2: FrozenDict):
     """Test semantic equality of relation mappings for various cases."""
-    assert compare_relations(relations1, relations2) is expected
+    assert not compare_relations_semantically(relations1, relations2)
+
+
+def test_compare_empty_relations():
+    """Test that empty relations are considered semantically equal."""
+    assert compare_relations_semantically(FrozenDict(), FrozenDict())
 
 
 def test_compare_class_relations_happy():
     """Test that identical ClassRelation objects are equal."""
     relation1 = _make_class_relation(_Relation(target_class="B"))
     relation2 = _make_class_relation(_Relation(target_class="B"))
-    assert compare_class_relations(relation1, relation2)
+    assert compare_class_relations_semantically(relation1, relation2)
 
 
 @pytest.mark.parametrize(
@@ -172,35 +169,46 @@ def test_compare_class_relations_unhappy(
     relation1: ClassRelation, relation2: ClassRelation
 ):
     """Test semantic equality of ClassRelation objects."""
-    assert not compare_class_relations(relation1, relation2)
+    assert not compare_class_relations_semantically(relation1, relation2)
 
 
 @pytest.mark.parametrize(
-    "case_name, schema1_path, schema2_path", COMPARISON_SCHEMAPACK_PATHS
+    "path", COMPARISON_SCHEMAPACK_PATHS.values(), ids=COMPARISON_SCHEMAPACK_PATHS
 )
-def test_assert_equivalent_schemapack(
-    case_name: str, schema1_path: Path, schema2_path: Path
-):
-    """Test that assert_equivalent_schemapack raises the correct exception."""
-    schema1 = load_schemapack(schema1_path)
-    schema2 = load_schemapack(schema2_path)
-    expected_exception = EXPECTED_EXCEPTIONS[case_name]
-
-    if expected_exception is None:
-        assert_equivalent_schemapack(schema1, schema2)
-    else:
-        with pytest.raises(expected_exception):
-            assert_equivalent_schemapack(schema1, schema2)
+def test_equivalence_reflexivity(path: Path):
+    """Test that each schema is equivalent to itself (reflexivity)."""
+    schema = load_schemapack(path)
+    assert is_equivalent_schemapack(schema, schema)
 
 
 @pytest.mark.parametrize(
-    "case_name, schema1_path, schema2_path", COMPARISON_SCHEMAPACK_PATHS
+    "name, path1, path2",
+    SCHEMAPACK_PAIRED_COMPARISON_PATHS,
+    ids=[
+        f"{name}: {path1.name} vs {path2.name}"
+        for name, path1, path2 in SCHEMAPACK_PAIRED_COMPARISON_PATHS
+    ],
 )
-def test_is_equivalent_schemapack(
-    case_name: str, schema1_path: Path, schema2_path: Path
-):
-    """Test comparing two schemapacks semantically."""
-    schema1 = load_schemapack(schema1_path)
-    schema2 = load_schemapack(schema2_path)
+def test_equivalence_symmetry_and_transitivity(name: str, path1: Path, path2: Path):
+    """Test that equivalence is symmetric and transitive. Since all possible pairs are tested
+    in an order sensitive manner, both symmetry and transitivity are implicitly tested.
+    """
+    schema1 = load_schemapack(path1)
+    schema2 = load_schemapack(path2)
+    assert is_equivalent_schemapack(schema1, schema2)
+    assert is_equivalent_schemapack(schema2, schema1)
 
-    assert is_equivalent_schemapack(schema1, schema2) == EXPECTED_RESULTS[case_name]
+
+@pytest.mark.parametrize(
+    "path1, path2",
+    list(combinations(REPRESENTATIVE_SCHEMAPACK_PATHS.values(), 2)),
+    ids=[
+        f"{path1.parent.name}.{path1.stem.split('.')[0]} vs {path2.parent.name}.{path2.stem.split('.')[0]}"
+        for path1, path2 in combinations(REPRESENTATIVE_SCHEMAPACK_PATHS.values(), 2)
+    ],
+)
+def test_inequivalence(path1: Path, path2: Path):
+    """Test that the representative schemapacks from different test cases are not equivalent."""
+    schema1 = load_schemapack(path1)
+    schema2 = load_schemapack(path2)
+    assert not is_equivalent_schemapack(schema1, schema2)
