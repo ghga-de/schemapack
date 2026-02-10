@@ -50,7 +50,7 @@ def test_load_schemapack_valid(path: Path):
 )
 def test_load_schemapack_invalid(name: str, path: Path):
     """Test loading invalid schemapacks."""
-    error_type = name.split(".")[0]
+    error_type = name.split(".", 1)[0]
 
     with pytest.raises(SchemaPackSpecError) as exception_info:
         _ = load_schemapack(path)

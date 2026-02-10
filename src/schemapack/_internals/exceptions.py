@@ -18,12 +18,12 @@
 
 from abc import ABC
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 
 import pydantic_core
 
 
-class SpecType(str, Enum):
+class SpecType(StrEnum):
     """An enumeration of the types of specs."""
 
     SCHEMAPACK = "schemapack"
