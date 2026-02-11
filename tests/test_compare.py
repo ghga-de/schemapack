@@ -22,12 +22,14 @@ from pathlib import Path
 import pytest
 from arcticfreeze import FrozenDict
 
-from schemapack import load_schemapack
+from schemapack import (
+    is_equal_schemapack,
+    is_equivalent_schemapack,
+    load_schemapack,
+)
 from schemapack._internals.compare import (
     compare_class_relations_semantically,
     compare_relations_semantically,
-    is_equal_schemapack,
-    is_equivalent_schemapack,
 )
 from schemapack._internals.exceptions import (
     InequivalentContentSchemas,

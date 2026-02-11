@@ -28,6 +28,12 @@ from schemapack._internals.spec.schemapack import ClassDefinition, ClassRelation
 from schemapack._internals.utils import thaw
 from schemapack.spec.schemapack import SchemaPack
 
+__all__ = [
+    "assert_equal_schemapack",
+    "assert_equivalent_schemapack",
+    "is_equal_schemapack",
+    "is_equivalent_schemapack",
+]
 
 def compare_relations_semantically(
     relations1: FrozenDict[RelationPropertyName, ClassRelation],
