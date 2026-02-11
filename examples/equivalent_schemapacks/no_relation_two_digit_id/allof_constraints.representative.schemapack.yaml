@@ -1,14 +1,16 @@
 schemapack: 4.0.0
 classes:
-  B:
+  A:
     id:
       propertyName: alias
     content:
       $schema: "https://json-schema.org/draft/2020-12/schema"
-      title: B1
+      title: A1
       type: object
       required: [id]
       additionalProperties: false
       properties:
         id:
-          type: string
+          allOf:
+            - type: string
+            - pattern: '^\d\d$' # <-
