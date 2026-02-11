@@ -241,7 +241,7 @@ def test_equal_schemapack_with_identical_file_loaded_twice():
 
 
 def test_structurally_different_schemapacks():
-    """Test that semantically equivalent schemapacks are not structurally equal."""
+    """Testcase where semantically equivalent schemapacks are not structurally equal."""
     path1 = COMPARISON_SCHEMAPACK_PATHS["all_mandatory.some_descriptions"]
     path2 = COMPARISON_SCHEMAPACK_PATHS["all_mandatory.no_descriptions"]
 
