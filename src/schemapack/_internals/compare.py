@@ -35,6 +35,7 @@ __all__ = [
     "is_equivalent_schemapack",
 ]
 
+
 def compare_relations_semantically(
     relations1: FrozenDict[RelationPropertyName, ClassRelation],
     relations2: FrozenDict[RelationPropertyName, ClassRelation],

@@ -75,7 +75,6 @@ class _Relation:
     multiple_origin: bool = True
     multiple_target: bool = True
 
-
     def _make_class_relation(self) -> ClassRelation:
         return ClassRelation(
             targetClass=self.target_class,
