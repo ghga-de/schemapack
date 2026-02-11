@@ -137,6 +137,6 @@ def is_equal_schemapack(schemapack1: SchemaPack, schemapack2: SchemaPack) -> boo
     """
     try:
         assert_equal_schemapack(schemapack1, schemapack2)
-        return True
     except InequivalentSchemapacks:
         return False
+    return True
