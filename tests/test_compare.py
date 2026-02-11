@@ -76,21 +76,21 @@ class _Relation:
     multiple_target: bool = True
 
 
-def _make_class_relation(relation: _Relation) -> ClassRelation:
-    return ClassRelation(
-        targetClass=relation.target_class,
-        mandatory=MandatoryRelationSpec(
-            origin=relation.mandatory_origin, target=relation.mandatory_target
-        ),
-        multiple=MultipleRelationSpec(
-            origin=relation.multiple_origin, target=relation.multiple_target
-        ),
-    )
+    def _make_class_relation(self) -> ClassRelation:
+        return ClassRelation(
+            targetClass=self.target_class,
+            mandatory=MandatoryRelationSpec(
+                origin=self.mandatory_origin, target=self.mandatory_target
+            ),
+            multiple=MultipleRelationSpec(
+                origin=self.multiple_origin, target=self.multiple_target
+            ),
+        )
 
 
 def _relation(*relations: tuple[str, _Relation]) -> FrozenDict:
     """Create one or more ClassRelation entries."""
-    return FrozenDict({name: _make_class_relation(rel) for name, rel in relations})
+    return FrozenDict({name: rel._make_class_relation() for name, rel in relations})
 
 
 @pytest.mark.parametrize(
@@ -133,8 +133,8 @@ def test_compare_empty_relations():
 
 def test_compare_class_relations_happy():
     """Test that identical ClassRelation objects are equal."""
-    relation1 = _make_class_relation(_Relation(target_class="B"))
-    relation2 = _make_class_relation(_Relation(target_class="B"))
+    relation1 = _Relation(target_class="B")._make_class_relation()
+    relation2 = _Relation(target_class="B")._make_class_relation()
     assert compare_class_relations_semantically(relation1, relation2)
 
 
@@ -142,28 +142,28 @@ def test_compare_class_relations_happy():
     "relation1, relation2",
     [
         pytest.param(
-            _make_class_relation(_Relation(target_class="B")),
-            _make_class_relation(_Relation(target_class="C")),
+            _Relation(target_class="B")._make_class_relation(),
+            _Relation(target_class="C")._make_class_relation(),
             id="different_target_class",
         ),
         pytest.param(
-            _make_class_relation(_Relation(target_class="B", mandatory_origin=True)),
-            _make_class_relation(_Relation(target_class="B", mandatory_origin=False)),
+            _Relation(target_class="B", mandatory_origin=True)._make_class_relation(),
+            _Relation(target_class="B", mandatory_origin=False)._make_class_relation(),
             id="different_mandatory_origin",
         ),
         pytest.param(
-            _make_class_relation(_Relation(target_class="B", mandatory_target=True)),
-            _make_class_relation(_Relation(target_class="B", mandatory_target=False)),
+            _Relation(target_class="B", mandatory_target=True)._make_class_relation(),
+            _Relation(target_class="B", mandatory_target=False)._make_class_relation(),
             id="different_mandatory_target",
         ),
         pytest.param(
-            _make_class_relation(_Relation(target_class="B", multiple_origin=True)),
-            _make_class_relation(_Relation(target_class="B", multiple_origin=False)),
+            _Relation(target_class="B", multiple_origin=True)._make_class_relation(),
+            _Relation(target_class="B", multiple_origin=False)._make_class_relation(),
             id="different_multiple_origin",
         ),
         pytest.param(
-            _make_class_relation(_Relation(target_class="B", multiple_target=True)),
-            _make_class_relation(_Relation(target_class="B", multiple_target=False)),
+            _Relation(target_class="B", multiple_target=True)._make_class_relation(),
+            _Relation(target_class="B", multiple_target=False)._make_class_relation(),
             id="different_multiple_target",
         ),
     ],

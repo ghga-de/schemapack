@@ -144,7 +144,9 @@ def group_comparison_schemapacks_by_test_case(
     return by_class
 
 
-def list_schemapack_comparison_pairs(comparison_schemapack_paths: dict[str, Path]):
+def list_schemapack_comparison_pairs(
+    comparison_schemapack_paths: dict[str, Path],
+) -> list[tuple[str, Path, Path]]:
     """
     Generate all schemapack path pairs that should be compared for equivalence.
 
