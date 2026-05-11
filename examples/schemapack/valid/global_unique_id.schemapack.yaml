@@ -1,4 +1,4 @@
-schemapack: 4.0.0
+schemapack: 4.2.0
 description: A simple schemapack # with no root class but with descriptions.
 classes:
   A:
