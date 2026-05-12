@@ -24,8 +24,8 @@ from schemapack.spec.schemapack import SchemaPack
 
 
 class GlobalUniqueIdValidationPlugin(GlobalValidationPlugin):
-    """A global-scoped validation plugin validating that a data package has globally
-    unique IDs for all resources when the schemapack's globalUniqueId is set to
+    """A global-scoped validation plugin ensuring a datapack has globally
+    unique IDs for all resources when the schemapack's globalUniqueIds is set to
     "true".
     """
 
@@ -36,7 +36,7 @@ class GlobalUniqueIdValidationPlugin(GlobalValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return bool(schemapack.globalUniqueId)
+        return bool(schemapack.globalUniqueIds)
 
     def __init__(self, *, schemapack: SchemaPack):
         """This plugin is configured with the entire schemapack."""

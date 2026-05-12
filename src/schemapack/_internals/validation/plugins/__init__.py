@@ -23,7 +23,7 @@ from schemapack._internals.validation.plugins.content_schema import (
 from schemapack._internals.validation.plugins.expected_root import (
     ExpectedRootValidationPlugin,
 )
-from schemapack._internals.validation.plugins.global_unique_id import (
+from schemapack._internals.validation.plugins.global_unique_ids import (
     GlobalUniqueIdValidationPlugin,
 )
 from schemapack._internals.validation.plugins.missing_class import (
