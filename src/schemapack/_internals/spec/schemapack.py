@@ -378,8 +378,9 @@ class SchemaPack(_FrozenNoExtraBaseModel):
     globalUniqueIds: bool = Field(  # noqa: N815 - following JSON conventions
         default=False,
         description=(
-            "If true, IDs of all classes must be globally unique across the entire"
-            " schemapack. If false (the default), IDs only need to be unique within their respective class."
+            "If true, resource IDs must be unique across all classes, i.e. no two resources"
+            " from different classes may share the same ID. If false (the default), IDs only"
+            " need to be unique within their respective class."
         ),
     )
 
