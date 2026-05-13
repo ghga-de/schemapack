@@ -24,7 +24,7 @@ from schemapack._internals.validation.base import (
 from schemapack._internals.validation.plugins import (
     ContentSchemaValidationPlugin,
     ExpectedRootValidationPlugin,
-    GlobalUniqueIdValidationPlugin,
+    GloballyUniqueIdsValidationPlugin,
     MissingClassSlotValidationPlugin,
     MissingMandatoryOriginValidationPlugin,
     MissingMandatoryTargetValidationPlugin,
@@ -41,7 +41,7 @@ DEFAULT_GLOBAL_PLUGIN_REGISTRY: list[type[GlobalValidationPlugin]] = [
     UnknownClassSlotValidationPlugin,
     ExpectedRootValidationPlugin,
     UnexpectedRootValidationPlugin,
-    GlobalUniqueIdValidationPlugin,
+    GloballyUniqueIdsValidationPlugin,
 ]
 DEFAULT_CLASS_PLUGIN_REGISTRY: list[type[ClassValidationPlugin]] = [
     TargetOverlapValidationPlugin,

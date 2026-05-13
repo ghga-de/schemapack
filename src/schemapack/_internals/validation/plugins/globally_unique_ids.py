@@ -23,9 +23,9 @@ from schemapack.spec.datapack import DataPack
 from schemapack.spec.schemapack import SchemaPack
 
 
-class GlobalUniqueIdValidationPlugin(GlobalValidationPlugin):
+class GloballyUniqueIdsValidationPlugin(GlobalValidationPlugin):
     """A global-scoped validation plugin ensuring a datapack has globally
-    unique IDs for all resources when the schemapack's globalUniqueIds is set to
+    unique IDs for all resources when the schemapack's globallyUniqueIds is set to
     "true".
     """
 
@@ -36,7 +36,7 @@ class GlobalUniqueIdValidationPlugin(GlobalValidationPlugin):
 
         Returns: True if this plugin is relevant for the given class definition.
         """
-        return bool(schemapack.globalUniqueIds)
+        return bool(schemapack.globallyUniqueIds)
 
     def __init__(self, *, schemapack: SchemaPack):
         """This plugin is configured with the entire schemapack."""
@@ -60,7 +60,7 @@ class GlobalUniqueIdValidationPlugin(GlobalValidationPlugin):
         }
         if duplicates:
             raise ValidationPluginError(
-                type_="GlobalUniqueIdError",
+                type_="GloballyUniqueIdsError",
                 message="Found resource IDs that are not globally unique across classes.",
                 details={"duplicates": duplicates},
             )

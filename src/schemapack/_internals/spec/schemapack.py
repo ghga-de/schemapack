@@ -375,7 +375,7 @@ class SchemaPack(_FrozenNoExtraBaseModel):
             + " specify a root resource."
         ),
     )
-    globalUniqueIds: bool = Field(  # noqa: N815 - following JSON conventions
+    globallyUniqueIds: bool = Field(  # noqa: N815 - following JSON conventions
         default=False,
         description=(
             "If true, resource IDs must be unique across all classes, i.e. no two resources"
