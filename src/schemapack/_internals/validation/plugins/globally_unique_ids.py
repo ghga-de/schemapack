@@ -48,7 +48,7 @@ class GloballyUniqueIdsValidationPlugin(GlobalValidationPlugin):
         Raises:
             schemapack.exceptions.ValidationPluginError: If validation fails.
         """
-        id_to_classes: dict[str, list[str]] = defaultdict(list)
+        id_to_classes= defaultdict(list)
         for class_name, resources in datapack.resources.items():
             for resource_id in resources:
                 id_to_classes[resource_id].append(class_name)
