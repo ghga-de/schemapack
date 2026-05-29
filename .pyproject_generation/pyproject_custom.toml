@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-schema-comparison = ["jsonsubschema >= 0.0.7"]
+schema-comparison = ["ghga-jsonsubschema >= 0.1.0"]
 
 [project.urls]
 # please adapt to package name
