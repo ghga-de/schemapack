@@ -72,9 +72,9 @@ mdurl==0.1.2 \
     # via
     #   -c lock/requirements-dev.txt
     #   markdown-it-py
-portion==2.6.1 \
-    --hash=sha256:44b1f7d57e052993c4157e519dc447e57b87a4e5e00a77c1c50e7044104e53c6 \
-    --hash=sha256:764d0be5479842f011feccc6f4bf80454dd944ef16309fceb2b5ae229cf05df3
+portion==2.6.2 \
+    --hash=sha256:86be115afafa776174dc5eac82afb6496c9fa3684f5b3a844c3139535c51085e \
+    --hash=sha256:fbf334143dbac5d07ffa411784e2b29e4e1f21203385019a93e2c1a8f443da16
     # via
     #   -c lock/requirements-dev.txt
     #   ghga-jsonsubschema
@@ -459,9 +459,9 @@ sortedcontainers==2.4.0 \
     # via
     #   -c lock/requirements-dev.txt
     #   portion
-typer==0.26.2 \
-    --hash=sha256:39beff72ffbb31978a5b545f677d57edb97c6f980f433b38556deb0af25f094d \
-    --hash=sha256:9b4f19e08fcc9427a822d1ef467b1fe76737a2f65c7926bdeba2337d73569b68
+typer==0.26.7 \
+    --hash=sha256:5c87cfbc5d34491c5346ebf49c23e18d56ccb863268d3a8d592b26087c2f5e58 \
+    --hash=sha256:e314a34c617e419c091b2830dda3ea1f257134ff593061a8f5b9717ab8dddb3a
     # via
     #   -c lock/requirements-dev.txt
     #   schemapack (pyproject.toml)
