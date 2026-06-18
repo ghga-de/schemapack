@@ -27,6 +27,7 @@ from schemapack.spec.datapack import (
     SUPPORTED_DATA_PACK_VERSIONS,
     DataPack,
 )
+from schemapack.spec.schemapack import SchemaPack
 from tests.fixtures.examples import VALID_DATAPACK_PATHS, VALID_SCHEMAPACK_PATHS
 
 
@@ -130,3 +131,13 @@ def test_datapack_target_id_ordering_upon_dump():
         ]["targetResources"]
         == sorted_target_ids
     )
+
+
+def test_schemapack_classes_serialization_roundtrip():
+    """Test that a SchemaPack can be serialized and subsequently deserialized to an equal instance."""
+    original = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations_condensed"])
+
+    serialized = json.loads(original.model_dump_json())
+    deserialized = SchemaPack.model_validate(serialized)
+
+    assert deserialized == original
