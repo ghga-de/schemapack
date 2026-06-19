@@ -152,6 +152,14 @@ class Resource(_FrozenNoExtraBaseModel):
         ),
     )
 
+    @field_serializer("content", mode="plain")
+    def serialize_content(self, value: Any) -> dict[str, object]:
+        return thaw(value)
+
+    @field_serializer("relations", mode="plain")
+    def serialize_relations(self, value: Any) -> dict[str, object]:
+        return thaw(value)
+
 
 class DataPack(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack definition."""

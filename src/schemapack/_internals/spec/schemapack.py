@@ -212,6 +212,14 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         """Returns a set of the content properties."""
         return frozenset(self.content.get("properties", {}))
 
+    @field_serializer("content", mode="plain")
+    def serialize_content(self, value: Any) -> dict[str, object]:
+        return thaw(value)
+
+    @field_serializer("relations", mode="plain")
+    def serialize_relations(self, value: Any) -> dict[str, object]:
+        return thaw(value)
+
     @field_validator("content", mode="before")
     @classmethod
     def load_and_validate_content_schema(

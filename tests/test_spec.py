@@ -137,7 +137,21 @@ def test_schemapack_classes_serialization_roundtrip():
     """Test that a SchemaPack can be serialized and subsequently deserialized to an equal instance."""
     original = load_schemapack(VALID_SCHEMAPACK_PATHS["simple_relations_condensed"])
 
-    serialized = json.loads(original.model_dump_json())
-    deserialized = SchemaPack.model_validate(serialized)
+    for serialized in (
+        json.loads(original.model_dump_json()),
+        original.model_dump(mode="json"),
+    ):
+        deserialized = SchemaPack.model_validate(serialized)
+        assert deserialized == original
 
-    assert deserialized == original
+
+def test_datapack_serialization_roundtrip():
+    """Test that a DataPack can be serialized and subsequently deserialized to an equal instance."""
+    original = load_datapack(VALID_DATAPACK_PATHS["simple_relations.simple_resources"])
+
+    for serialized in (
+        json.loads(original.model_dump_json()),
+        original.model_dump(mode="json"),
+    ):
+        deserialized = DataPack.model_validate(serialized)
+        assert deserialized == original
