@@ -29,7 +29,6 @@ from pydantic import (
     BeforeValidator,
     Field,
     WrapSerializer,
-    field_serializer,
     model_validator,
 )
 from pydantic_core import PydanticCustomError
@@ -40,7 +39,6 @@ from schemapack._internals.spec.custom_types import (
     RelationPropertyName,
     ResourceId,
 )
-from schemapack._internals.utils import thaw
 
 SupportedDataPackVersions = Literal["3.0.0", "3.1.0", "4.0.0", "4.1.0", "4.2.0"]
 SUPPORTED_DATA_PACK_VERSIONS = typing.get_args(SupportedDataPackVersions)
@@ -152,14 +150,6 @@ class Resource(_FrozenNoExtraBaseModel):
         ),
     )
 
-    @field_serializer("content", mode="plain")
-    def serialize_content(self, value: Any) -> dict[str, object]:
-        return thaw(value)
-
-    @field_serializer("relations", mode="plain")
-    def serialize_relations(self, value: Any) -> dict[str, object]:
-        return thaw(value)
-
 
 class DataPack(_FrozenNoExtraBaseModel):
     """A model for describing a schemapack definition."""
@@ -203,10 +193,6 @@ class DataPack(_FrozenNoExtraBaseModel):
             + " dependencies) of the root resource."
         ),
     )
-
-    @field_serializer("resources", mode="plain")
-    def serialize_resources(self, value: Any) -> dict[str, object]:
-        return thaw(value)
 
     @model_validator(mode="before")
     @classmethod

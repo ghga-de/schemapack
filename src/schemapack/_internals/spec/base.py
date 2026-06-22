@@ -15,6 +15,9 @@
 
 """Base models."""
 
+import json
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -22,3 +25,8 @@ class _FrozenNoExtraBaseModel(BaseModel):
     """A BaseModel that does not allow any extra fields."""
 
     model_config = ConfigDict(use_enum_values=True, extra="forbid", frozen=True)
+
+    def model_dump(self, *, mode: str = "python", **kwargs: Any) -> Any:
+        if mode == "json":
+            return json.loads(self.model_dump_json(**kwargs))
+        return super().model_dump(mode=mode, **kwargs)

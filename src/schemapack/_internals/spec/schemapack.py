@@ -27,14 +27,13 @@ from arcticfreeze import FrozenDict, freeze
 from immutabledict import immutabledict
 from pydantic import (
     Field,
-    field_serializer,
     field_validator,
     model_validator,
 )
 from pydantic_core import PydanticCustomError
 
 from schemapack._internals.spec.base import _FrozenNoExtraBaseModel
-from schemapack._internals.utils import JsonSchemaError, assert_valid_json_schema, thaw
+from schemapack._internals.utils import JsonSchemaError, assert_valid_json_schema
 from schemapack.exceptions import ParsingError
 from schemapack.spec.custom_types import (
     ClassName,
@@ -212,14 +211,6 @@ class ClassDefinition(_FrozenNoExtraBaseModel):
         """Returns a set of the content properties."""
         return frozenset(self.content.get("properties", {}))
 
-    @field_serializer("content", mode="plain")
-    def serialize_content(self, value: Any) -> dict[str, object]:
-        return thaw(value)
-
-    @field_serializer("relations", mode="plain")
-    def serialize_relations(self, value: Any) -> dict[str, object]:
-        return thaw(value)
-
     @field_validator("content", mode="before")
     @classmethod
     def load_and_validate_content_schema(
@@ -392,10 +383,6 @@ class SchemaPack(_FrozenNoExtraBaseModel):
             " need to be unique within their respective class."
         ),
     )
-
-    @field_serializer("classes", mode="plain")
-    def serialize_classes(self, value: Any) -> dict[str, object]:
-        return thaw(value)
 
     @model_validator(mode="before")
     @classmethod
