@@ -38,11 +38,11 @@ bash
 
 schemapack --help
 
-                                                                                                                                             
- Usage: schemapack [OPTIONS] COMMAND [ARGS]...                                                                                               
-                                                                                                                                             
- Common arguments and options.                                                                                                               
-                                                                                                                                             
+
+ Usage: schemapack [OPTIONS] COMMAND [ARGS]...
+
+ Common arguments and options.
+
 ╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --version                     Show the version of the library and exit.                                                                   │
 │ --install-completion          Install completion for the current shell.                                                                   │
