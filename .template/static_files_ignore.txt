@@ -8,6 +8,7 @@
 .github/workflows/dev_cd.yaml
 .github/workflows/ci_workflow_dispatch.yaml
 .github/workflows/ci_release.yaml
+.github/workflows/tests.yaml
 
 scripts/script_utils/fastapi_app_location.py
 
