@@ -1,6 +1,6 @@
-annotated-doc==0.0.4 \
-    --hash=sha256:571ac1dc6991c450b25a9c2d84a3705e2ae7a53467b5d111c24fa8baabbed320 \
-    --hash=sha256:fbcda96e87e9c92ad167c2e53839e57503ecfda18804ea28102353485033faa4
+annotated-doc==0.0.5 \
+    --hash=sha256:117bac03a25ede5df5440e855b32d556049ca169ead221505badf432fed4b101 \
+    --hash=sha256:c7e58ce09192557605d8bbd92836d7e1d520ac9580096042c0bfd197efacf1bb
     # via
     #   -c lock/requirements-dev.txt
     #   typer
@@ -10,12 +10,6 @@ annotated-types==0.8.0 \
     # via
     #   -c lock/requirements-dev.txt
     #   pydantic
-arcticfreeze==0.1.1 \
-    --hash=sha256:977a1d7c74498d00201d65519fa59f2b59e5a2b303668f7ecaec58a270ce5eda \
-    --hash=sha256:c9811b3c787bfdb0e2ea721b0a99bb0e700c91945fb1c9ce0822cb859b409916
-    # via
-    #   -c lock/requirements-dev.txt
-    #   schemapack (pyproject.toml)
 attrs==26.1.0 \
     --hash=sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309 \
     --hash=sha256:d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32
@@ -23,9 +17,15 @@ attrs==26.1.0 \
     #   -c lock/requirements-dev.txt
     #   jsonschema
     #   referencing
-ghga-jsonsubschema==0.1.1 \
-    --hash=sha256:141bd32583a3708f0f9f864a1bad33ad8f066b66633aeb7820844a69bf118f35 \
-    --hash=sha256:351132aa599a64a40fdaf7a431edd55de8a99d1ebc2cc874ba406a501fb1e6b6
+ghga-arcticfreeze==1.0.0 \
+    --hash=sha256:16dbc192666aa61d67f398ed2a69ec0d779d958a2a91ed5cbecf12617f44d720 \
+    --hash=sha256:ee331354edaaf8d1ddd495a0b77e29bd8dc6ad4147809bfa0fad6a0e3036cb1c
+    # via
+    #   -c lock/requirements-dev.txt
+    #   schemapack (pyproject.toml)
+ghga-jsonsubschema==0.1.2 \
+    --hash=sha256:b2c7cfb82951cd424b93405c5d1a9ea1de015d135f14a24ce0c57cbb6bc64a40 \
+    --hash=sha256:d4e77d5db2015aea6d7b694b06f6e6e19f561eb03462c520aebab26aa97e95c8
     # via
     #   -c lock/requirements-dev.txt
     #   schemapack (pyproject.toml)
@@ -40,7 +40,7 @@ immutabledict==4.3.1 \
     --hash=sha256:f844a669106cfdc73f47b1a9da003782fb17dc955a54c80972e0d93d1c63c514
     # via
     #   -c lock/requirements-dev.txt
-    #   arcticfreeze
+    #   ghga-arcticfreeze
 jsonref==1.1.0 \
     --hash=sha256:32fe8e1d85af0fdefbebce950af85590b22b60f9e95443176adbde4e1ecea552 \
     --hash=sha256:590dc7773df6c21cbf948b5dac07a72a251db28b0238ceecce0a2abfa8ec30a9
@@ -209,21 +209,21 @@ pydantic-core==2.46.4 \
     # via
     #   -c lock/requirements-dev.txt
     #   pydantic
-pydantic-settings==2.14.2 \
-    --hash=sha256:a20c97b37910b6550d5ea50fbcc2d4187defe58cd57070b73863d069419c9440 \
-    --hash=sha256:c19dd64b19097f1de80184f0cc7b0272a13ae6e170cbf240a3e27e381ed14a5f
+pydantic-settings==2.15.0 \
+    --hash=sha256:0ba092c291c94baceb5eff768aa0d56400a457585bc0175925a5a5510303da42 \
+    --hash=sha256:694b793e84f766ba76a90ebdefc01d0a9a045dab0382bee70393da93712ad117
     # via
     #   -c lock/requirements-dev.txt
     #   schemapack (pyproject.toml)
-pygments==2.20.0 \
-    --hash=sha256:6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f \
-    --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
+pygments==2.21.0 \
+    --hash=sha256:2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9 \
+    --hash=sha256:610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c
     # via
     #   -c lock/requirements-dev.txt
     #   rich
-python-dotenv==1.2.2 \
-    --hash=sha256:1d8214789a24de455a8b8bd8ae6fe3c6b69a5e3d64aa8a8e5d68e694bbcb285a \
-    --hash=sha256:2c371a91fbd7ba082c2c1dc1f8bf89ca22564a087c2c287cd9b662adde799cf3
+python-dotenv==1.2.3 \
+    --hash=sha256:904552145e8bfed22162c09dab1c2b9b54fefa7b23ba780f4f26ca0316b0f0d9 \
+    --hash=sha256:a20a594dabeaa385725aa239d5244871c143ecb356add8a20fcf23773a6c3a35
     # via
     #   -c lock/requirements-dev.txt
     #   pydantic-settings
@@ -445,9 +445,9 @@ sortedcontainers==2.4.0 \
     # via
     #   -c lock/requirements-dev.txt
     #   portion
-typer==0.27.0 \
-    --hash=sha256:629bd12ea5d13a17148125d9a264f949eb171fb3f120f9b04d85873cab054fa5 \
-    --hash=sha256:6f4b27631e47f077871b7dc30e933ec0131c1390fbe0e387ea5574b5bac9ccf1
+typer==0.27.1 \
+    --hash=sha256:53150287edd11baeb4e4722c8e394fcdf8181c0ae89485cba8d25c778d5edd56 \
+    --hash=sha256:a79bef8469a79c45498e7b814ecf8d603cc7644e9acbd9e19cac0334240b18df
     # via
     #   -c lock/requirements-dev.txt
     #   schemapack (pyproject.toml)
@@ -459,9 +459,9 @@ typing-extensions==4.16.0 \
     #   pydantic
     #   pydantic-core
     #   typing-inspection
-typing-inspection==0.4.2 \
-    --hash=sha256:4ed1cacbdc298c220f1bd249ed5287caa16f34d44ef4e9c3d0cbad5b521545e7 \
-    --hash=sha256:ba561c48a67c5958007083d386c3295464928b01faa735ab8547c5692e87f464
+typing-inspection==0.4.4 \
+    --hash=sha256:547274fa6b0a561ccf549cc9524b999a578e737d015d8709d021f9d0d13bea47 \
+    --hash=sha256:65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147
     # via
     #   -c lock/requirements-dev.txt
     #   pydantic
