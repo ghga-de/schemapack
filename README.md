@@ -1,3 +1,11 @@
+> [!IMPORTANT]
+> **schemapack has moved.** Development continues in the GHGA monorepo at
+> [ghga-de/ghga](https://github.com/ghga-de/ghga), under
+> [`libs/schemapack`](https://github.com/ghga-de/ghga/tree/main/libs/schemapack).
+> This repository is being archived and will become read-only; please open issues
+> and pull requests in the monorepo. The `schemapack` package on PyPI is unaffected and
+> continues to be released from there.
+
 [![tests](https://github.com/ghga-de/schemapack/actions/workflows/tests.yaml/badge.svg)](https://github.com/ghga-de/schemapack/actions/workflows/tests.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/ghga-de/schemapack/badge.svg?branch=main)](https://coveralls.io/github/ghga-de/schemapack?branch=main)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/schemapack.svg)](https://pypi.python.org/pypi/schemapack/)
@@ -43,25 +51,25 @@ schemapack --help
 
  Common arguments and options.
 
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --version                     Show the version of the library and exit.                                                                   │
-│ --install-completion          Install completion for the current shell.                                                                   │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                            │
-│ --help                        Show this message and exit.                                                                                 │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ validate              Validate a datapack against a schemapack.                                                                           │
-│ check-schemapack      Check if the provided JSON/YAML document complies with the schemapack specs.                                        │
-│ check-datapack        Check if the provided JSON/YAML document complies with the datapack specs.                                          │
-│ condense-schemapack   Writes a version of the provided schemapack with embedded content schemas to                                        │
-│                       stdout.                                                                                                             │
-│ isolate-resource      Isolate a resource from the given datapack and write a datapack that is rooted to                                   │
-│                       this resource to stdout.                                                                                            │
-│ isolate-class         Isolate a class from the given schemapack and write a condensed (with content                                       │
-│                       schemas being embedded) schemapack that is rooted to this class to stdout.                                          │
-│ export-mermaid        Generate an entity relationship diagram based on the mermaid markup from the                                        │
-│                       provided schemapack.                                                                                                │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --version                     Show the version of the library and exit.                                                                                                  │
+│ --install-completion          Install completion for the current shell.                                                                                                  │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                                                           │
+│ --help                        Show this message and exit.                                                                                                                │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ validate              Validate a datapack against a schemapack.                                                                                                          │
+│ check-schemapack      Check if the provided JSON/YAML document complies with the schemapack specs.                                                                       │
+│ check-datapack        Check if the provided JSON/YAML document complies with the datapack specs.                                                                         │
+│ condense-schemapack   Writes a version of the provided schemapack with embedded content schemas to                                                                       │
+│                       stdout.                                                                                                                                            │
+│ isolate-resource      Isolate a resource from the given datapack and write a datapack that is rooted to                                                                  │
+│                       this resource to stdout.                                                                                                                           │
+│ isolate-class         Isolate a class from the given schemapack and write a condensed (with content                                                                      │
+│                       schemas being embedded) schemapack that is rooted to this class to stdout.                                                                         │
+│ export-mermaid        Generate an entity relationship diagram based on the mermaid markup from the                                                                       │
+│                       provided schemapack.                                                                                                                               │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 
 ```

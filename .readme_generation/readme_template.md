@@ -1,3 +1,11 @@
+> [!IMPORTANT]
+> **schemapack has moved.** Development continues in the GHGA monorepo at
+> [ghga-de/ghga](https://github.com/ghga-de/ghga), under
+> [`libs/schemapack`](https://github.com/ghga-de/ghga/tree/main/libs/schemapack).
+> This repository is being archived and will become read-only; please open issues
+> and pull requests in the monorepo. The `schemapack` package on PyPI is unaffected and
+> continues to be released from there.
+
 [![tests](https://github.com/ghga-de/$repo_name/actions/workflows/tests.yaml/badge.svg)](https://github.com/ghga-de/$repo_name/actions/workflows/tests.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/ghga-de/$repo_name/badge.svg?branch=main)](https://coveralls.io/github/ghga-de/$repo_name?branch=main)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/$repo_name.svg)](https://pypi.python.org/pypi/$repo_name/)
